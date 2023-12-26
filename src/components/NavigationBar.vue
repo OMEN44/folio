@@ -7,10 +7,10 @@ import { mdiAccount } from '@mdi/js'
   <div class="div-navigation">
     <div class="div-left">
       <router-link class="link" to="/home">
-        <p>Home</p>
+        <h2>Home</h2>
       </router-link>
       <router-link class="link" to="/timeline">
-        <p>Timeline</p>
+        <h2>Timeline</h2>
       </router-link>
     </div>
 
@@ -52,8 +52,8 @@ import { mdiAccount } from '@mdi/js'
   flex-direction: row;
 }
 
-.div-left p {
-  padding: 20px 30px;
+.div-left h2 {
+  padding: 18px 30px;
   background-color: transparent;
   transition: background-color 1s;
 }

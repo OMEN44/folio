@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import HomeView from "@/views/HomeView.vue";
 import TimelineView from "@/views/TimelineView.vue";
+import AccountView from "@/views/AccountView.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -15,6 +16,11 @@ const router = createRouter({
             path: '/timeline',
             name: 'timeline',
             component: TimelineView,
+        },
+        {
+            path: '/account',
+            name: 'account',
+            component: AccountView,
         },
         {
             path: '/:pathMatch(.*)*',

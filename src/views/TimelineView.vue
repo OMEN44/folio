@@ -13,22 +13,37 @@ const timelineData = ref(
   }))
 )
 
+fetch("http://localhost:3000/")
+    .then(response => { return response.json() })
+    .then(data => {
+      console.log(data);
+    })
+
 </script>
 
 <template>
-  <div class="div-intro">
-    <h2>What is this?</h2>
-    <p>I have been interested in robots and computers for as long as i can remember. This passion has sparked many projects starting from humble lego taking me to where i am today. This timeline show cases most (or atleast the ones that got close to finished) of my projects, including images and links to dedicated pages where possible. I hope that atleast one of the entries can inspire someone somewhere to start their own project!</p>
-  </div>
-  <div class="div-timeline">
-    <timeline-event v-for="(item, index) in timelineData" v-bind="item"/>
+  <div class="container">
+    <div class="div-intro">
+      <h1>What is this?</h1>
+      <p>I have been interested in robots and computers for as long as I can remember, this passion has sparked many projects starting from humble lego and taking me to where I am today. This timeline showcases most (or at least the ones that got close to finished) of my projects, including images and links to dedicated pages where possible.<br/>I hope that at least one of the entries can inspire someone, somewhere to start their own project!</p>
+    </div>
+    <div class="filter">
+      
+    </div>
+    <div class="div-timeline">
+      <timeline-event v-for="(item, index) in timelineData" v-bind="item"/>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.container {
+  margin: 0 10%;
+}
+
 .div-intro {
   text-align: center;
-  padding: 50px 100px;
+  padding: 50px 50px;
 }
 
 .div-timeline {
