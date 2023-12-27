@@ -14,7 +14,6 @@ onBeforeMount(() => {
   widthValue.value = (props.width) === undefined ? 300 : props.width;
   appearance.value = props.appearance === undefined ? "basic" : props.appearance;
 })
-
 </script>
 
 <template>
@@ -52,122 +51,7 @@ h2 {
   padding: 10px;
 }
 
-/* Basic appearance styling */
-
-.div-content.basic {
-  width: 100%;
-}
-
-.div-title.basic {
-  border-width: 4px 0;
-  text-align: center;
-}
-
-span.basic {
-  background-color: var(--primary);
-  display: block;
-  position: absolute;
-  border: var(--accent) 4px solid;
-  border-radius: 100%;
-  width: 20px;
-  height: 20px;
-}
-
-.basic.tl {
-  top: -8px;
-  left: -10px;
-}
-
-.basic.tr {
-  top: -8px;
-  right: -10px;
-}
-
-.basic.br {
-  top: 46px;
-  right: -10px;
-}
-
-.basic.bl {
-  top: 46px;
-  left: -10px;
-}
-
-/* Rounded appearance styling */
-
-.div-content.rounded {
-  width: calc(100% - 15px);
-}
-
-.div-title.rounded {
-  border-width: 4px 4px 4px 0;
-}
-
-.rounded.tr:before {
-  content:"";
-  position: absolute;
-  top: 0;
-  right: 0;
-  border-width: 20px 0 0 20px;
-  border-style: solid;
-  border-color: var(--accent) transparent;
-}
-
-.rounded.tr:after {
-  content:"";
-  position: absolute;
-  top: 0;
-  right: 0;
-  border-width: 14px 0 0 14px;
-  border-style: solid;
-  border-color: var(--background) transparent;
-}
-
-.rounded.br:before {
-  content:"";
-  position: absolute;
-  top: 38px;
-  right: 0;
-  border-width: 20px 20px 0 0;
-  border-style: solid;
-  border-color: transparent var(--accent);
-}
-
-.rounded.br:after {
-  content:"";
-  position: absolute;
-  top: 44px;
-  right: 0;
-  border-width: 14px 14px 0 0;
-  border-style: solid;
-  border-color: transparent var(--background);
-}
-
-.rounded.tl {
-  background-color: var(--primary);
-  display: block;
-  position: absolute;
-  border: var(--accent) 4px solid;
-  border-radius: 100%;
-  width: 20px;
-  height: 20px;
-  top: -8px;
-  left: -10px;
-}
-
-.rounded.bl {
-  background-color: var(--primary);
-  display: block;
-  position: absolute;
-  border: var(--accent) 4px solid;
-  border-radius: 100%;
-  width: 20px;
-  height: 20px;
-  top: 46px;
-  left: -10px;
-}
-
-/* Faded appearance styling */
+/*Styling here*/
 
 .faded.div-container {
   border: 4px solid;
@@ -208,4 +92,5 @@ span.basic {
   bottom: -12px;
   right: -12px;
 }
+
 </style>
