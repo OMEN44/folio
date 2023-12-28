@@ -12,12 +12,12 @@ const login = () => {
 
 <template>
     <TextBox class="form-login" title="Login" :width="400" appearance="faded">
-      <div class="form-content">
+      <form class="form-content" action="">
         Login to access private pages and contribute.
         <input id="username" type="text">
         <input id="password" type="password">
-        <button @click="login()">Submit</button>
-      </div>
+        <button @click="login()" type="submit">Submit</button>
+      </form>
     </TextBox>
 
 
