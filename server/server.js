@@ -1,47 +1,50 @@
-
-
 const express = require('express');
+const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
+const cors = require('cors');
+
 const app = express();
+const secretKey = 'My-epic-secret-key-1234$'; // Replace with a secure secret key
 
-const passport = require('passport');
-const flash = require('express-flash');
-const session = require('express-session');
-const methodOverride = require('method-override');
+app.use(bodyParser.json());
+app.use(cors());
 
-const initialisePassport = require('passport-config');
-initialisePassport(
-    passport,
-    email => users.find(user => user.email === email),
-    id => users.find(user => user.id === id)
-);
+// Dummy user database (in-memory)
+const users = [
+    { id: 1, username: 'user1', password: 'password1' },
+    { id: 2, username: 'user2', password: 'password2' },
+];
 
-const users = [];
+// Authenticate user and generate a JWT
+app.post('/api/login', (req, res) => {
+    const { username, password } = req.body;
+    const user = users.find(u => u.username === username && u.password === password);
 
-app.use(express.urlencoded({ extended: false }));
-app.use(flash());
-app.use(session({
-    secret: "omen is the best",
-    resave: false,
-    saveUninitialized: false
-}));
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(methodOverride('_method'));
-
-
-
-const loggedIn = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        return next()
+    if (user) {
+        const token = jwt.sign({ userId: user.id, username: user.username }, secretKey, { expiresIn: '1h' });
+        res.json({ token });
+    } else {
+        res.status(401).json({ error: 'Invalid credentials' });
     }
-    res.redirect('/login')
-}
+});
 
-const notLoggedIn = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        return res.redirect('/')
+// Example protected route
+app.get('/api/protected', (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1];
+
+    if (token) {
+        try {
+            const decoded = jwt.verify(token, secretKey);
+            res.json({ message: 'Protected resource', user: decoded });
+        } catch (error) {
+            res.status(401).json({ error: 'Invalid token' });
+        }
+    } else {
+        res.status(401).json({ error: 'No token provided' });
     }
-    next()
-}
+});
 
-app.listen(3000);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});

@@ -10,18 +10,18 @@
   "dependencies": {
     "@jamescoyle/vue-icon": "^0.1.2",
     "@mdi/js": "^7.3.67",
+    "axios": "^1.6.3",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
     "connect-sqlite3": "^0.9.13",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "express-flash": "^0.0.2",
-    "express-session": "^1.17.3",
-    "method-override": "^3.0.0",
-    "passport": "^0.7.0",
-    "passport-local": "^1.0.0",
+    "jsonwebtoken": "^9.0.2",
     "sqlite3": "^5.1.6",
     "vue": "^3.3.4",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",

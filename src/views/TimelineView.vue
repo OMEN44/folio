@@ -3,6 +3,8 @@ import TimelineEvent from "@/components/TimelineEvent.vue";
 import { ref, onMounted, onBeforeMount } from "vue";
 
 import data from '../assets/projects.json'
+import axios from "axios";
+import store from "@/store";
 
 const timelineData = ref(
   data.projects.map((project) => ({
@@ -13,11 +15,13 @@ const timelineData = ref(
   }))
 )
 
-fetch("http://localhost:3000/")
-    .then(response => { return response.json() })
-    .then(data => {
-      console.log(data);
-    })
+axios.get('http://localhost:3000/api/protected', {
+  headers: {
+    Authorization: `Bearer ${store.getters.token}`
+  }
+}).then(res => {
+  console.log(res.data)
+})
 
 </script>
 
