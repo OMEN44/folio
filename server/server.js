@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const database = require('./database')
 
 const app = express();
 const secretKey = 'My-epic-secret-key-1234$'; // Replace with a secure secret key

@@ -39,7 +39,7 @@ onBeforeMount(() => {
 
 .div-title {
   padding: 10px 20px;
-  border: var(--accent) solid;
+  border: var(--primary) solid;
 }
 
 h2 {
@@ -47,7 +47,7 @@ h2 {
 }
 
 .div-content {
-  background-color: var(--accent-hover);
+  background-color: var(--secondary);
   padding: 10px;
 }
 
@@ -55,12 +55,12 @@ h2 {
 
 .faded.div-container {
   border: 4px solid;
-  border-image: linear-gradient(to bottom right, var(--accent), transparent, var(--accent)) 1;
+  border-image: linear-gradient(to bottom right, var(--primary), transparent, var(--primary)) 1;
 }
 
 .faded.div-title {
   border: 0px;
-  background-color: var(--accent-hover);
+  background-color: var(--secondary);
   padding: 5px 10px;
   border-radius: 0 8px 0 0;
 }
@@ -70,10 +70,9 @@ h2 {
 }
 
 .faded.tl {
-  background-color: var(--primary);
   display: block;
   position: absolute;
-  border: var(--accent) 4px solid;
+  border: var(--primary) 4px solid;
   border-radius: 100%;
   width: 20px;
   height: 20px;
@@ -82,10 +81,9 @@ h2 {
 }
 
 .faded.br {
-  background-color: var(--primary);
   display: block;
   position: absolute;
-  border: var(--accent) 4px solid;
+  border: var(--primary) 4px solid;
   border-radius: 100%;
   width: 20px;
   height: 20px;

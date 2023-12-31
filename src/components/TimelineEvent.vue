@@ -27,15 +27,15 @@ const props = defineProps(['title', 'route', 'about', 'image'])
 .div-timeline-event {
   padding: 10px 50px 10px 10px;
   border-image: linear-gradient(to right, var(--primary), transparent) 1;
-  border-top: var(--primary) 4px solid;
+  border-top: 4px solid;
   margin-bottom: 25px;
   position: relative;
-  background: linear-gradient(to bottom right, var(--accent), transparent, transparent);
+  background: linear-gradient(to bottom right, var(--secondary), transparent, transparent);
   transition: background-image 0.5s;
 }
 
 .div-timeline-event:hover {
-  background: linear-gradient(to bottom right, var(--accent), transparent);
+  background: linear-gradient(to bottom right, var(--secondary), transparent);
 }
 
 .div-timeline-event::after {

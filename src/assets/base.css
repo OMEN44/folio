@@ -1,10 +1,19 @@
-:root {
+/*:root {
     --background: #040205;
     --accent: #ff5a43;
     --accent-hover: rgba(255, 90, 67, 0.39);
     --primary: #801414;
     --text: rgb(208, 208, 208);
+}*/
+
+:root {
+    --background: #1a1a1b;
+    --primary: #881010;
+    --secondary: rgb(131, 51, 51);
+    --acent: #b90018;
+    --text: rgb(208, 208, 208);
 }
+
 
 html {
     box-sizing: border-box;
@@ -16,7 +25,7 @@ html {
 }
 
 body {
-    background: black;
+    background: var(--background);
 }
 
 p {

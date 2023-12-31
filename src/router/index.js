@@ -17,12 +17,17 @@ const router = createRouter({
             path: '/timeline',
             name: 'timeline',
             component: TimelineView,
-            meta: { requiresAuth: true },
         },
         {
             path: '/account',
             name: 'account',
             component: AccountView,
+        },
+        {
+            path: '/notes',
+            name: 'notes',
+            component: AccountView,
+            meta: { requiresAuth: true },
         },
         {
             path: '/:pathMatch(.*)*',

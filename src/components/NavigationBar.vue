@@ -33,7 +33,7 @@ import { mdiAccount } from '@mdi/js'
 
 .div-left::before {
   background-color: var(--background);
-  border: solid var(--accent) 4px;
+  border: solid var(--primary) 4px;
   height: 16px;
   width: 16px;
   border-radius: 50%;
@@ -44,7 +44,7 @@ import { mdiAccount } from '@mdi/js'
 }
 
 .div-left {
-  border-bottom: var(--accent) solid 4px;
+  border-bottom: var(--primary) solid 4px;
   display: flex;
   height: 100%;
   width: fit-content;
@@ -73,7 +73,7 @@ import { mdiAccount } from '@mdi/js'
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--accent-hover);
+  background: var(--secondary);
   transition:0.5s;
   transform-origin:bottom;
   transform:scaleY(0);
@@ -87,13 +87,13 @@ import { mdiAccount } from '@mdi/js'
 }
 
 .div-right {
-  border-bottom: var(--accent) solid 4px;
+  border-bottom: var(--primary) solid 4px;
   position: relative;
 }
 
 .div-right::before {
   background-color: var(--background);
-  border: solid var(--accent) 4px;
+  border: solid var(--primary) 4px;
   height: 16px;
   width: 16px;
   border-radius: 50%;
