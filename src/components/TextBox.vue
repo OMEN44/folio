@@ -175,7 +175,7 @@ span.basic {
 }
 
 .faded.div-title {
-  border: 0px;
+  border: 0;
   background-color: var(--secondary);
   padding: 5px 10px;
   border-radius: 0 8px 0 0;

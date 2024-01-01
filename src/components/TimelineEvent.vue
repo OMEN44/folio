@@ -1,6 +1,4 @@
 <script setup>
-import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiOpenInApp  } from '@mdi/js'
 
 const props = defineProps(['title', 'route', 'about', 'image'])
 

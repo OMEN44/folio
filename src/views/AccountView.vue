@@ -56,6 +56,7 @@ onMounted(() => {
         <input id="username" type="text" placeholder="Username">
         <input id="password" type="password" placeholder="Password">
         <button @click="login" type="submit">Submit</button>
+        <button @click="register" type="button">Register</button>
       </form>
     </div>
     <div id="logout">
