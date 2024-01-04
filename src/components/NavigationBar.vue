@@ -12,6 +12,9 @@ import { mdiAccount } from '@mdi/js'
       <router-link class="link" to="/timeline">
         <h2>Timeline</h2>
       </router-link>
+      <router-link class="link" to="/notes">
+        <h2>Notes</h2>
+      </router-link>
     </div>
 
     <div class="div-right">

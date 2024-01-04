@@ -4,45 +4,80 @@ import axios from "axios";
 import store from '@/store'
 import {onMounted, ref} from "vue";
 
-const formContent = ref(null)
-const error = ref('test')
+const errorMessage = ref('')
 
 const logout = async (e) => {
   await store.dispatch('logout');
-  switchFormContent(false)
+  errorMessage.value = ''
+  switchFormContent('login')
 }
 
 const login = async (e) => {
   e.preventDefault()
-  const user = (<HTMLInputElement> document.getElementById("username")).value;
-  const pass = (<HTMLInputElement> document.getElementById("password")).value;
+  const user = (<HTMLInputElement> document.getElementById("username-login")).value;
+  const pass = (<HTMLInputElement> document.getElementById("password-login")).value;
 
   try {
-    const response = await axios.post('http://localhost:3000/api/login',
-      {
-        username: user,
-        password: pass
-      });
-    const token = response.data.token;
-    await store.dispatch('login', token)
-    switchFormContent(true)
+    axios.post('http://localhost:3000/login',
+    {
+      username: user,
+      password: pass
+    }).then(async response => {
+      const data = response.data;
+      await store.dispatch('login', data.token)
+      console.log(data)
+      errorMessage.value = data.username
+      switchFormContent('logout')
+    }).catch(error => {
+      if (error.response.status === 401) {
+        errorMessage.value = error.response.data.error
+      }
+    });
   }  catch (error) {
     console.error('login failed', error)
   }
 }
 
-const switchFormContent = (loggedIn) => {
-  if (loggedIn) {
+const register = async (e) => {
+  e.preventDefault()
+
+  const user = (<HTMLInputElement> document.getElementById("username-register")).value;
+  const email = (<HTMLInputElement> document.getElementById("email-register")).value;
+  const pass = (<HTMLInputElement> document.getElementById("password-register")).value;
+
+  axios.post('http://localhost:3000/register', {
+    username: user,
+    password: pass,
+    email: email
+  }).then(response => {
+    errorMessage.value = response.data.message
+    switchFormContent('login')
+  }).catch(error => {
+    if (error.response.status === 409)
+      errorMessage.value = error.response.data.error
+    else
+      console.error(error)
+  })
+}
+
+const switchFormContent = (content) => {
+  if (content === 'logout') {
     document.getElementById('logout').classList.remove('hidden')
     document.getElementById('login').classList.add('hidden')
-  } else {
+    document.getElementById('register').classList.add('hidden')
+  } else if (content === 'login') {
     document.getElementById('logout').classList.add('hidden')
     document.getElementById('login').classList.remove('hidden')
+    document.getElementById('register').classList.add('hidden')
+  } else if (content === 'register') {
+    document.getElementById('logout').classList.add('hidden')
+    document.getElementById('login').classList.add('hidden')
+    document.getElementById('register').classList.remove('hidden')
   }
 }
 
 onMounted(() => {
-  switchFormContent(store.getters.isAuthenticated)
+  switchFormContent(store.getters.isAuthenticated ? 'logout' : 'login')
 })
 
 </script>
@@ -52,21 +87,56 @@ onMounted(() => {
     <div id="login">
       <form class="form-content">
         <p>Login to access private pages and contribute.</p>
-        <span v-html="error"></span>
-        <input id="username" type="text" placeholder="Username">
-        <input id="password" type="password" placeholder="Password">
+        <span v-html="errorMessage"></span>
+        <input id="username-login" type="text" placeholder="Username">
+        <input id="password-login" type="password" placeholder="Password">
         <button @click="login" type="submit">Submit</button>
-        <button @click="register" type="button">Register</button>
+        <button @click="switchFormContent('register')" type="button">Register</button>
+      </form>
+    </div>
+    <div id="register">
+      <form class="form-content">
+        <p>Login to access private pages and contribute.</p>
+        <span v-html="errorMessage"></span>
+        <input id="username-register" type="text" placeholder="Username">
+        <input id="email-register" type="text" placeholder="Email">
+        <input id="password-register" type="password" placeholder="Password">
+        <button @click="register" type="submit">Submit</button>
+        <button @click="logout" type="button">Cancel</button>
       </form>
     </div>
     <div id="logout">
-      You are logged in as:
-      <button @click="logout">Logout</button>
+      <div class="div-logout">
+        <div class="div-logout-content">
+          <p>You are logged in as:</p>
+          <span v-html="errorMessage"></span>
+        </div>
+        <button @click="logout">Logout</button>
+      </div>
     </div>
   </TextBox>
 </template>
 
 <style scoped>
+#logout span {
+  margin: 0 6px;
+  font-size: 20px;
+}
+
+.div-logout {
+  display: flex;
+  flex-direction: column;
+}
+
+#logout button {
+  margin: 20px auto;
+}
+
+.div-logout-content {
+  display: flex;
+  flex-direction: row;
+}
+
 .form-login {
   margin: 100px auto;
 }

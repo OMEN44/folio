@@ -1,18 +1,42 @@
-const { Sequelize } = require('sequelize')
+const {Sequelize, DataTypes, Op} = require('sequelize')
+const {sequelize, User, Timeline} = require('./databaseConfig')
 
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: 'server/folio.sqlite'
-})
-
-try {
-    await sequelize.authenticate();
-    console.log('Connection has been established successfully.');
-} catch (error) {
-    console.error('Unable to connect to the database:', error);
+const addUser = (username, email, password, access) => {
+    return new Promise((resolve, reject) => {
+            sequelize.sync().then(async () => {
+                resolve(await User.create({
+                    username: username,
+                    email: email,
+                    password: password,
+                    access: access
+                }))
+            }).catch(error => {
+                reject(error)
+            })
+        }
+    )
 }
 
-let db = null
+const getUser = (username, email) => {
+    return new Promise((resolve, reject) => {
+        sequelize.sync().then(async () => {
+            resolve(await User.findAll({
+                raw: true,
+                where: {
+                    [Op.or]: {
+                        username: username,
+                        email: email
+                    }
+                }
+            }))
+        }).catch((error) => console.log('Failed to synchronize with the database:', error))
+    })
+}
+
+module.exports = {addUser, getUser}
+
+
+/*
 let tablesCreated = false;
 
 
@@ -112,12 +136,12 @@ const createTables = async () => {
     }
 }
 
-/*
+/!*
 db.close((err) => {
     if (err) {
         console.error(err.message);
     }
     console.log('Close the database connection.');
-});*/
+});*!/
 
-module.exports = DbHelper
+module.exports = DbHelper*/

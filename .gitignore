@@ -29,3 +29,4 @@ coverage
 
 # deployment files
 folio.db
+folio.sqlite
