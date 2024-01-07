@@ -62,6 +62,17 @@ const search = (e) => {
         return project.title.toLowerCase().includes(searchValue.value.toLowerCase())
             || project.about.toLowerCase().includes(searchValue.value.toLowerCase())
       })
+
+  timelineDisplayData.value = timelineDisplayData.value.sort((a, b) => {
+    return a.date > b.date ? 1 : -1
+  })
+  let currentYear = 0
+  timelineDisplayData.value.forEach((element) => {
+    if (new Date(element.date).getFullYear() > currentYear) {
+      currentYear = new Date(element.date).getFullYear()
+      element.newYear = true
+    }
+  })
 }
 const openFilter = () => filterHidden.value = !filterHidden.value
 const filterClick = (e) => {
@@ -166,7 +177,7 @@ const filterClick = (e) => {
 
 .div-timeline {
   margin: 20px;
-  padding-left: 35px;
+  padding-left: 40px;
   border-left: solid 4px var(--primary);
 }
 

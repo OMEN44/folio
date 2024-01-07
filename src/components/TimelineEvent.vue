@@ -17,8 +17,9 @@ const props = defineProps(['title', 'route', 'about', 'image', 'date', 'newYear'
         <svg-icon type="mdi" :size="40" :path="mdiOpenInApp"></svg-icon>
       </router-link>-->
     </div>
+    <p class="p-date">{{props.date.toLocaleString('default', {month: 'long'})}} {{props.date.getFullYear()}}</p>
     <div class="div-content">
-      <p>{{ props.about }}</p>
+      <p>{{ props.about }} </p>
       <img v-if="props.image !== null" :src="props.image" :alt="props.image" />
     </div>
     <slot></slot>
@@ -26,23 +27,38 @@ const props = defineProps(['title', 'route', 'about', 'image', 'date', 'newYear'
 </template>
 
 <style scoped>
-.div-timeline-event {
-  padding: 10px 50px 10px 10px;
-  border-image: linear-gradient(to right, var(--primary), transparent) 1;
-  border-top: 4px solid;
-  margin-bottom: 25px;
-  position: relative;
-  background: linear-gradient(to bottom right, var(--secondary), transparent, transparent);
-  transition: background-image 0.5s;
+.div-header:before {
+  content:"";
+  position: absolute;
+  top: 0;
+  left: -25px;
+  border-width: 25px 0 0 25px;
+  border-style: solid;
+  border-color: var(--primary) transparent;
 }
 
-.div-timeline-event:hover {
-  background: linear-gradient(to bottom right, var(--secondary), transparent);
+.div-header:after {
+  content:"";
+  position: absolute;
+  top: 0;
+  left: -19px;
+  border-width: 20px 0 0 20px;
+  border-style: solid;
+  border-color: var(--accent) transparent;
+}
+
+.div-timeline-event {
+  padding: 10px 50px 10px 10px;
+  border: 4px solid;
+  border-color: var(--primary) transparent transparent var(--primary);
+  margin: 0 0 25px 15px;
+  position: relative;
+  background-color: var(--accent);
 }
 
 .year {
-  left: -69px;
-  top: -17px;
+  left: -92px;
+  top: -19px;
   content: '';
   background-color: var(--background);
   border: var(--primary) 4px solid;
@@ -56,7 +72,7 @@ const props = defineProps(['title', 'route', 'about', 'image', 'date', 'newYear'
 }
 
 .circle {
-  left: -48px;
+  left: -71px;
   top: -13px;
   content: '';
   background-color: var(--background);
@@ -68,10 +84,10 @@ const props = defineProps(['title', 'route', 'about', 'image', 'date', 'newYear'
 }
 
 .div-timeline-event::before {
-  left: -40px;
+  left: -60px;
   top: -4px;
   position: absolute;
-  width: 40px;
+  width: 60px;
   height: 4px;
   background-color: var(--primary);
   content: '';
@@ -84,7 +100,13 @@ const props = defineProps(['title', 'route', 'about', 'image', 'date', 'newYear'
 
 .div-header {
   display: flex;
+  flex-direction: row;
   align-items: center;
+}
+
+.p-date {
+  margin-bottom: 8px;
+  font-size: 16px;
 }
 
 i {
