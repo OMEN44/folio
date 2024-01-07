@@ -1,12 +1,16 @@
-<script setup>
+<script setup lang="ts">
+import {defineProps} from 'vue'
 
-const props = defineProps(['title', 'route', 'about', 'image'])
+const props = defineProps(['title', 'route', 'about', 'image', 'date', 'newYear'])
 
 
 </script>
 
 <template>
   <div class="div-timeline-event">
+    <span :class="{year: props.newYear, circle: !props.newYear}">
+      {{ (props.newYear ? props.date.getFullYear() : '') }}
+    </span>
     <div class="div-header">
       <h2>{{ props.title }}</h2>
 <!--      <router-link :v-if="props.route !== null" :to="props.route">
@@ -36,7 +40,22 @@ const props = defineProps(['title', 'route', 'about', 'image'])
   background: linear-gradient(to bottom right, var(--secondary), transparent);
 }
 
-.div-timeline-event::after {
+.year {
+  left: -69px;
+  top: -17px;
+  content: '';
+  background-color: var(--background);
+  border: var(--primary) 4px solid;
+  border-radius: 20%;
+  width: 60px;
+  height: 35px;
+  position: absolute;
+  text-align: center;
+  padding-top: 3px;
+  font-size: 18px;
+}
+
+.circle {
   left: -48px;
   top: -13px;
   content: '';

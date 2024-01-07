@@ -38,26 +38,38 @@ const User = sequelize.define('user', {
     }
 })
 
-const Timeline = sequelize.define('timeline', {
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true
+const Timeline = sequelize.define('timeline',
+    {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            allowNull: false,
+            primaryKey: true
+        },
+        title: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        date: {
+            type: DataTypes.DATE,
+            allowNull: false,
+        },
+        about: {
+            type: DataTypes.STRING,
+            allowNull: false
+        }
     },
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    date: {
-        type: DataTypes.DATE,
-        allowNull: false,
-    },
-    about: {
-        type: DataTypes.STRING,
-        allowNull: false
+    {
+        indexes: [
+            {
+                unique: true,
+                fields: ["title", "date"]
+            }
+        ]
     }
-})
+)
+
+
 
 User.sync().then(() => {
     console.log('User table created successfully!');

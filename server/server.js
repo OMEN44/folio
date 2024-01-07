@@ -4,13 +4,8 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 
 
-//const { db } = require('./databaseConfig')
-const { addUser, getUser} = require('./database')
-/*addUser("Blorp", "blorp@gmail.com", 'pass', 0).then(result => console.log(result))
-    .catch(error => {
-        if (error.name === 'SequelizeUniqueConstraintError')
-            console.log('user already exists')
-    })*/
+const { addUser, getUser, getTimelineData, addTimelineEvent} = require('./database')
+
 
 const app = express();
 const secretKey = 'My-epic-secret-key-1234$'; // Replace with a secure secret key
@@ -44,6 +39,12 @@ app.post('/register', (req, res) => {
             if (error.name === 'SequelizeUniqueConstraintError')
                 res.status(409).json({error: `User: ${username} or email: ${email} are already in use.`})
         })
+})
+
+app.get('/timeline', (req, res) => {
+    getTimelineData()
+        .then((data) => res.json({message: 'success', data: data}))
+        .catch(error => res.status(404).json({error: 'Could not access timeline data'}))
 })
 
 // Example protected route
