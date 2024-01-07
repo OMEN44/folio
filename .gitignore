@@ -30,3 +30,4 @@ coverage
 # deployment files
 folio.db
 folio.sqlite
+folio-backup.sqlite
