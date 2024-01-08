@@ -54,3 +54,12 @@ img {
     max-width: 100%;
     height: auto;
 }
+
+.icon {
+    transition: color 0.5s;
+    color: var(--text);
+}
+
+.icon:hover {
+    color: var(--primary)
+}

@@ -58,4 +58,12 @@ const getTimelineData = () => {
     })
 }
 
-module.exports = {addUser, getUser, addTimelineEvent, getTimelineData}
+const deleteTimelineEvent = (id) => {
+    return new Promise((resolve, reject) => {
+        sequelize.sync().then(async () => {
+            resolve(await Timeline.destroy({ where: { id: id }}))
+        }).catch(error => reject(error))
+    })
+}
+
+module.exports = {addUser, getUser, addTimelineEvent, getTimelineData, deleteTimelineEvent}

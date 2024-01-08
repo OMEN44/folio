@@ -1,8 +1,9 @@
 <script setup lang="ts">
 
 
+import axios from "axios";
 
-/*axios.get('http://localhost:3000/api/protected', {
+axios.get('http://localhost:3000/api/protected', {
   headers: {
     Authorization: `Bearer ${store.getters.token}`
   }
@@ -10,7 +11,7 @@
   console.log(res.data)
 }).catch(error => {
   console.log("nut")
-})*/
+})
 
 </script>
 

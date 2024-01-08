@@ -25,7 +25,6 @@ const login = async (e) => {
     }).then(async response => {
       const data = response.data;
       await store.dispatch('login', data.token)
-      console.log(data)
       errorMessage.value = data.username
       switchFormContent('logout')
     }).catch(error => {

@@ -1,8 +1,41 @@
 <script setup lang="ts">
-import {defineProps} from 'vue'
+import {defineProps, ref} from 'vue'
 
-const props = defineProps(['title', 'route', 'about', 'image', 'date', 'newYear'])
+import SvgIcon from '@jamescoyle/vue-icon'
+import { mdiClose } from '@mdi/js'
+import axios from "axios";
+import store from '@/store'
 
+const props = defineProps(['id', 'title', 'route', 'about', 'image', 'date', 'newYear'])
+const emit = defineEmits(['eventDeleted'])
+
+const loggedIn = ref(false)
+
+const checkAccess = () => {
+  if (store.getters.isAuthenticated) {
+    axios.get('http://localhost:3000/access-level', {
+    headers: {
+      Authorization: `Bearer ${store.getters.token}`
+    }
+    }).then(response => {
+      if (response.data.valid && response.data.access === 0)
+        loggedIn.value = true
+    }).catch(() => loggedIn.value = false)
+  }
+}
+checkAccess()
+
+
+const deleteEvent = (e) => {
+  console.log(props.id)
+  axios.post('http://localhost:3000/timeline/delete', { id: props.id }, {
+    headers: {
+      Authorization: `Bearer ${store.getters.token}`
+    }
+  })
+      .then(() => emit('eventDeleted'))
+      .catch(error => console.log(error))
+}
 
 </script>
 
@@ -12,10 +45,13 @@ const props = defineProps(['title', 'route', 'about', 'image', 'date', 'newYear'
       {{ (props.newYear ? props.date.getFullYear() : '') }}
     </span>
     <div class="div-header">
-      <h2>{{ props.title }}</h2>
-<!--      <router-link :v-if="props.route !== null" :to="props.route">
-        <svg-icon type="mdi" :size="40" :path="mdiOpenInApp"></svg-icon>
-      </router-link>-->
+      <div class="div-title">
+        <h2>{{ props.title }}</h2>
+        <!--      <router-link :v-if="props.route !== null" :to="props.route">
+                <svg-icon type="mdi" :size="40" :path="mdiOpenInApp"></svg-icon>
+              </router-link>-->
+      </div>
+      <svg-icon @click="deleteEvent" v-if="loggedIn" class="icon" type="mdi" :size="30" :path="mdiClose"></svg-icon>
     </div>
     <p class="p-date">{{props.date.toLocaleString('default', {month: 'long'})}} {{props.date.getFullYear()}}</p>
     <div class="div-content">
@@ -48,7 +84,7 @@ const props = defineProps(['title', 'route', 'about', 'image', 'date', 'newYear'
 }
 
 .div-timeline-event {
-  padding: 10px 50px 10px 10px;
+  padding: 10px;
   border: 4px solid;
   border-color: var(--primary) transparent transparent var(--primary);
   margin: 0 0 25px 15px;
@@ -98,10 +134,16 @@ const props = defineProps(['title', 'route', 'about', 'image', 'date', 'newYear'
   flex-direction: row;
 }
 
-.div-header {
+.div-title {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.div-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .p-date {
