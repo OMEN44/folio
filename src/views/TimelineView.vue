@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import TimelineEvent from "@/components/TimelineEvent.vue";
-import { ref, onMounted, onBeforeMount } from "vue";
+import { ref } from "vue";
 
-import SvgIcon from '@jamescoyle/vue-icon'
+import SvgIcon from "@jamescoyle/vue-icon"
 import { mdiTagSearch, mdiFilter, mdiClose } from '@mdi/js'
 import axios from "axios";
 import store from '@/store'
@@ -35,6 +35,7 @@ const initTimeline = () => {
   axios.get('http://localhost:3000/timeline')
       .then(response => {
         timelineData.value = response.data.data
+        if (timelineData.value === undefined) return
         timelineData.value = timelineData.value.sort((a, b) => {
           return a.date > b.date ? 1 : -1
         })
@@ -201,7 +202,7 @@ const createEvent = (e) => {
     <div class="div-timeline">
       <timeline-event
           @event-deleted="initTimeline"
-          v-for="(item, index) in timelineDisplayData"
+          v-for="(item) in timelineDisplayData"
           v-bind="item"
       />
     </div>

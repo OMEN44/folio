@@ -1,52 +1,47 @@
 <script setup lang="ts">
 
 import axios from "axios";
-import {ref} from "vue";
+import {ComponentPublicInstance, ref} from "vue";
+import store from '@/store'
+import MarkdownEditor from "@/components/MarkdownEditor.vue";
 
-/*axios.get('http://localhost:3000/api/protected', {
+const notes = ref(null)
+const selected = ref(0)
+const accessLevel = ref(0);
+
+if (store.getters.isAuthenticated) {
+  axios.get('http://localhost:3000/access-level', {
+    headers: {
+      Authorization: `Bearer ${store.getters.token}`
+    }
+  }).then(response => {
+    if (response.data.valid && response.data.access === 0)
+      accessLevel.value = 0
+  }).catch(() => accessLevel.value = 1)
+}
+
+axios.get('http://localhost:3000/notes', {
   headers: {
     Authorization: `Bearer ${store.getters.token}`
   }
-}).then(res => {
-  console.log(res.data)
-}).catch(error => {
-  console.log("nut")
-})*/
+}).then(result => {
+  notes.value = result.data.value.map(note => ({
+    id: note.id,
+    title: note.title,
+    content: note.content,
+    route: note.route,
+    isPrivate: note.private,
+    authorId: note['user.id'],
+    authorName: note['user.username']
+  }))
+}).catch(error => console.log(error))
 
-const dummyData = ref([
-  {
-    name: 'example1',
-    route: '/example-route1'
-  },
-  {
-    name: 'example2',
-    route: '/example-route2'
-  },
-  {
-    name: 'example3',
-    route: '/example-route3'
-  },
-  {
-    name: 'example4',
-    route: '/example-route4'
-  }
-])
+const changeSelection = (e) => {
+  selected.value = Number(e.target.id)
+  editor.value.changeNote(notes.value[selected.value].content)
+}
 
-const selected = ref(2)
-
-const dummyMarkdown = ref(`
-# This is a header!
-paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph
-paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph
-paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph
-
-## Small header
-balls
-
-## Another SMall header
-Hello world!
-
-`)
+const editor = ref(null)
 
 </script>
 
@@ -62,21 +57,26 @@ Hello world!
         <span class="v-shape"/>
       </div>
       <div class="div-menu-body">
-        <div class="div-note" v-for="(element, index) in dummyData" :class="{highlight: index === selected}">
-          <h3>{{ element.name }}</h3>
-          <span>{{ element.route }}</span>
+        <div class="div-note"
+             v-for="(element, index) in notes"
+             @click="changeSelection"
+             :class="{highlight: index === selected}"
+             :id="index">
+          <h3>{{ element['title'] }}</h3>
+          <span>{{ element['route'] }}</span>
         </div>
       </div>
     </div>
-    <div class="div-content">
+    <div class="div-notes-content">
       <div class="div-title">
-        <h1>Example</h1>
+        <h1 v-if="notes !== null" v-html="notes[selected].title"></h1>
         <span class="circle" id="tr"/>
         <span class="circle" id="br"/>
       </div>
-      <div class="div-content-body" v-html="dummyMarkdown">
-
-      </div>
+      <MarkdownEditor ref="editor"
+                      v-if="notes !== null"
+                      :raw-markdown="notes[selected].content"
+                      :editor-open="accessLevel"/>
     </div>
   </div>
 </template>
@@ -84,7 +84,6 @@ Hello world!
 <style scoped>
 .div-container {
   display: flex;
-  flex-direction: row;
   margin: 60px 80px;
   border-top: var(--primary) 4px solid;
 }
@@ -99,23 +98,24 @@ Hello world!
 
 .div-menu {
   border-right: var(--primary) 4px solid;
-  width: fit-content;
   min-width: 200px;
   position: relative;
 }
 
-.div-content {
-  width: 100%;
+.div-notes-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
-.div-content-body {
-  padding: 10px;
+.div-note * {
+  pointer-events: none;
 }
 
 /*Hover effect*/
 
 .div-note {
-  padding: 5px 10px;
+  padding: 10px 15px;
   margin: 0;
   text-decoration: none;
   position: relative;

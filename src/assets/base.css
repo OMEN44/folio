@@ -15,6 +15,10 @@
     --text: rgb(208, 208, 208);
 }
 
+.hidden {
+    display: none;
+}
+
 
 html {
     box-sizing: border-box;
@@ -34,16 +38,12 @@ p {
     font-weight: 400;
 }
 
-body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+body, h1, h2, h3, h4, h5, h6, p {
     margin: 0;
     padding: 0;
     color: var(--text);
     font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
     Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-}
-
-ol, ul {
-    list-style: none;
 }
 
 img {

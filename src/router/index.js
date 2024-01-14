@@ -28,7 +28,7 @@ const router = createRouter({
             path: '/notes',
             name: 'notes',
             component: NotesView,
-            meta: { requiresAuth: true },
+            /*meta: { requiresAuth: true },*/
         },
         {
             path: '/:pathMatch(.*)*',

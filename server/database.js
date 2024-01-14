@@ -1,5 +1,5 @@
-const {Sequelize, DataTypes, Op} = require('sequelize')
-const {sequelize, User, Timeline} = require('./databaseConfig')
+const {Op} = require('sequelize')
+const {sequelize, Notes, User, Timeline} = require('./databaseConfig')
 
 const addUser = (username, email, password, access) => {
     return new Promise((resolve, reject) => {
@@ -29,7 +29,7 @@ const getUser = (username, email) => {
                     }
                 }
             }))
-        }).catch((error) => console.log('Failed to synchronize with the database:', error))
+        }).catch((error) => reject(error))
     })
 }
 
@@ -54,7 +54,7 @@ const getTimelineData = () => {
             resolve(await Timeline.findAll({
                 raw: true
             }))
-        }).catch((error) => console.log('Failed to synchronize with the database:', error))
+        }).catch((error) => reject(error))
     })
 }
 
@@ -66,4 +66,76 @@ const deleteTimelineEvent = (id) => {
     })
 }
 
-module.exports = {addUser, getUser, addTimelineEvent, getTimelineData, deleteTimelineEvent}
+const getAllNotes = () => {
+    return new Promise((resolve, reject) => {
+        sequelize.sync().then(async () => {
+            resolve(await Notes.findAll({
+                raw: true,
+                order: [
+                    ['title', 'ASC']
+                ],
+                include: User
+            }))
+        }).catch((error) => reject(error))
+    })
+}
+const getAllPublicNotes = () => {
+    return new Promise((resolve, reject) => {
+        sequelize.sync().then(async () => {
+            resolve(await Notes.findAll({
+                raw: true,
+                where: {
+                    private: false
+                },
+                order: [
+                    ['title', 'ASC']
+                ],
+                include: User
+            }))
+        }).catch((error) => reject(error))
+    })
+}
+
+const addNote = (title, content, access, route, author) => {
+    return new Promise((resolve, reject) => {
+            sequelize.sync().then(async () => {
+                resolve(await Notes.create({
+                    title: title,
+                    content: content,
+                    private: access,
+                    route: route,
+                    userId: author
+                }))
+            }).catch(error => {
+                reject(error)
+            })
+        }
+    )
+}
+
+const editNote = (id, title, content, access) => {
+    return new Promise((resolve, reject) => {
+            sequelize.sync().then(async () => {
+                const note = await Notes.findByPk(id)
+                note.title = title
+                note.content = content
+                note.access = access
+                resolve(await note.save())
+            }).catch(error => {
+                reject(error)
+            })
+        }
+    )
+}
+
+module.exports = {
+    addUser,
+    getUser,
+    addTimelineEvent,
+    getTimelineData,
+    deleteTimelineEvent,
+    getAllNotes,
+    getAllPublicNotes,
+    addNote,
+    editNote
+}

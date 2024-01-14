@@ -4,9 +4,41 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 
 
-const { addUser, getUser, getTimelineData, addTimelineEvent, deleteTimelineEvent} = require('./database')
-const {response} = require("express");
+const {
+    addUser,
+    getUser,
+    getTimelineData,
+    addTimelineEvent,
+    deleteTimelineEvent,
+    getAllNotes,
+    getAllPublicNotes,
+    addNote,
+    editNote
+} = require('./database')
+/*
 
+editNote(4, 'got some ideas', 'blank', 1)
+
+addUser('huon', 'huonswales@gmail.com', 'password', 0)
+addUser('user2', 'user@gmail.com', 'password', 1)
+
+addNote('Test note 1', '# Title', true, 'test-note', 1)
+addNote('Electromagnetic induction', `\`\`\`cpp
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int num = 0;
+    cout << "The number is: " << num << endl;
+    return 0;
+}
+\`\`\``, false, 'emi', 1)
+addNote('Spider-man', '# Spider-man', false, 'spider-man', 1)
+addNote('Running out of ideas', '# Running out of ideas', true, 'no-ideas', 1)
+addNote('I LIKE ROBOTS', '# I LIKE ROBOTS', false, 'robots', 1)
+*/
 
 const app = express();
 const secretKey = 'My-epic-secret-key-1234$'; // Replace with a secure secret key
@@ -18,6 +50,12 @@ app.use(cors());
 app.get('/access-level', (req, res) => {
     res.json({ valid: true, access: checkAccess(req, res).access })
 })
+
+/*=================================================
+*
+* Login endpoints
+*
+=================================================*/
 
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
@@ -46,10 +84,17 @@ app.post('/register', (req, res) => {
         })
 })
 
+
+/*=================================================
+*
+* Timeline endpoints
+*
+=================================================*/
+
 app.get('/timeline', (req, res) => {
     getTimelineData()
-        .then((data) => res.json({message: 'success', data: data}))
-        .catch(error => res.status(404).json({error: 'Could not access timeline data'}))
+        .then((data) => res.json({message: 'success', value: data}))
+        .catch(error => res.status(404).json({message: 'Could not access timeline data', error: error}))
 })
 
 app.post('/timeline', (req, res) => {
@@ -65,9 +110,7 @@ app.post('/timeline', (req, res) => {
 })
 
 app.post('/timeline/delete', (req, res) => {
-    console.log(checkAccess(req, res))
     if (checkAccess(req, res).access === 0) {
-        console.log('error')
         const {id} = req.body
         deleteTimelineEvent(id)
             .then(() => res.json({ message: 'Success' }))
@@ -78,8 +121,42 @@ app.post('/timeline/delete', (req, res) => {
 })
 
 
+/*=================================================
+*
+* Notes endpoints
+*
+=================================================*/
+
+app.get('/notes', (req, res) => {
+    if (checkAccess(req, res).access === 0) {
+        getAllNotes()
+            .then(data => res.json({message: 'success', value: data}))
+            .catch(error => res.status(404).json({message: 'Could not access timeline data', error: error}))
+    } else {
+        getAllPublicNotes()
+            .then(data => res.json({message: 'success', value: data}))
+            .catch(error => res.status(404).json({message: 'Could not access timeline data', error: error}))
+    }
+})
+
+app.post('/notes/update', (req, res) => {
+    console.log('update')
+})
+
+app.post('/notes/create', (req, res) => {
+    console.log('create')
+})
+
+app.post('/notes/delete', (req, res) => {
+    console.log('delete')
+})
+
+
+
 const checkAccess = (req, res) => {
+
     const token = req.headers.authorization?.split(' ')[1];
+    if (token === 'null') return false;
 
     if (token) {
         try {

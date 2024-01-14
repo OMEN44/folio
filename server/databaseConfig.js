@@ -69,7 +69,40 @@ const Timeline = sequelize.define('timeline',
     }
 )
 
+const Notes = sequelize.define('notes',
+    {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            allowNull: false,
+            primaryKey: true
+        },
+        title: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        content: {
+            type: DataTypes.TEXT,
+            allowNull: false
+        },
+        private: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: true
+        },
+        route: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true
+        }
+    }
+)
 
+Timeline.belongsTo(Notes)
+Notes.hasOne(Timeline)
+
+User.hasMany(Notes)
+Notes.belongsTo(User)
 
 User.sync().then(() => {
     console.log('User table created successfully!');
@@ -83,4 +116,10 @@ Timeline.sync().then(() => {
     console.error('Unable to create table : ', error);
 });
 
-module.exports = { sequelize, User, Timeline };
+Notes.sync().then(() => {
+    console.log('Notes table created successfully!');
+}).catch((error) => {
+    console.error('Unable to create table : ', error);
+});
+
+module.exports = { sequelize, Notes, User, Timeline };
