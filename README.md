@@ -1,6 +1,13 @@
-# folio
+# Huon's project folio
 
-This template should help get you started developing with Vue 3 in Vite.
+This folio is intended to act as a showcase for everything that I have worked on .
+
+- [x] add Notes page
+- [ ] encrypt passwords
+- [ ] Remove repeted functions and styles
+- [ ] Link the timeline and notes page
+- [ ] Change `message: 'success'` to `success: true` on the server
+- [ ] Use cookies not store
 
 ## Recommended IDE Setup
 
