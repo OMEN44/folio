@@ -10,6 +10,7 @@ This folio is intended to act as a showcase for everything that I have worked on
 - [ ] Use cookies not store
 - [ ] Add ability to change note privacy setting
 - [ ] Add overlays
+- [ ] Remove wacky errors that exist despite running perfectly
 - [ ] Optimise the shit outta it
 
 ## Recommended IDE Setup
