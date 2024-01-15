@@ -1,13 +1,17 @@
 <script setup lang="ts">
 
 import axios from "axios";
-import {ComponentPublicInstance, ref} from "vue";
+import {ref} from "vue";
 import store from '@/store'
 import MarkdownEditor from "@/components/MarkdownEditor.vue";
+import SvgIcon from "@jamescoyle/vue-icon"
+import {mdiPlus} from '@mdi/js'
 
 const notes = ref(null)
 const selected = ref(0)
-const accessLevel = ref(0);
+const accessLevel = ref(1);
+const titleInput = ref('')
+const isPrivate = ref(true)
 
 if (store.getters.isAuthenticated) {
   axios.get('http://localhost:3000/access-level', {
@@ -20,28 +24,63 @@ if (store.getters.isAuthenticated) {
   }).catch(() => accessLevel.value = 1)
 }
 
-axios.get('http://localhost:3000/notes', {
-  headers: {
-    Authorization: `Bearer ${store.getters.token}`
-  }
-}).then(result => {
-  notes.value = result.data.value.map(note => ({
-    id: note.id,
-    title: note.title,
-    content: note.content,
-    route: note.route,
-    isPrivate: note.private,
-    authorId: note['user.id'],
-    authorName: note['user.username']
-  }))
-}).catch(error => console.log(error))
+const initNotes = () => {
+  axios.get('http://localhost:3000/notes', {
+    headers: {
+      Authorization: `Bearer ${store.getters.token}`
+    }
+  }).then(result => {
+    if (result.data.value.length > 0) {
+      notes.value = result.data.value.map(note => ({
+        id: note.id,
+        title: note.title,
+        content: note.content,
+        route: note.route,
+        isPrivate: note.private,
+        authorId: note['user.id'],
+        authorName: note['user.username']
+      }))
+    }
+  }).catch(error => console.log(error))
+}
 
 const changeSelection = (e) => {
   selected.value = Number(e.target.id)
   editor.value.changeNote(notes.value[selected.value].content)
 }
 
+const deleteNote = () => {
+  selected.value = 0;
+  initNotes()
+  editor.value.changeNote(notes.value[selected.value].content)
+}
+
 const editor = ref(null)
+initNotes()
+
+
+// Create new note
+const createNote = (e: Event) => {
+  e.preventDefault()
+  if (titleInput.value !== '') {
+    axios.post('http://localhost:3000/notes/create',
+        {
+          title: titleInput.value,
+          access: isPrivate.value,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${store.getters.token}`
+          }
+        })
+        .then(() => {
+          console.log('done')
+          titleInput.value = '';
+          initNotes()
+        })
+        .catch(error => console.log(error.response.data.error))
+  }
+}
 
 </script>
 
@@ -65,6 +104,15 @@ const editor = ref(null)
           <h3>{{ element['title'] }}</h3>
           <span>{{ element['route'] }}</span>
         </div>
+        <div class="div-add-note" v-if="!accessLevel">
+          <form>
+            <input type="text" v-model="titleInput">
+            <input type="checkbox" v-model="isPrivate">
+            <button class="button-border" @click="createNote">
+              <svg-icon type="mdi" :path="mdiPlus"/>
+            </button>
+          </form>
+        </div>
       </div>
     </div>
     <div class="div-notes-content">
@@ -74,9 +122,13 @@ const editor = ref(null)
         <span class="circle" id="br"/>
       </div>
       <MarkdownEditor ref="editor"
-                      v-if="notes !== null"
+                      v-if="notes !== null && notes.length > 0"
                       :raw-markdown="notes[selected].content"
-                      :editor-open="accessLevel"/>
+                      :editor-open="accessLevel"
+                      :id="notes[selected].id"
+                      :private="notes[selected].isPrivate"
+                      @note-deleted="deleteNote"
+                      @update-note="initNotes"/>
     </div>
   </div>
 </template>
@@ -112,16 +164,24 @@ const editor = ref(null)
   pointer-events: none;
 }
 
+.div-add-note {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
 /*Hover effect*/
 
 .div-note {
+  height: fit-content;
   padding: 10px 15px;
-  margin: 0;
+  margin: 6px;
   text-decoration: none;
   position: relative;
   overflow: hidden;
   cursor: pointer;
   z-index: 0;
+  border-radius: 8px;
 }
 
 .highlight {

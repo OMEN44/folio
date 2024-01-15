@@ -3,6 +3,7 @@ import TextBox from "@/components/TextBox.vue";
 import axios from "axios";
 import store from '@/store'
 import {onMounted, ref} from "vue";
+import '@/assets/base.css'
 
 const errorMessage = ref('')
 
@@ -89,8 +90,8 @@ onMounted(() => {
         <span v-html="errorMessage"></span>
         <input id="username-login" type="text" placeholder="Username">
         <input id="password-login" type="password" placeholder="Password">
-        <button @click="login" type="submit">Submit</button>
-        <button @click="switchFormContent('register')" type="button">Register</button>
+        <button class="button-border" @click="login" type="submit">Submit</button>
+        <button class="button-border" @click="switchFormContent('register')" type="button">Register</button>
       </form>
     </div>
     <div id="register">
@@ -100,8 +101,8 @@ onMounted(() => {
         <input id="username-register" type="text" placeholder="Username">
         <input id="email-register" type="text" placeholder="Email">
         <input id="password-register" type="password" placeholder="Password">
-        <button @click="register" type="submit">Submit</button>
-        <button @click="logout" type="button">Cancel</button>
+        <button class="button-border" @click="register" type="submit">Submit</button>
+        <button class="button-border" @click="logout" type="button">Cancel</button>
       </form>
     </div>
     <div id="logout">
@@ -110,7 +111,7 @@ onMounted(() => {
           <p>You are logged in as:</p>
           <span v-html="errorMessage"></span>
         </div>
-        <button @click="logout">Logout</button>
+        <button class="button-border" @click="logout">Logout</button>
       </div>
     </div>
   </TextBox>
@@ -158,17 +159,7 @@ input {
 }
 
 button {
-  width: 180px;
   margin: 5px auto;
-  padding: 5px;
-  border: var(--background) solid 2px;
-  background-color: var(--secondary);
-  transition: background-color 0.5s;
-  border-radius: 2px;
-}
-
-button:hover {
-  background-color: var(--primary);
 }
 
 span {

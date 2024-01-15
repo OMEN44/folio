@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import {watch, defineProps, onMounted, ref} from 'vue'
 
-const props = defineProps(['rawMarkdown', 'editorOpen'])
+const props = defineProps(['rawMarkdown', 'editorOpen', 'id', 'private'])
+const emit = defineEmits(['noteDeleted', 'updateNote'])
+
 const raw = ref(null)
 
+// Mark down imports
 import MarkdownIt from "markdown-it";
 import MarkdownItHighlightJs from "markdown-it-highlightjs"
 
@@ -16,7 +19,13 @@ import multiTable from "markdown-it-multimd-table"
 import taskList from "markdown-it-task-lists"
 import mark from "markdown-it-mark"
 
+//icon imports
+import SvgIcon from "@jamescoyle/vue-icon"
+import {mdiClose, mdiContentSave, mdiReload} from '@mdi/js'
+
 import 'highlight.js/styles/github-dark.css'
+import axios from "axios";
+import store from '@/store'
 
   const md = MarkdownIt()
       .use(MarkdownItHighlightJs)
@@ -49,15 +58,53 @@ raw.value = props.rawMarkdown
 
 defineExpose({changeNote})
 
+const deleteNote = (e) => {
+  axios.post('http://localhost:3000/notes/delete',
+      {
+        id: props.id
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${store.getters.token}`
+        }
+      })
+      .then(() => emit('noteDeleted'))
+      .catch(error => console.log(error.response.data.error))
+}
+
+const saveNote = (e) => {
+  axios.post('http://localhost:3000/notes/update',
+      {
+        id: props.id,
+        content: raw.value,
+        access: props.private
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${store.getters.token}`
+        }
+      })
+      .then(() => emit('updateNote'))
+      .catch(error => console.log(error.response.data.error))
+}
+
+const undoChanges = (e) => raw.value = props.rawMarkdown
+
 </script>
 
 <template>
   <div class="div-editor-container">
     <div class="div-input" :class="{hidden: props.editorOpen !== 0}">
       <div class="div-input-controls">
-        <button>Save</button>
-        <button>Discard changes</button>
-        <button>Delete note</button>
+        <button class="button-border" @click="saveNote">
+          <svg-icon class="icon" type="mdi" :path="mdiContentSave"/>
+        </button>
+        <button class="button-border" @click="undoChanges">
+          <svg-icon class="icon" type="mdi" :path="mdiReload"/>
+        </button>
+        <button class="button-border" @click="deleteNote">
+          <svg-icon class="icon" type="mdi" :path="mdiClose"/>
+        </button>
       </div>
       <textarea :value="raw"
                 @input="onUpdate"
@@ -83,11 +130,13 @@ defineExpose({changeNote})
 }
 
 .div-input-controls {
-
+  display: flex;
+  flex-direction: row;
+  margin: 5px;
 }
 
 textarea {
-  padding-left: 5px;
+  padding: 5px;
   width: 100%;
   height: fit-content;
   resize: none;

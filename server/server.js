@@ -13,7 +13,8 @@ const {
     getAllNotes,
     getAllPublicNotes,
     addNote,
-    editNote
+    editNote,
+    deleteNote
 } = require('./database')
 /*
 
@@ -140,18 +141,45 @@ app.get('/notes', (req, res) => {
 })
 
 app.post('/notes/update', (req, res) => {
-    console.log('update')
+    if (checkAccess(req, res).access === 0) {
+        const {id, content, access} = req.body
+        editNote(id, content, access)
+            .then(() => res.json({ message: 'Success' }))
+            .catch(error => {
+                res.status(404).json({message: `Note not found`, error: error})
+            })
+    } else {
+        res.status(401).json({ error: 'User not logged in' })
+    }
 })
 
 app.post('/notes/create', (req, res) => {
-    console.log('create')
+    const user = checkAccess(req, res)
+    if (user.access === 0) {
+        const {title, access} = req.body
+        addNote(title, '# Title\nAdd some content', access, title, user.userId)
+            .then(() => res.json({ message: 'Success' }))
+            .catch(error => {
+                console.log(error)
+                res.status(404).json({message: `Unable to create`, error: error})
+            })
+    } else {
+        res.status(401).json({ error: 'User not logged in' })
+    }
 })
 
 app.post('/notes/delete', (req, res) => {
-    console.log('delete')
+    if (checkAccess(req, res).access === 0) {
+        const {id} = req.body
+        deleteNote(id)
+            .then(() => res.json({ message: 'Success' }))
+            .catch(error => {
+                res.status(404).json({message: `Note not found`, error: error})
+            })
+    } else {
+        res.status(401).json({ error: 'User not logged in' })
+    }
 })
-
-
 
 const checkAccess = (req, res) => {
 

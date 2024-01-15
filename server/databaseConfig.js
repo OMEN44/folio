@@ -92,8 +92,7 @@ const Notes = sequelize.define('notes',
         },
         route: {
             type: DataTypes.STRING,
-            allowNull: false,
-            unique: true
+            allowNull: false
         }
     }
 )

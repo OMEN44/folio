@@ -181,13 +181,13 @@ const createEvent = (e) => {
     <form class="filter">
       <input class="input-filter" v-model="searchValue" placeholder="Search Timeline">
       <button class="button-filter" type="button" @click="cancel">
-        <svg-icon class="icon" type="mdi" :size="30" :path="mdiClose"></svg-icon>
+        <svg-icon class="icon icon-hover" type="mdi" :size="30" :path="mdiClose"></svg-icon>
       </button>
       <button class="button-filter" type="submit" @click="search">
-        <svg-icon class="icon" type="mdi" :size="30" :path="mdiTagSearch"></svg-icon>
+        <svg-icon class="icon icon-hover" type="mdi" :size="30" :path="mdiTagSearch"></svg-icon>
       </button>
       <button class="button-filter" @click="openFilter" type="button">
-        <svg-icon class="icon" type="mdi" :size="30" :path="mdiFilter"></svg-icon>
+        <svg-icon class="icon icon-hover" type="mdi" :size="30" :path="mdiFilter"></svg-icon>
       </button>
       <span class="span-bl"/>
       <span class="span-tl"/>

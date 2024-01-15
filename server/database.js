@@ -113,11 +113,10 @@ const addNote = (title, content, access, route, author) => {
     )
 }
 
-const editNote = (id, title, content, access) => {
+const editNote = (id, content, access) => {
     return new Promise((resolve, reject) => {
             sequelize.sync().then(async () => {
                 const note = await Notes.findByPk(id)
-                note.title = title
                 note.content = content
                 note.access = access
                 resolve(await note.save())
@@ -126,6 +125,14 @@ const editNote = (id, title, content, access) => {
             })
         }
     )
+}
+
+const deleteNote = (id) => {
+    return new Promise((resolve, reject) => {
+        sequelize.sync().then(async () => {
+            resolve(await Notes.destroy({ where: { id: id }}))
+        }).catch(error => reject(error))
+    })
 }
 
 module.exports = {
@@ -137,5 +144,6 @@ module.exports = {
     getAllNotes,
     getAllPublicNotes,
     addNote,
-    editNote
+    editNote,
+    deleteNote
 }

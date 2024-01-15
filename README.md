@@ -8,6 +8,9 @@ This folio is intended to act as a showcase for everything that I have worked on
 - [ ] Link the timeline and notes page
 - [ ] Change `message: 'success'` to `success: true` on the server
 - [ ] Use cookies not store
+- [ ] Add ability to change note privacy setting
+- [ ] Add overlays
+- [ ] Optimise the shit outta it
 
 ## Recommended IDE Setup
 
