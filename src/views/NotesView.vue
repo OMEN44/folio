@@ -7,7 +7,7 @@ import MarkdownEditor from "@/components/MarkdownEditor.vue";
 import SvgIcon from "@jamescoyle/vue-icon"
 import {mdiPlus} from '@mdi/js'
 
-const notes = ref(null)
+const notes = ref([])
 const selected = ref(0)
 const accessLevel = ref(1);
 const titleInput = ref('')
@@ -40,6 +40,14 @@ const initNotes = () => {
         authorId: note['user.id'],
         authorName: note['user.username']
       }))
+    } else {
+      notes.value.push({
+        id: -1,
+        title: 'No notes found',
+        content: 'Login to create a note!',
+        route: '',
+        isPrivate: false,
+      })
     }
   }).catch(error => console.log(error))
 }
@@ -50,8 +58,8 @@ const changeSelection = (e) => {
 }
 
 const deleteNote = () => {
-  selected.value = 0;
   initNotes()
+  selected.value = 0;
   editor.value.changeNote(notes.value[selected.value].content)
 }
 
@@ -74,7 +82,6 @@ const createNote = (e: Event) => {
           }
         })
         .then(() => {
-          console.log('done')
           titleInput.value = '';
           initNotes()
         })
@@ -96,33 +103,36 @@ const createNote = (e: Event) => {
         <span class="v-shape"/>
       </div>
       <div class="div-menu-body">
-        <div class="div-note"
-             v-for="(element, index) in notes"
-             @click="changeSelection"
-             :class="{highlight: index === selected}"
-             :id="index">
-          <h3>{{ element['title'] }}</h3>
-          <span>{{ element['route'] }}</span>
-        </div>
         <div class="div-add-note" v-if="!accessLevel">
-          <form>
-            <input type="text" v-model="titleInput">
-            <input type="checkbox" v-model="isPrivate">
+          <form class="form-create">
+            <div class="div-create-inputs">
+              <input class="input-text-border" type="text" v-model="titleInput" placeholder="New note title...">
+              <label><input type="checkbox" v-model="isPrivate">Private</label>
+            </div>
             <button class="button-border" @click="createNote">
               <svg-icon type="mdi" :path="mdiPlus"/>
             </button>
           </form>
         </div>
+        <div class="div-note"
+             v-for="(element, index) in notes"
+             @click="changeSelection"
+             :class="{highlight: index === selected}"
+             :key="index">
+          <h3>{{ element['title'] }}</h3>
+          <span>{{ element['route'] }}</span>
+        </div>
       </div>
     </div>
     <div class="div-notes-content">
       <div class="div-title">
-        <h1 v-if="notes !== null" v-html="notes[selected].title"></h1>
+        <h1 v-if="notes[selected] !== undefined" v-html="notes[selected].title"></h1>
         <span class="circle" id="tr"/>
         <span class="circle" id="br"/>
       </div>
       <MarkdownEditor ref="editor"
-                      v-if="notes !== null && notes.length > 0"
+                      v-if="notes[selected] !== undefined"
+                      :key="notes"
                       :raw-markdown="notes[selected].content"
                       :editor-open="accessLevel"
                       :id="notes[selected].id"
@@ -167,7 +177,6 @@ const createNote = (e: Event) => {
 .div-add-note {
   display: flex;
   flex-direction: column;
-  text-align: center;
 }
 
 /*Hover effect*/
@@ -206,6 +215,40 @@ const createNote = (e: Event) => {
   transition:transform 0.5s;
   transform-origin:left;
   transform:scaleX(1);
+}
+
+.form-create {
+  margin: 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.div-create-inputs {
+  margin-right: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.div-create-inputs input[type=checkbox] {
+  margin-top: 8px;
+}
+
+.div-create-inputs input[type=text] {
+  border-radius: 4px;
+  border: none;
+  height: 24px;
+  color: var(--text);
+  background-color: var(--accent);
+  font-size: 14px;
+  padding-left: 4px;
+}
+
+.div-create-inputs input[type=text]:focus {
+  outline: none;
+}
+
+button {
+  margin: 0;
 }
 
 /*Circles:*/

@@ -90,8 +90,10 @@ onMounted(() => {
         <span v-html="errorMessage"></span>
         <input id="username-login" type="text" placeholder="Username">
         <input id="password-login" type="password" placeholder="Password">
-        <button class="button-border" @click="login" type="submit">Submit</button>
-        <button class="button-border" @click="switchFormContent('register')" type="button">Register</button>
+        <div class="div-buttons">
+          <button class="button-border" @click="login" type="submit">Submit</button>
+          <button class="button-border" @click="switchFormContent('register')" type="button">Register</button>
+        </div>
       </form>
     </div>
     <div id="register">
@@ -101,8 +103,10 @@ onMounted(() => {
         <input id="username-register" type="text" placeholder="Username">
         <input id="email-register" type="text" placeholder="Email">
         <input id="password-register" type="password" placeholder="Password">
-        <button class="button-border" @click="register" type="submit">Submit</button>
-        <button class="button-border" @click="logout" type="button">Cancel</button>
+        <div class="div-buttons">
+          <button class="button-border" @click="register" type="submit">Submit</button>
+          <button class="button-border" @click="logout" type="button">Cancel</button>
+        </div>
       </form>
     </div>
     <div id="logout">
@@ -128,6 +132,12 @@ onMounted(() => {
   flex-direction: column;
 }
 
+.div-buttons {
+  display: flex;
+  flex-direction: row;
+  margin: auto;
+}
+
 #logout button {
   margin: 20px auto;
 }
@@ -149,24 +159,35 @@ onMounted(() => {
 input {
   width: 250px;
   margin: 5px auto;
-  padding: 5px;
-  border: var(--background) solid 2px;
-  border-radius: 2px;
+  padding: 5px 10px;
+  background-color: var(--accent);
+  color: var(--text);
+  font-size: 20px;
+  border: none;
+  border-radius: 8px;
 }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active{
+  -webkit-box-shadow: 0 0 0 30px var(--accent) inset !important;
+}
+
+input:focus {
+  outline: none;
+}
+
 .form-content p {
   font-size: 18px;
   margin-bottom: 10px;
 }
 
 button {
-  margin: 5px auto;
+  margin: 5px;
 }
 
 span {
   margin: auto;
-}
-
-.hidden {
-  display: none;
 }
 </style>

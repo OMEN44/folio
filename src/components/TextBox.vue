@@ -170,19 +170,18 @@ span.basic {
 /* Faded appearance styling */
 
 .faded.div-container {
-  border: 4px solid;
-  border-image: linear-gradient(to bottom right, var(--primary), transparent, var(--primary)) 1;
+  border: 4px solid var(--primary);
 }
 
 .faded.div-title {
   border: 0;
-  background-color: var(--secondary);
   padding: 5px 10px;
   border-radius: 0 8px 0 0;
 }
 
 .faded.div-content {
   border-radius: 0 0 0 8px;
+  background-color: transparent;
 }
 
 .faded.tl {
@@ -207,5 +206,45 @@ span.basic {
   height: 20px;
   bottom: -12px;
   right: -12px;
+}
+
+.faded.tr:before {
+  content:"";
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  border-width: 20px 0 0 20px;
+  border-style: solid;
+  border-color: var(--primary) transparent;
+}
+
+.faded.tr:after {
+  content:"";
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  border-width: 14px 0 0 14px;
+  border-style: solid;
+  border-color: var(--background) transparent;
+}
+
+.faded.bl:before {
+  content:"";
+  position: absolute;
+  bottom: -4px;
+  left: -4px;
+  border-width: 20px 0 0 20px;
+  border-style: solid;
+  border-color: transparent var(--primary);
+}
+
+.faded.bl:after {
+  content:"";
+  position: absolute;
+  bottom: -4px;
+  left: -4px;
+  border-width: 14px 0 0 14px;
+  border-style: solid;
+  border-color: transparent var(--background);
 }
 </style>

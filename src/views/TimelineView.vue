@@ -34,7 +34,7 @@ const checkAccess = () => {
 const initTimeline = () => {
   axios.get('http://localhost:3000/timeline')
       .then(response => {
-        timelineData.value = response.data.data
+        timelineData.value = response.data.value
         if (timelineData.value === undefined) return
         timelineData.value = timelineData.value.sort((a, b) => {
           return a.date > b.date ? 1 : -1

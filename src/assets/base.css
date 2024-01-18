@@ -75,7 +75,26 @@ img {
     touch-action: manipulation;
 }
 
-.button-border:hover {
+.button-border:hover, .button-border-small:hover {
     box-shadow: rgba(0, 0, 0, .8) 0 3px 9px 0;
     transform: translateY(-2px);
+}
+
+.button-border-small {
+    background-color: var(--accent);
+    border: none;
+    border-radius: 4px;
+    color: var(--text);
+    cursor: pointer;
+    padding: 2px 3px 0;
+    font-size: 16px;
+    width: fit-content;
+    margin: 5px;
+    transform: translateY(0);
+    transition: transform 150ms, box-shadow 150ms;
+    touch-action: manipulation;
+}
+
+.input-text-border {
+
 }

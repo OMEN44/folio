@@ -3,6 +3,8 @@
 This folio is intended to act as a showcase for everything that I have worked on .
 
 - [x] add Notes page
+- [ ] Add a proper home page
+- [ ] Mkae a better login form
 - [ ] encrypt passwords
 - [ ] Remove repeted functions and styles
 - [ ] Link the timeline and notes page

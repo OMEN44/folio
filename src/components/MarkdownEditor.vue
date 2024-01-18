@@ -59,6 +59,7 @@ raw.value = props.rawMarkdown
 defineExpose({changeNote})
 
 const deleteNote = (e) => {
+  if (props.id === -1) return;
   axios.post('http://localhost:3000/notes/delete',
       {
         id: props.id
@@ -73,6 +74,7 @@ const deleteNote = (e) => {
 }
 
 const saveNote = (e) => {
+  if (props.id === -1) return;
   axios.post('http://localhost:3000/notes/update',
       {
         id: props.id,
