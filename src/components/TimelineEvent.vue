@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import {defineProps, ref} from 'vue'
+import {defineProps, ref, getCurrentInstance} from 'vue'
 
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiClose } from '@mdi/js'
-import axios from "axios";
-import store from '@/store'
+import store from '../store'
 
 const props = defineProps(['id', 'title', 'route', 'about', 'image', 'date', 'newYear'])
 const emit = defineEmits(['eventDeleted'])
+const axios = getCurrentInstance().appContext.config.globalProperties.$axios
 
 const loggedIn = ref(false)
 
 const checkAccess = () => {
   if (store.getters.isAuthenticated) {
-    axios.get('http://localhost:3000/access-level', {
+    axios.get('/access-level', {
     headers: {
       Authorization: `Bearer ${store.getters.token}`
     }
@@ -28,7 +28,7 @@ checkAccess()
 
 const deleteEvent = (e) => {
   console.log(props.id)
-  axios.post('http://localhost:3000/timeline/delete', { id: props.id }, {
+  axios.post('/timeline/delete', { id: props.id }, {
     headers: {
       Authorization: `Bearer ${store.getters.token}`
     }

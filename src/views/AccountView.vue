@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import TextBox from "@/components/TextBox.vue";
-import axios from "axios";
-import store from '@/store'
-import {onMounted, ref} from "vue";
+import TextBox from "../components/TextBox.vue";
+import store from '../store/index'
+import {onMounted, ref, getCurrentInstance} from "vue";
 import '@/assets/base.css'
+import getAxios from '../plugins/axios'
 
 const errorMessage = ref('')
 
@@ -19,7 +19,7 @@ const login = async (e) => {
   const pass = (<HTMLInputElement> document.getElementById("password-login")).value;
 
   try {
-    axios.post('http://localhost:3000/login',
+    getAxios().post('/login',
     {
       username: user,
       password: pass
@@ -45,7 +45,7 @@ const register = async (e) => {
   const email = (<HTMLInputElement> document.getElementById("email-register")).value;
   const pass = (<HTMLInputElement> document.getElementById("password-register")).value;
 
-  axios.post('http://localhost:3000/register', {
+    getAxios().post('/register', {
     username: user,
     password: pass,
     email: email

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {watch, defineProps, onMounted, ref} from 'vue'
+import {watch, defineProps, getCurrentInstance, ref} from 'vue'
 
 const props = defineProps(['rawMarkdown', 'editorOpen', 'id', 'private'])
 const emit = defineEmits(['noteDeleted', 'updateNote'])
@@ -24,19 +24,19 @@ import SvgIcon from "@jamescoyle/vue-icon"
 import {mdiClose, mdiContentSave, mdiReload} from '@mdi/js'
 
 import 'highlight.js/styles/github-dark.css'
-import axios from "axios";
-import store from '@/store'
+import store from '../store'
 
-  const md = MarkdownIt()
-      .use(MarkdownItHighlightJs)
-      .use(sup)
-      .use(sub)
-      .use(emoji)
-      .use(container)
-      .use(anchor)
-      .use(multiTable)
-      .use(taskList)
-      .use(mark)
+const axios = getCurrentInstance().appContext.config.globalProperties.$axios
+const md = MarkdownIt()
+    .use(MarkdownItHighlightJs)
+    .use(sup)
+    .use(sub)
+    .use(emoji)
+    .use(container)
+    .use(anchor)
+    .use(multiTable)
+    .use(taskList)
+    .use(mark)
 
 
 const changeNote = (content) => raw.value = content
@@ -60,7 +60,7 @@ defineExpose({changeNote})
 
 const deleteNote = (e) => {
   if (props.id === -1) return;
-  axios.post('http://localhost:3000/notes/delete',
+  axios.post('/notes/delete',
       {
         id: props.id
       },
@@ -75,7 +75,7 @@ const deleteNote = (e) => {
 
 const saveNote = (e) => {
   if (props.id === -1) return;
-  axios.post('http://localhost:3000/notes/update',
+  axios.post('/notes/update',
       {
         id: props.id,
         content: raw.value,

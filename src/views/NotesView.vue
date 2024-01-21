@@ -1,11 +1,12 @@
 <script setup lang="ts">
 
-import axios from "axios";
-import {ref} from "vue";
-import store from '@/store'
-import MarkdownEditor from "@/components/MarkdownEditor.vue";
+import {ref, getCurrentInstance} from "vue";
+import store from '../store/index'
+import MarkdownEditor from "../components/MarkdownEditor.vue";
 import SvgIcon from "@jamescoyle/vue-icon"
 import {mdiPlus} from '@mdi/js'
+
+const instance = getCurrentInstance().appContext.config.globalProperties
 
 const notes = ref([])
 const selected = ref(0)
@@ -14,7 +15,7 @@ const titleInput = ref('')
 const isPrivate = ref(true)
 
 if (store.getters.isAuthenticated) {
-  axios.get('http://localhost:3000/access-level', {
+  instance.$axios.get('access-level', {
     headers: {
       Authorization: `Bearer ${store.getters.token}`
     }
@@ -25,7 +26,7 @@ if (store.getters.isAuthenticated) {
 }
 
 const initNotes = () => {
-  axios.get('http://localhost:3000/notes', {
+  instance.$axios.get('notes', {
     headers: {
       Authorization: `Bearer ${store.getters.token}`
     }
@@ -71,7 +72,7 @@ initNotes()
 const createNote = (e: Event) => {
   e.preventDefault()
   if (titleInput.value !== '') {
-    axios.post('http://localhost:3000/notes/create',
+    instance.$axios.post('notes/create',
         {
           title: titleInput.value,
           access: isPrivate.value,
@@ -132,7 +133,6 @@ const createNote = (e: Event) => {
       </div>
       <MarkdownEditor ref="editor"
                       v-if="notes[selected] !== undefined"
-                      :key="notes"
                       :raw-markdown="notes[selected].content"
                       :editor-open="accessLevel"
                       :id="notes[selected].id"

@@ -55,12 +55,12 @@ app.get('/', (req, res) => {
 })*/
 
 
-/*app.use(function(req, res, next) {
-    console.log(req.url)
-});*/
+// app.use(function(req, res, next) {
+//     console.log(req.url)
+// });
 // Authenticate user and generate a JWT
-app.get('/access-level', (req, res) => {
-    res.json({ valid: true, access: checkAccess(req, res).access })
+app.get('/api/access-level', (req, res) => {
+    res.json({ valid: true, access: checkAccess(req, res) })
 })
 
 /*=================================================
@@ -69,7 +69,7 @@ app.get('/access-level', (req, res) => {
 *
 =================================================*/
 
-app.post('/login', (req, res) => {
+app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
     getUser(username, username).then(result => {
         if (result.length === 1) {
@@ -85,7 +85,7 @@ app.post('/login', (req, res) => {
     })
 });
 
-app.post('/register', (req, res) => {
+app.post('/api/register', (req, res) => {
     const { username, password, email } = req.body
 
     addUser(username, email, password, 1)
@@ -103,13 +103,13 @@ app.post('/register', (req, res) => {
 *
 =================================================*/
 
-app.get('/timeline', (req, res) => {
+app.get('/api/timeline', (req, res) => {
     getTimelineData()
         .then((data) => res.json({message: 'success', value: data}))
         .catch(error => res.status(404).json({message: 'Could not access timeline data', error: error}))
 })
 
-app.post('/timeline', (req, res) => {
+app.post('/api/timeline', (req, res) => {
     const { title, about, date } = req.body
 
     addTimelineEvent(title, date, about)
@@ -121,7 +121,7 @@ app.post('/timeline', (req, res) => {
         })
 })
 
-app.post('/timeline/delete', (req, res) => {
+app.post('/api/timeline/delete', (req, res) => {
     if (checkAccess(req, res).access === 0) {
         const {id} = req.body
         deleteTimelineEvent(id)
@@ -139,7 +139,7 @@ app.post('/timeline/delete', (req, res) => {
 *
 =================================================*/
 
-app.get('/notes', (req, res) => {
+app.get('/api/notes', (req, res) => {
     if (checkAccess(req, res).access === 0) {
         getAllNotes()
             .then(data => res.json({message: 'success', value: data}))
@@ -151,7 +151,7 @@ app.get('/notes', (req, res) => {
     }
 })
 
-app.post('/notes/update', (req, res) => {
+app.post('/api/notes/update', (req, res) => {
     if (checkAccess(req, res).access === 0) {
         const {id, content, access} = req.body
         editNote(id, content, access)
@@ -164,7 +164,7 @@ app.post('/notes/update', (req, res) => {
     }
 })
 
-app.post('/notes/create', (req, res) => {
+app.post('/api/notes/create', (req, res) => {
     const user = checkAccess(req, res)
     if (user.access === 0) {
         const {title, access} = req.body
@@ -179,7 +179,7 @@ app.post('/notes/create', (req, res) => {
     }
 })
 
-app.post('/notes/delete', (req, res) => {
+app.post('/api/notes/delete', (req, res) => {
     if (checkAccess(req, res).access === 0) {
         const {id} = req.body
         deleteNote(id)
