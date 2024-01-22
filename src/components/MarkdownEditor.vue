@@ -60,7 +60,7 @@ defineExpose({changeNote})
 
 const deleteNote = (e) => {
   if (props.id === -1) return;
-  axios.post('/notes/delete',
+  getAxios().post('/notes/delete',
       {
         id: props.id
       },
@@ -75,7 +75,7 @@ const deleteNote = (e) => {
 
 const saveNote = (e) => {
   if (props.id === -1) return;
-  axios.post('/notes/update',
+  getAxios().post('/notes/update',
       {
         id: props.id,
         content: raw.value,

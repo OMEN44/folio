@@ -4,16 +4,16 @@ import {defineProps, ref, getCurrentInstance} from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiClose } from '@mdi/js'
 import store from '../store'
+import getAxios from '../plugins/axios'
 
-const props = defineProps(['id', 'title', 'route', 'about', 'image', 'date', 'newYear'])
+const props = defineProps(['id', 'title', 'route', 'about', 'image', 'date', 'newYear', 'loggedIn'])
 const emit = defineEmits(['eventDeleted'])
-const axios = getCurrentInstance().appContext.config.globalProperties.$axios
 
 const loggedIn = ref(false)
 
 const checkAccess = () => {
   if (store.getters.isAuthenticated) {
-    axios.get('/access-level', {
+    getAxios().get('/access-level', {
     headers: {
       Authorization: `Bearer ${store.getters.token}`
     }
@@ -28,11 +28,7 @@ checkAccess()
 
 const deleteEvent = (e) => {
   console.log(props.id)
-  axios.post('/timeline/delete', { id: props.id }, {
-    headers: {
-      Authorization: `Bearer ${store.getters.token}`
-    }
-  })
+  getAxios().post('/timeline/delete', { id: props.id })
       .then(() => emit('eventDeleted'))
       .catch(error => console.log(error))
 }
@@ -51,7 +47,7 @@ const deleteEvent = (e) => {
                 <svg-icon type="mdi" :size="40" :path="mdiOpenInApp"></svg-icon>
               </router-link>-->
       </div>
-      <svg-icon @click="deleteEvent" v-if="loggedIn" class="icon" type="mdi" :size="30" :path="mdiClose"></svg-icon>
+      <svg-icon @click="deleteEvent" v-if="props.loggedIn" class="icon icon-hover" type="mdi" :size="30" :path="mdiClose"></svg-icon>
     </div>
     <p class="p-date">{{props.date.toLocaleString('default', {month: 'long'})}} {{props.date.getFullYear()}}</p>
     <div class="div-content">

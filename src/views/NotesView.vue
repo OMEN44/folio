@@ -5,8 +5,7 @@ import store from '../store/index'
 import MarkdownEditor from "../components/MarkdownEditor.vue";
 import SvgIcon from "@jamescoyle/vue-icon"
 import {mdiPlus} from '@mdi/js'
-
-const instance = getCurrentInstance().appContext.config.globalProperties
+import getAxios from "../plugins/axios";
 
 const notes = ref([])
 const selected = ref(0)
@@ -15,7 +14,7 @@ const titleInput = ref('')
 const isPrivate = ref(true)
 
 if (store.getters.isAuthenticated) {
-  instance.$axios.get('access-level', {
+  getAxios().get('access-level', {
     headers: {
       Authorization: `Bearer ${store.getters.token}`
     }
@@ -26,7 +25,7 @@ if (store.getters.isAuthenticated) {
 }
 
 const initNotes = () => {
-  instance.$axios.get('notes', {
+  getAxios().get('notes', {
     headers: {
       Authorization: `Bearer ${store.getters.token}`
     }
@@ -72,7 +71,7 @@ initNotes()
 const createNote = (e: Event) => {
   e.preventDefault()
   if (titleInput.value !== '') {
-    instance.$axios.post('notes/create',
+    getAxios().post('notes/create',
         {
           title: titleInput.value,
           access: isPrivate.value,

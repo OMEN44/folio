@@ -3,72 +3,42 @@ import SvgIcon from "@jamescoyle/vue-icon"
 import { mdiTagSearch, mdiFilter, mdiClose } from '@mdi/js'
 import { ref } from "vue";
 
-const emit = defineEmits(['reset'])
-const props = defineProps(['data'])
+const emit = defineEmits(['updateTimeline'])
 
-const searchValue = ref('')
 const hideFilter = ref(true)
-const filterOptions = ref({
+const searchOptions = ref({
+    searchTerm: '',
     onlyLinks: false,
     newest: false,
     oldest: true
 })
 
 const cancel = () => {
-    emit('reset', filterOptions.value)
-    searchValue.value = '';
+    emit('updateTimeline', searchOptions.value)
+    searchOptions.value.searchTerm = '';
 }
 
 const search = (e) => {
     e.preventDefault()
-    emit('reset', filterOptions.value)
-    if (searchValue.value === '') return
-
-    props.data.value = props.data.value
-        .filter(project => {
-            return project.title.toLowerCase().includes(searchValue.value.toLowerCase())
-                || project.about.toLowerCase().includes(searchValue.value.toLowerCase())
-        })
-
-    let outputData = props.data.sort((a, b) => {
-        return a.date > b.date ? 1 : -1
-    })
-    let currentYear = 0
-    outputData.forEach((element) => {
-        if (new Date(element.date).getFullYear() > currentYear) {
-            currentYear = new Date(element.date).getFullYear()
-            element.newYear = true
-        }
-    })
-    emit('update')
+    if (searchOptions.value.searchTerm === '') return
+    emit('updateTimeline', searchOptions.value)
 }
-const openFilter = () => hideFilter.value = !hideFilter.value
+
 const filterClick = (e) => {
     try {
         if (e.originalTarget.attributes.id.value === 'newestFirst') {
-            filterOptions.value.oldest = false
-            timelineDisplayData.value.sort((a, b) => {
-                return a.date < b.date ? 1 : -1
-            })
+            searchOptions.value.oldest = searchOptions.value.newest
         } else if (e.originalTarget.attributes.id.value === 'oldestFirst') {
-            filterOptions.value.newest = false
-            resetTimeline()
-        } else if (e.originalTarget.attributes.id.value === 'onlyLinks') {
-            if (!onlyLinks.value)
-                timelineDisplayData.value = timelineDisplayData.value
-                    .filter(project => {
-                        return project.route !== null
-                    })
-            else
-                resetTimeline()
+            searchOptions.value.newest = searchOptions.value.oldest
         }
-    } catch (e) { }
+        emit('updateTimeline', searchOptions.value)
+    } catch (_) {}
 }
 </script>
 
 <template>
     <form class="filter">
-        <input class="input-filter" v-model="searchValue" placeholder="Search Timeline">
+        <input class="input-filter" v-model="searchOptions.searchTerm" placeholder="Search Timeline">
         <button class="button-filter" type="button" @click="cancel">
             <svg-icon class="icon icon-hover" type="mdi" :size="30" :path="mdiClose"></svg-icon>
         </button>
@@ -82,15 +52,15 @@ const filterClick = (e) => {
         <span class="span-tl" />
         <span class="span-br" />
         <span class="span-tr" />
-        <form id="filter" @click="filterClick" class="filter-menu" :class="{ hidden: hideFilter }">
+        <form id="filter" @click="filterClick" class="filter-menu" v-if="!hideFilter">
             <label>
-                <input id="oldestFirst" v-model="filterOptions.oldest" type="checkbox" />Oldest to newest
+                <input id="oldestFirst" v-model="searchOptions.oldest" type="checkbox" />Oldest to newest
             </label>
             <label>
-                <input id="newestFirst" v-model="filterOptions.newest" type="checkbox" />Newest to Oldest
+                <input id="newestFirst" v-model="searchOptions.newest" type="checkbox" />Newest to Oldest
             </label>
             <label>
-                <input id="onlyLinks" v-model="filterOptions.onlyLinks" type="checkbox" />Only projects with links
+                <input id="onlyLinks" v-model="searchOptions.onlyLinks" type="checkbox" />Only projects with links
             </label>
         </form>
     </form>
@@ -98,6 +68,7 @@ const filterClick = (e) => {
 
 <style scoped>
 .filter-menu {
+    pointer-events: none;
     background-color: var(--accent);
     width: 250px;
     padding: 10px;
@@ -112,6 +83,7 @@ const filterClick = (e) => {
 }
 
 .filter-menu input {
+    pointer-events: all;
     margin-right: 10px;
     border: var(--primary) solid 2px;
 }
@@ -220,9 +192,5 @@ const filterClick = (e) => {
     height: 20px;
     right: -12px;
     bottom: -12px;
-}
-
-.hidden {
-    display: none;
 }
 </style>

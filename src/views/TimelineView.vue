@@ -1,51 +1,65 @@
 <script setup lang="ts">
 import TimelineEvent from "../components/TimelineEvent.vue";
 import { ref } from "vue";
-
-import SvgIcon from "@jamescoyle/vue-icon"
-import { mdiClose } from '@mdi/js'
 import store from '../store/index'
-import TextBox from "../components/TextBox.vue";
-import { getCurrentInstance } from 'vue';
 import TimelineSeach from "../components/TimelineSeach.vue";
-import http from '../plugins/axios'
-
-const axios = getCurrentInstance().appContext.config.globalProperties.$axios
+import getAxios from "../plugins/axios";
+import TimelineCreator from "../components/TimelineCreator.vue";
 
 const timelineDisplayData = ref(null)
 const loggedIn = ref(false)
 
-const checkAccess = () => {
+const updateTimeline = (filters?) => {
+  // If logged in check users access level
   if (store.getters.isAuthenticated) {
-    axios.get('/access-level')
+    getAxios().get('/access-level')
       .then(response => {
-        console.log(response.data)
-        console.log(store.getters.token);
-        if (response.data.valid && response.data.access === 0) {
+        if (response.data.valid && response.data.value.access === 0)
           loggedIn.value = true
-        }
       }).catch(() => loggedIn.value = false)
   }
-}
 
-checkAccess()
-
-const initTimeline = (filters?) => {
-  axios.get('/timeline')
+  // Get timeline data and format it
+  getAxios().get('/timeline')
     .then(response => {
-        console.log('2');        
       if (response.data.value === undefined) return
-      let timelineData = response.data.value.sort((a, b) => {
-        return a.date > b.date ? 1 : -1
+      let rawData = response.data.value
+      // filter for links option on filter
+      if (filters && filters.onlyLinks)
+        rawData = response.data.value.filter(event => {
+          return event.noteId !== null
+        })
+      // Filter for search term
+      if (filters && filters.searchTerm !== '') {
+        rawData = rawData.filter(event => {
+          return event.title.toLowerCase().includes(filters.searchTerm.toLowerCase())
+            || event.about.toLowerCase().includes(filters.searchTerm.toLowerCase())
+            || event.date.toLowerCase().includes(filters.searchTerm.toLowerCase())
+        })
+      }
+      // sort by date
+      rawData.sort((a, b) => {
+        if (filters && filters.newest)
+          return a.date < b.date ? 1 : -1
+        else
+          return a.date > b.date ? 1 : -1
       })
-      let currentYear = 0
-      response.data.value.forEach((element) => {
-        if (new Date(element.date).getFullYear() > currentYear) {
-          currentYear = new Date(element.date).getFullYear()
-          element.newYear = true
+      // give first event in the year the newYear tag
+      let currentYear = (filters && filters.newest) ? 10000 : 0
+      rawData.forEach((event) => {
+        let isFirst = false
+        const fullYear = new Date(event.date).getFullYear()
+        if (filters && filters.newest)
+          isFirst = fullYear < currentYear
+        else
+          isFirst = fullYear > currentYear
+        if (isFirst) {
+          currentYear = fullYear
+          event.newYear = true
         }
       })
-      timelineDisplayData.value = timelineData.map((project) => ({
+      // Format the raw Data for display
+      timelineDisplayData.value = rawData.map((project) => ({
         id: project.id,
         title: project.title,
         about: project.about,
@@ -53,50 +67,10 @@ const initTimeline = (filters?) => {
         newYear: (project.newYear !== undefined),
         date: new Date(project.date)
       }))
-      timelineDisplayData.value.sort((a, b) => {
-        if (filters.newest)
-          return a.date < b.date ? 1 : -1
-        else
-          return a.date > b.date ? 1 : -1
-      })
     })
 }
 
-initTimeline()
-
-const createTitle = ref('')
-const createDate = ref('')
-const createAbout = ref('')
-const createEventError = ref('')
-
-const createEvent = (e) => {
-  e.preventDefault(e)
-  checkAccess()
-  if (createTitle.value === '' || createDate.value === '' || createAbout.value === '') {
-    createEventError.value = 'Must fill all inputs!'
-    return
-  }
-  if (loggedIn.value) {
-    axios.post(
-      '/timeline',
-      {
-        title: createTitle.value,
-        about: createAbout.value,
-        date: createDate.value
-      }
-    ).then(response => {
-      console.log(response.data.message)
-      createEventError.value = response.data.message
-      initTimeline()
-      createTitle.value = ''
-      createDate.value = ''
-      createAbout.value = ''
-    }).catch(error => {
-      createEventError.value = error.response.data.error
-    })
-  }
-}
-
+updateTimeline()
 </script>
 
 <template>
@@ -109,62 +83,16 @@ const createEvent = (e) => {
         possible.<br />I hope that at least one of the entries can inspire someone, somewhere to start their own project!
       </p>
     </div>
-    <TextBox title="Create new event" v-if="loggedIn" class="div-create-event" :width="500">
-      <form class="form-create">
-        <div class="form-top">
-          <div>
-            <label>Title</label><input v-model="createTitle" type="text">
-          </div>
-          <div style="margin-left: 10px">
-            <label>Date</label><input v-model="createDate" type="date">
-          </div>
-        </div>
-        <label>About</label><textarea v-model="createAbout" style="max-width: calc(100%)"></textarea>
-        <div class="form-top">
-          <button @click="createEvent">Submit</button>
-          <span v-html="createEventError"></span>
-        </div>
-      </form>
-    </TextBox>
-    <TimelineSeach />
+    <Timeline-creator v-if="loggedIn" @updateTimeline="updateTimeline" />
+    <Timeline-seach @updateTimeline="updateTimeline" />
     <div class="div-timeline">
-      <timeline-event @event-deleted="initTimeline" v-for="(item) in timelineDisplayData" v-bind="item" />
+      <timeline-event @event-deleted="updateTimeline" v-for="(item) in timelineDisplayData" v-bind="item"
+        :logged-in="loggedIn" />
     </div>
   </div>
 </template>
 
 <style scoped>
-.div-create-event {
-  margin: 0 auto 20px auto;
-  position: relative;
-}
-
-.form-create {
-  display: flex;
-  flex-direction: column;
-
-}
-
-.form-top {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 5px;
-}
-
-.form-create label {
-  display: block;
-}
-
-.form-create button {
-  margin-top: 10px;
-  width: 150px;
-}
-
-.form-top span {
-  margin: 12px 0 0 5px;
-
-}
-
 .container {
   margin: 0 10%;
 }
@@ -178,9 +106,5 @@ const createEvent = (e) => {
   margin: 20px;
   padding-left: 40px;
   border-left: solid 4px var(--primary);
-}
-
-.hidden {
-  display: none;
 }
 </style>
