@@ -1,0 +1,96 @@
+/*:root {
+    --background: #040205;
+    --accent: #ff5a43;
+    --accent-hover: rgba(255, 90, 67, 0.39);
+    --primary: #801414;
+    --text: rgb(208, 208, 208);
+}*/
+
+:root {
+    --background: #1a1a1b;
+    --primary: #881010;
+    --secondary: rgb(131, 51, 51);
+    --accent: rgb(79, 39, 39);
+    --acent: #b90018;
+    --text: rgb(208, 208, 208);
+}
+
+.hidden {
+    display: none;
+}
+
+
+html {
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    background: var(--background);
+}
+
+p {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+body, h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+    padding: 0;
+    color: var(--text);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+    Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.icon {
+    transition: color 0.5s;
+    color: var(--text);
+}
+
+.icon-hover:hover {
+    color: var(--primary)
+}
+
+.button-border {
+    background-color: var(--accent);
+    border: none;
+    border-radius: 4px;
+    color: var(--text);
+    cursor: pointer;
+    padding: 8px 10px 6px;
+    font-size: 16px;
+    width: fit-content;
+    margin: 5px;
+    transform: translateY(0);
+    transition: transform 150ms, box-shadow 150ms;
+    touch-action: manipulation;
+}
+
+.button-border:hover, .button-border-small:hover {
+    box-shadow: rgba(0, 0, 0, .8) 0 3px 9px 0;
+    transform: translateY(-2px);
+}
+
+.button-border-small {
+    background-color: var(--accent);
+    border: none;
+    border-radius: 4px;
+    color: var(--text);
+    cursor: pointer;
+    padding: 2px 3px 0;
+    font-size: 16px;
+    width: fit-content;
+    margin: 5px;
+    transform: translateY(0);
+    transition: transform 150ms, box-shadow 150ms;
+    touch-action: manipulation;
+}
