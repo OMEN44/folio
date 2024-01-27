@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {watch, defineProps, getCurrentInstance, ref} from 'vue'
+import { watch, defineProps, ref } from 'vue'
 
 const props = defineProps(['rawMarkdown', 'editorOpen', 'id', 'private'])
 const emit = defineEmits(['noteDeleted', 'updateNote'])
@@ -12,7 +12,7 @@ import MarkdownItHighlightJs from "markdown-it-highlightjs"
 
 import sub from "markdown-it-sub"
 import sup from "markdown-it-sup"
-import {full as emoji} from "markdown-it-emoji"
+import { full as emoji } from "markdown-it-emoji"
 import container from "markdown-it-container"
 import anchor from "markdown-it-anchor"
 import multiTable from "markdown-it-multimd-table"
@@ -21,22 +21,22 @@ import mark from "markdown-it-mark"
 
 //icon imports
 import SvgIcon from "@jamescoyle/vue-icon"
-import {mdiClose, mdiContentSave, mdiReload} from '@mdi/js'
+import { mdiClose, mdiContentSave, mdiReload } from '@mdi/js'
 
 import 'highlight.js/styles/github-dark.css'
 import store from '../store'
+import getAxios from '../plugins/axios';
 
-const axios = getCurrentInstance().appContext.config.globalProperties.$axios
 const md = MarkdownIt()
-    .use(MarkdownItHighlightJs)
-    .use(sup)
-    .use(sub)
-    .use(emoji)
-    .use(container)
-    .use(anchor)
-    .use(multiTable)
-    .use(taskList)
-    .use(mark)
+  .use(MarkdownItHighlightJs)
+  .use(sup)
+  .use(sub)
+  .use(emoji)
+  .use(container)
+  .use(anchor)
+  .use(multiTable)
+  .use(taskList)
+  .use(mark)
 
 
 const changeNote = (content) => raw.value = content
@@ -56,38 +56,38 @@ watch(raw, () => {
 
 raw.value = props.rawMarkdown
 
-defineExpose({changeNote})
+defineExpose({ changeNote })
 
 const deleteNote = (e) => {
   if (props.id === -1) return;
   getAxios().post('/notes/delete',
-      {
-        id: props.id
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${store.getters.token}`
-        }
-      })
-      .then(() => emit('noteDeleted'))
-      .catch(error => console.log(error.response.data.error))
+    {
+      id: props.id
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${store.getters.token}`
+      }
+    })
+    .then(() => emit('noteDeleted'))
+    .catch(error => console.log(error.response.data.error))
 }
 
 const saveNote = (e) => {
   if (props.id === -1) return;
   getAxios().post('/notes/update',
-      {
-        id: props.id,
-        content: raw.value,
-        access: props.private
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${store.getters.token}`
-        }
-      })
-      .then(() => emit('updateNote'))
-      .catch(error => console.log(error.response.data.error))
+    {
+      id: props.id,
+      content: raw.value,
+      access: props.private
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${store.getters.token}`
+      }
+    })
+    .then(() => emit('updateNote'))
+    .catch(error => console.log(error.response.data.error))
 }
 
 const undoChanges = (e) => raw.value = props.rawMarkdown
@@ -96,21 +96,19 @@ const undoChanges = (e) => raw.value = props.rawMarkdown
 
 <template>
   <div class="div-editor-container">
-    <div class="div-input" :class="{hidden: props.editorOpen !== 0}">
+    <div class="div-input" :class="{ hidden: props.editorOpen !== 0 }">
       <div class="div-input-controls">
         <button class="button-border" @click="saveNote">
-          <svg-icon class="icon" type="mdi" :path="mdiContentSave"/>
+          <svg-icon class="icon" type="mdi" :path="mdiContentSave" />
         </button>
         <button class="button-border" @click="undoChanges">
-          <svg-icon class="icon" type="mdi" :path="mdiReload"/>
+          <svg-icon class="icon" type="mdi" :path="mdiReload" />
         </button>
         <button class="button-border" @click="deleteNote">
-          <svg-icon class="icon" type="mdi" :path="mdiClose"/>
+          <svg-icon class="icon" type="mdi" :path="mdiClose" />
         </button>
       </div>
-      <textarea :value="raw"
-                @input="onUpdate"
-                @load="onTextareaLoad"></textarea>
+      <textarea :value="raw" @input="onUpdate" @load="onTextareaLoad"></textarea>
     </div>
     <div class="div-output" v-html="md.render(<string>raw)"></div>
   </div>

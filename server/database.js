@@ -1,7 +1,7 @@
-const {Op} = require('sequelize')
-const {sequelize, Notes, User, Timeline} = require('./databaseConfig')
+import {Op} from 'sequelize'
+import {sequelize, Notes, User, Timeline} from './databaseConfig.js'
 
-const addUser = (username, email, password, access) => {
+export const addUser = (username, email, password, access) => {
     return new Promise((resolve, reject) => {
             sequelize.sync().then(async () => {
                 resolve(await User.create({
@@ -17,7 +17,7 @@ const addUser = (username, email, password, access) => {
     )
 }
 
-const getUser = (username, email) => {
+export const getUser = (username, email) => {
     return new Promise((resolve, reject) => {
         sequelize.sync().then(async () => {
             resolve(await User.findAll({
@@ -33,7 +33,7 @@ const getUser = (username, email) => {
     })
 }
 
-const addTimelineEvent = (title, date, about) => {
+export const addTimelineEvent = (title, date, about) => {
     return new Promise((resolve, reject) => {
             sequelize.sync().then(async () => {
                 resolve(await Timeline.create({
@@ -48,7 +48,7 @@ const addTimelineEvent = (title, date, about) => {
     )
 }
 
-const getTimelineData = () => {
+export const getTimelineData = () => {
     return new Promise((resolve, reject) => {
         sequelize.sync().then(async () => {
             resolve(await Timeline.findAll({
@@ -58,7 +58,7 @@ const getTimelineData = () => {
     })
 }
 
-const deleteTimelineEvent = (id) => {
+export const deleteTimelineEvent = (id) => {
     return new Promise((resolve, reject) => {
         sequelize.sync().then(async () => {
             resolve(await Timeline.destroy({ where: { id: id }}))
@@ -66,7 +66,7 @@ const deleteTimelineEvent = (id) => {
     })
 }
 
-const getAllNotes = () => {
+export const getAllNotes = () => {
     return new Promise((resolve, reject) => {
         sequelize.sync().then(async () => {
             resolve(await Notes.findAll({
@@ -79,7 +79,7 @@ const getAllNotes = () => {
         }).catch((error) => reject(error))
     })
 }
-const getAllPublicNotes = () => {
+export const getAllPublicNotes = () => {
     return new Promise((resolve, reject) => {
         sequelize.sync().then(async () => {
             resolve(await Notes.findAll({
@@ -96,7 +96,7 @@ const getAllPublicNotes = () => {
     })
 }
 
-const addNote = (title, content, access, route, author) => {
+export const addNote = (title, content, access, route, author) => {
     return new Promise((resolve, reject) => {
             sequelize.sync().then(async () => {
                 resolve(await Notes.create({
@@ -113,7 +113,7 @@ const addNote = (title, content, access, route, author) => {
     )
 }
 
-const editNote = (id, content, access) => {
+export const editNote = (id, content, access) => {
     return new Promise((resolve, reject) => {
             sequelize.sync().then(async () => {
                 const note = await Notes.findByPk(id)
@@ -127,23 +127,10 @@ const editNote = (id, content, access) => {
     )
 }
 
-const deleteNote = (id) => {
+export const deleteNote = (id) => {
     return new Promise((resolve, reject) => {
         sequelize.sync().then(async () => {
             resolve(await Notes.destroy({ where: { id: id }}))
         }).catch(error => reject(error))
     })
-}
-
-module.exports = {
-    addUser,
-    getUser,
-    addTimelineEvent,
-    getTimelineData,
-    deleteTimelineEvent,
-    getAllNotes,
-    getAllPublicNotes,
-    addNote,
-    editNote,
-    deleteNote
 }

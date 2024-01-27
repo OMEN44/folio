@@ -1,23 +1,14 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken');
-const cors = require('cors');
+import express from 'express'
+import bodyParser from 'body-parser'
+import jwt from 'jsonwebtoken'
+import cors from 'cors'
 
+// Other routes
+import timeline from './routes/timeline.js'
+import login from './routes/login.js'
+import notes from './routes/notes.js'
 
-const {
-    addUser,
-    getUser,
-    getTimelineData,
-    addTimelineEvent,
-    deleteTimelineEvent,
-    getAllNotes,
-    getAllPublicNotes,
-    addNote,
-    editNote,
-    deleteNote
-} = require('./database')
 /*
-
 editNote(4, 'got some ideas', 'blank', 1)
 
 addUser('huon', 'huonswales@gmail.com', 'password', 0)
@@ -48,161 +39,20 @@ addTimelineEvent('Indrocraft MC server', new Date(2021, 5), 'I eventually took m
 addTimelineEvent('Minecraft', new Date(2020, 10), 'My friends and I discover the amazing world of Minecraft servers! I tried a number of different server hosting providers setting with Shockbyte hosting for quite some time as their interface made it easy for us to test out different custom plugins. My curiosity then led me to learn Java so that I could make plugins of my own.')
 */
 const app = express();
-const secretKey = 'My-epic-secret-key-1234$'; // Replace with a secure secret key
+export const secretKey = 'My-epic-secret-key-1234$'; // Replace with a secure secret key
 
 app.use(bodyParser.json());
 app.use(cors());
+app.use('/api/timeline', timeline)
+app.use('/api/login', login)
+app.use('/api/notes', notes)
 
-/*app.use(express.static(__dirname + '/public'))
-app.get('/', (req, res) => {
-
-    res.sendFile(__dirname + '/public/index.html')
-
-})*/
-
-
-// app.use(function(req, res, next) {
-//     console.log(req.url)
-// });
 // Authenticate user and generate a JWT
 app.get('/api/access-level', (req, res) => {
     res.json({ valid: true, value: checkAccess(req, res) })
 })
 
-/*=================================================
-*
-* Login endpoints
-*
-=================================================*/
-
-app.post('/api/login', (req, res) => {
-    const { username, password } = req.body;
-    getUser(username, username).then(result => {
-        if (result.length === 1) {
-            if (result[0].password === password) {
-                const token = jwt.sign({ userId: result[0].id, username: result[0].username, access: result[0].access }, secretKey, { expiresIn: '1h' });
-                res.json({ token: token, username: username });
-            } else {
-                res.status(401).json({ error: 'Invalid username or password' });
-            }
-        } else {
-            res.status(401).json({ error: 'No user found' });
-        }
-    })
-});
-
-app.post('/api/register', (req, res) => {
-    const { username, password, email } = req.body
-
-    addUser(username, email, password, 1)
-        .then(() => res.json({ message: 'Successfully registered'}))
-        .catch(error => {
-            if (error.name === 'SequelizeUniqueConstraintError')
-                res.status(409).json({error: `User: ${username} or email: ${email} are already in use.`})
-        })
-})
-
-
-/*=================================================
-*
-* Timeline endpoints
-*
-=================================================*/
-
-app.get('/api/timeline', (req, res) => {
-    getTimelineData()
-        .then((data) => res.json({message: 'success', value: data}))
-        .catch(error => res.status(404).json({message: 'Could not access timeline data', error: error}))
-})
-
-app.post('/api/timeline', (req, res) => {
-    const { title, about, date } = req.body
-
-    if (checkAccess(req, res).access !== 0) {
-        res.status(401).json({ error: 'You do not have permission to create Timeline Events.' })
-    }
-
-    addTimelineEvent(title, date, about)
-        .then(() => res.json({ message: 'Success' }))
-        .catch(error => {
-            console.log(error)
-            if (error.name === 'SequelizeUniqueConstraintError')
-                res.status(409).json({error: `Event with this title and time already exist`})
-        })
-})
-
-app.post('/api/timeline/delete', (req, res) => {
-    if (checkAccess(req, res).access === 0) {
-        const {id} = req.body
-        deleteTimelineEvent(id)
-            .then(() => res.json({ message: 'Success' }))
-            .catch(error => {
-                res.status(404).json({message: `Event not found`, error: error})
-            })
-    }
-})
-
-
-/*=================================================
-*
-* Notes endpoints
-*
-=================================================*/
-
-app.get('/api/notes', (req, res) => {
-    if (checkAccess(req, res).access === 0) {
-        getAllNotes()
-            .then(data => res.json({message: 'success', value: data}))
-            .catch(error => res.status(404).json({message: 'Could not access timeline data', error: error}))
-    } else {
-        getAllPublicNotes()
-            .then(data => res.json({message: 'success', value: data}))
-            .catch(error => res.status(404).json({message: 'Could not access timeline data', error: error}))
-    }
-})
-
-app.post('/api/notes/update', (req, res) => {
-    if (checkAccess(req, res).access === 0) {
-        const {id, content, access} = req.body
-        editNote(id, content, access)
-            .then(() => res.json({ message: 'Success' }))
-            .catch(error => {
-                res.status(404).json({message: `Note not found`, error: error})
-            })
-    } else {
-        res.status(401).json({ error: 'User not logged in' })
-    }
-})
-
-app.post('/api/notes/create', (req, res) => {
-    const user = checkAccess(req, res)
-    if (user.access === 0) {
-        const {title, access} = req.body
-        addNote(title, '# Title\nAdd some content', access, title, user.userId)
-            .then(() => res.json({ message: 'Success' }))
-            .catch(error => {
-                console.log(error)
-                res.status(404).json({message: `Unable to create`, error: error})
-            })
-    } else {
-        res.status(401).json({ error: 'User not logged in' })
-    }
-})
-
-app.post('/api/notes/delete', (req, res) => {
-    if (checkAccess(req, res).access === 0) {
-        const {id} = req.body
-        deleteNote(id)
-            .then(() => res.json({ message: 'Success' }))
-            .catch(error => {
-                res.status(404).json({message: `Note not found`, error: error})
-            })
-    } else {
-        res.status(401).json({ error: 'User not logged in' })
-    }
-})
-
-const checkAccess = (req, res) => {
+export const checkAccess = (req, res) => {
 
     const token = req.headers.authorization?.split(' ')[1];
     if (token === 'null') return false;

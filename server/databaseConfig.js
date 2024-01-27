@@ -1,6 +1,6 @@
-const { Sequelize, DataTypes} = require('sequelize')
+import { Sequelize, DataTypes} from 'sequelize'
 
-const sequelize = new Sequelize({
+export const sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: 'folio.sqlite'
 })
@@ -11,7 +11,7 @@ sequelize.authenticate().then(() => {
     console.error('Unable to connect to the database: ', error);
 });
 
-const User = sequelize.define('user', {
+export const User = sequelize.define('user', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -38,7 +38,7 @@ const User = sequelize.define('user', {
     }
 })
 
-const Timeline = sequelize.define('timeline',
+export const Timeline = sequelize.define('timeline',
     {
         id: {
             type: DataTypes.INTEGER,
@@ -69,7 +69,7 @@ const Timeline = sequelize.define('timeline',
     }
 )
 
-const Notes = sequelize.define('notes',
+export const Notes = sequelize.define('notes',
     {
         id: {
             type: DataTypes.INTEGER,
@@ -120,5 +120,3 @@ Notes.sync().then(() => {
 }).catch((error) => {
     console.error('Unable to create table : ', error);
 });
-
-module.exports = { sequelize, Notes, User, Timeline };
