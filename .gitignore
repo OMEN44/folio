@@ -28,6 +28,4 @@ coverage
 *.sw?
 
 # deployment files
-folio.db
-folio.sqlite
-folio-backup.sqlite
+*.sqlite
