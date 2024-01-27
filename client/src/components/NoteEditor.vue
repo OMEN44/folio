@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import { watch, defineProps, ref } from 'vue'
+import SvgIcon from "@jamescoyle/vue-icon"
+import { mdiDelete, mdiContentSave, mdiReload, mdiLock, mdiLockOpenVariant } from '@mdi/js'
+import 'highlight.js/styles/github-dark.css'
+import getAxios from '../plugins/axios';
+import { ref, watch } from 'vue'
 
-const props = defineProps(['rawMarkdown', 'editorOpen', 'id', 'private'])
-const emit = defineEmits(['noteDeleted', 'updateNote'])
+const props = defineProps(['editorOpen'])
+const emit = defineEmits(['updateNote'])
 
-const raw = ref(null)
+const raw = ref('Nothing selected')
+const note = ref(null)
 
-// Mark down imports
+// Markdown renderer
 import MarkdownIt from "markdown-it";
 import MarkdownItHighlightJs from "markdown-it-highlightjs"
 
@@ -19,14 +24,6 @@ import multiTable from "markdown-it-multimd-table"
 import taskList from "markdown-it-task-lists"
 import mark from "markdown-it-mark"
 
-//icon imports
-import SvgIcon from "@jamescoyle/vue-icon"
-import { mdiClose, mdiContentSave, mdiReload } from '@mdi/js'
-
-import 'highlight.js/styles/github-dark.css'
-import store from '../store'
-import getAxios from '../plugins/axios';
-
 const md = MarkdownIt()
   .use(MarkdownItHighlightJs)
   .use(sup)
@@ -38,65 +35,59 @@ const md = MarkdownIt()
   .use(taskList)
   .use(mark)
 
-
-const changeNote = (content) => raw.value = content
-const onUpdate = (e) => {
-  raw.value = e.target.value
-  e.target.style.height = 'auto';
-  e.target.style.height = (e.target.scrollHeight) + 'px';
-}
-const onTextareaLoad = (e) => {
-  e.target.style.height = (e.target.scrollHeight) + 'px;overflow-y:hidden;';
+const changeNote = (newNote, selectedIndex) => {
+  note.value = newNote
+  note.value.selectedIndex = selectedIndex
+  raw.value = note.value.content
 }
 
-watch(raw, () => {
+const onUpdate = (e?) => {
   const textArea = document.getElementsByTagName('textarea')[0]
-  textArea.setAttribute('style', 'height:' + (textArea.scrollHeight) + 'px;overflow-y:hidden;');
-})
-
-raw.value = props.rawMarkdown
-
-defineExpose({ changeNote })
+  if (e)
+    raw.value = e.target.value
+  textArea.setAttribute('style', 'height:' + (textArea.scrollHeight) + 'px - 52px')
+}
 
 const deleteNote = (e) => {
-  if (props.id === -1) return;
-  getAxios().post('/notes/delete',
-    {
-      id: props.id
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${store.getters.token}`
-      }
-    })
-    .then(() => emit('noteDeleted'))
-    .catch(error => console.log(error.response.data.error))
-}
-
-const saveNote = (e) => {
-  if (props.id === -1) return;
-  getAxios().post('/notes/update',
-    {
-      id: props.id,
-      content: raw.value,
-      access: props.private
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${store.getters.token}`
-      }
-    })
+  if (note.value.id === -1) return;
+  getAxios().post('/notes/delete', {
+    id: note.value.id
+  })
     .then(() => emit('updateNote'))
     .catch(error => console.log(error.response.data.error))
 }
 
-const undoChanges = (e) => raw.value = props.rawMarkdown
+const saveNote = () => updateNote({
+  id: note.value.id,
+  content: raw.value,
+  access: note.value.isPrivate
+})
 
+const togglePrivate = () => {
+  updateNote({
+    id: note.value.id,
+    content: raw.value,
+    isPrivate: !note.value.isPrivate
+  })
+  note.value.isPrivate = !note.value.isPrivate
+}
+
+const undoChanges = () => raw.value = note.value.content
+
+const updateNote = (noteData) => {
+  if (note.value.id === -1) return;
+  getAxios().post('/notes/update', noteData)
+    .then(() => emit('updateNote', note.value.selectedIndex))
+    .catch(error => console.log(error.response.data.error))
+}
+
+defineExpose({ changeNote })
 </script>
 
 <template>
   <div class="div-editor-container">
     <div class="div-input" :class="{ hidden: props.editorOpen !== 0 }">
+      <span class="circle" />
       <div class="div-input-controls">
         <button class="button-border" @click="saveNote">
           <svg-icon class="icon" type="mdi" :path="mdiContentSave" />
@@ -105,10 +96,13 @@ const undoChanges = (e) => raw.value = props.rawMarkdown
           <svg-icon class="icon" type="mdi" :path="mdiReload" />
         </button>
         <button class="button-border" @click="deleteNote">
-          <svg-icon class="icon" type="mdi" :path="mdiClose" />
+          <svg-icon class="icon" type="mdi" :path="mdiDelete" />
+        </button>
+        <button class="button-border" @click="togglePrivate">
+          <svg-icon class="icon" type="mdi" :path="note !== null && note.isPrivate ? mdiLock : mdiLockOpenVariant" />
         </button>
       </div>
-      <textarea :value="raw" @input="onUpdate" @load="onTextareaLoad"></textarea>
+      <textarea ref="textArea" :value="raw" @input="onUpdate"></textarea>
     </div>
     <div class="div-output" v-html="md.render(<string>raw)"></div>
   </div>
@@ -123,22 +117,37 @@ const undoChanges = (e) => raw.value = props.rawMarkdown
 }
 
 .div-input {
+  position: relative;
   width: 40%;
   border-style: none solid none none;
   border-width: 4px;
   border-color: var(--primary);
 }
 
+.circle {
+  background-color: var(--background);
+  display: block;
+  position: absolute;
+  border: var(--primary) 4px solid;
+  border-radius: 100%;
+  width: 20px;
+  height: 20px;
+  bottom: -12px;
+  right: -12px;
+  z-index: 1;
+}
+
 .div-input-controls {
   display: flex;
   flex-direction: row;
   margin: 5px;
+  height: 52px;
 }
 
 textarea {
   padding: 5px;
   width: 100%;
-  height: fit-content;
+  height: 100%;
   resize: none;
   border: none;
   font-size: 15px;

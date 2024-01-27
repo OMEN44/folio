@@ -48,10 +48,10 @@ app.use('/api/notes', notes)
 
 // Authenticate user and generate a JWT
 app.get('/api/access-level', (req, res) => {
-    res.json({ valid: true, value: checkAccess(req, res) })
+    res.json({ valid: true, value: checkUserData(req, res) })
 })
 
-export const checkAccess = (req, res) => {
+export const checkUserData = (req, res) => {
 
     const token = req.headers.authorization?.split(' ')[1];
     if (token === 'null') return false;

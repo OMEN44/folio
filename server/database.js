@@ -1,19 +1,19 @@
-import {Op} from 'sequelize'
-import {sequelize, Notes, User, Timeline} from './databaseConfig.js'
+import { Op } from 'sequelize'
+import { sequelize, Notes, User, Timeline } from './databaseConfig.js'
 
 export const addUser = (username, email, password, access) => {
     return new Promise((resolve, reject) => {
-            sequelize.sync().then(async () => {
-                resolve(await User.create({
-                    username: username,
-                    email: email,
-                    password: password,
-                    access: access
-                }))
-            }).catch(error => {
-                reject(error)
-            })
-        }
+        sequelize.sync().then(async () => {
+            resolve(await User.create({
+                username: username,
+                email: email,
+                password: password,
+                access: access
+            }))
+        }).catch(error => {
+            reject(error)
+        })
+    }
     )
 }
 
@@ -35,16 +35,16 @@ export const getUser = (username, email) => {
 
 export const addTimelineEvent = (title, date, about) => {
     return new Promise((resolve, reject) => {
-            sequelize.sync().then(async () => {
-                resolve(await Timeline.create({
-                    title: title,
-                    date: date,
-                    about: about
-                }))
-            }).catch(error => {
-                reject(error)
-            })
-        }
+        sequelize.sync().then(async () => {
+            resolve(await Timeline.create({
+                title: title,
+                date: date,
+                about: about
+            }))
+        }).catch(error => {
+            reject(error)
+        })
+    }
     )
 }
 
@@ -61,7 +61,7 @@ export const getTimelineData = () => {
 export const deleteTimelineEvent = (id) => {
     return new Promise((resolve, reject) => {
         sequelize.sync().then(async () => {
-            resolve(await Timeline.destroy({ where: { id: id }}))
+            resolve(await Timeline.destroy({ where: { id: id } }))
         }).catch(error => reject(error))
     })
 }
@@ -98,39 +98,39 @@ export const getAllPublicNotes = () => {
 
 export const addNote = (title, content, access, route, author) => {
     return new Promise((resolve, reject) => {
-            sequelize.sync().then(async () => {
-                resolve(await Notes.create({
-                    title: title,
-                    content: content,
-                    private: access,
-                    route: route,
-                    userId: author
-                }))
-            }).catch(error => {
-                reject(error)
-            })
-        }
+        sequelize.sync().then(async () => {
+            resolve(await Notes.create({
+                title: title,
+                content: content,
+                private: access,
+                route: route,
+                userId: author
+            }))
+        }).catch(error => {
+            reject(error)
+        })
+    }
     )
 }
 
-export const editNote = (id, content, access) => {
+export const editNote = (id, content, isPrivate) => {
     return new Promise((resolve, reject) => {
-            sequelize.sync().then(async () => {
-                const note = await Notes.findByPk(id)
-                note.content = content
-                note.access = access
-                resolve(await note.save())
-            }).catch(error => {
-                reject(error)
-            })
-        }
+        sequelize.sync().then(async () => {
+            const note = await Notes.findByPk(id)
+            note.content = content
+            note.private = isPrivate
+            resolve(await note.save())
+        }).catch(error => {
+            reject(error)
+        })
+    }
     )
 }
 
 export const deleteNote = (id) => {
     return new Promise((resolve, reject) => {
         sequelize.sync().then(async () => {
-            resolve(await Notes.destroy({ where: { id: id }}))
+            resolve(await Notes.destroy({ where: { id: id } }))
         }).catch(error => reject(error))
     })
 }

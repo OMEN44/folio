@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {defineProps, ref, getCurrentInstance} from 'vue'
+import { defineProps, ref } from 'vue'
 
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiClose } from '@mdi/js'
@@ -13,11 +13,7 @@ const loggedIn = ref(false)
 
 const checkAccess = () => {
   if (store.getters.isAuthenticated) {
-    getAxios().get('/access-level', {
-    headers: {
-      Authorization: `Bearer ${store.getters.token}`
-    }
-    }).then(response => {
+    getAxios().get('/access-level').then(response => {
       if (response.data.valid && response.data.access === 0)
         loggedIn.value = true
     }).catch(() => loggedIn.value = false)
@@ -29,15 +25,15 @@ checkAccess()
 const deleteEvent = (e) => {
   console.log(props.id)
   getAxios().post('/timeline/delete', { id: props.id })
-      .then(() => emit('eventDeleted'))
-      .catch(error => console.log(error))
+    .then(() => emit('eventDeleted'))
+    .catch(error => console.log(error))
 }
 
 </script>
 
 <template>
   <div class="div-timeline-event">
-    <span :class="{year: props.newYear, circle: !props.newYear}">
+    <span :class="{ year: props.newYear, circle: !props.newYear }">
       {{ (props.newYear ? props.date.getFullYear() : '') }}
     </span>
     <div class="div-header">
@@ -47,9 +43,10 @@ const deleteEvent = (e) => {
                 <svg-icon type="mdi" :size="40" :path="mdiOpenInApp"></svg-icon>
               </router-link>-->
       </div>
-      <svg-icon @click="deleteEvent" v-if="props.loggedIn" class="icon icon-hover" type="mdi" :size="30" :path="mdiClose"></svg-icon>
+      <svg-icon @click="deleteEvent" v-if="props.loggedIn" class="icon icon-hover" type="mdi" :size="30"
+        :path="mdiClose"></svg-icon>
     </div>
-    <p class="p-date">{{props.date.toLocaleString('default', {month: 'long'})}} {{props.date.getFullYear()}}</p>
+    <p class="p-date">{{ props.date.toLocaleString('default', { month: 'long' }) }} {{ props.date.getFullYear() }}</p>
     <div class="div-content">
       <p>{{ props.about }} </p>
       <img v-if="props.image !== null" :src="props.image" :alt="props.image" />
@@ -60,7 +57,7 @@ const deleteEvent = (e) => {
 
 <style scoped>
 .div-header:before {
-  content:"";
+  content: "";
   position: absolute;
   top: 0;
   left: -25px;
@@ -70,7 +67,7 @@ const deleteEvent = (e) => {
 }
 
 .div-header:after {
-  content:"";
+  content: "";
   position: absolute;
   top: 0;
   left: -19px;

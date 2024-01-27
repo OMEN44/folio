@@ -1,5 +1,5 @@
 import express from 'express'
-import { checkAccess } from '../server.js'
+import { checkUserData } from '../server.js'
 import {
     getTimelineData,
     addTimelineEvent,
@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
     const { title, about, date } = req.body
 
-    if (checkAccess(req, res).access !== 0) {
+    if (checkUserData(req, res).access !== 0) {
         res.status(401).json({ error: 'You do not have permission to create Timeline Events.' })
     }
 
@@ -33,7 +33,7 @@ router.post('/', (req, res) => {
 })
 
 router.post('/delete', (req, res) => {
-    if (checkAccess(req, res).access === 0) {
+    if (checkUserData(req, res).access === 0) {
         const { id } = req.body
         deleteTimelineEvent(id)
             .then(() => res.json({ message: 'Success' }))

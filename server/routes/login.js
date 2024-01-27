@@ -1,6 +1,6 @@
 import express from 'express'
 import jwt from 'jsonwebtoken'
-import { secretKey } from '../server.js'
+import { checkUserData, secretKey } from '../server.js'
 import {
     addUser,
     getUser
@@ -24,6 +24,15 @@ router.post('/', (req, res) => {
         }
     })
 });
+
+router.get('/', (req, res) => {
+    const userData = checkUserData(req, res)
+    res.json({
+        "accessLevel": userData.access,
+        "userId": userData.userId,
+        "username": userData.username
+    })
+})
 
 router.post('/register', (req, res) => {
     const { username, password, email } = req.body

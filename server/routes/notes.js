@@ -1,5 +1,5 @@
 import express from 'express'
-import { checkAccess } from '../server.js'
+import { checkUserData } from '../server.js'
 import {
     getAllNotes,
     getAllPublicNotes,
@@ -12,7 +12,7 @@ const router = express.Router()
 export default router
 
 router.get('', (req, res) => {
-    if (checkAccess(req, res).access === 0) {
+    if (checkUserData(req, res).access === 0) {
         getAllNotes()
             .then(data => res.json({ message: 'success', value: data }))
             .catch(error => res.status(404).json({ message: 'Could not access timeline data', error: error }))
@@ -24,9 +24,9 @@ router.get('', (req, res) => {
 })
 
 router.post('/update', (req, res) => {
-    if (checkAccess(req, res).access === 0) {
-        const { id, content, access } = req.body
-        editNote(id, content, access)
+    if (checkUserData(req, res).access === 0) {
+        const { id, content, isPrivate } = req.body
+        editNote(id, content, isPrivate)
             .then(() => res.json({ message: 'Success' }))
             .catch(error => {
                 res.status(404).json({ message: `Note not found`, error: error })
@@ -37,7 +37,7 @@ router.post('/update', (req, res) => {
 })
 
 router.post('/create', (req, res) => {
-    const user = checkAccess(req, res)
+    const user = checkUserData(req, res)
     if (user.access === 0) {
         const { title, access } = req.body
         addNote(title, '# Title\nAdd some content', access, title, user.userId)
@@ -52,7 +52,7 @@ router.post('/create', (req, res) => {
 })
 
 router.post('/delete', (req, res) => {
-    if (checkAccess(req, res).access === 0) {
+    if (checkUserData(req, res).access === 0) {
         const { id } = req.body
         deleteNote(id)
             .then(() => res.json({ message: 'Success' }))

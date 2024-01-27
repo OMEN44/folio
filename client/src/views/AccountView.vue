@@ -4,6 +4,7 @@ import store from '../store/index'
 import { onMounted, ref, getCurrentInstance } from "vue";
 import '@/assets/base.css'
 import getAxios from '../plugins/axios'
+import { getUserData } from "../script/utils";
 
 const errorMessage = ref('')
 
@@ -62,6 +63,8 @@ const register = async (e) => {
 
 const switchFormContent = (content) => {
   if (content === 'logout') {
+    getUserData().then(res => { errorMessage.value = res.username })
+    // errorMessage.value = getUserData()
     document.getElementById('logout').classList.remove('hidden')
     document.getElementById('login').classList.add('hidden')
     document.getElementById('register').classList.add('hidden')
