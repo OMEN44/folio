@@ -8,8 +8,7 @@ import timeline from './routes/timeline.js'
 import login from './routes/login.js'
 import notes from './routes/notes.js'
 
-/*
-editNote(4, 'got some ideas', 'blank', 1)
+/*editNote(4, 'got some ideas', 'blank', 1)
 
 addUser('huon', 'huonswales@gmail.com', 'password', 0)
 addUser('user2', 'user@gmail.com', 'password', 1)
