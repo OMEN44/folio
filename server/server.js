@@ -51,7 +51,7 @@ app.use((req, res, next) => {
     else next()
 })
 
-app.get('/access-level', (req, res) => {
+app.get('/api/auth', (req, res) => {
     res.json({ valid: true, value: checkUserData(req, res) })
 })
 
@@ -81,6 +81,9 @@ stdin.addListener("data", (d) => {
     switch (d.toString().trim()) {
         case 'exit':
             process.exit()
+            break
+        case 'help':
+            console.log('Commands: \nexit\t- closes the server and website')
             break
     }
 });

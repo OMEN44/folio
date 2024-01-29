@@ -15,11 +15,12 @@ router.get('/', (req, res) => {
         .catch(error => res.status(404).json({ message: 'Could not access timeline data', error: error }))
 })
 
-router.post('/', (req, res) => {
+router.post('/create', (req, res) => {
     const { title, about, date } = req.body
 
-    if (checkUserData(req, res).access !== 0) {
+    if (Number(checkUserData(req, res).access) > 1) {
         res.status(401).json({ error: 'You do not have permission to create Timeline Events.' })
+        return
     }
 
     addTimelineEvent(title, date, about)
@@ -33,12 +34,15 @@ router.post('/', (req, res) => {
 })
 
 router.post('/delete', (req, res) => {
-    if (checkUserData(req, res).access === 0) {
-        const { id } = req.body
-        deleteTimelineEvent(id)
-            .then(() => res.json({ message: 'Success' }))
-            .catch(error => {
-                res.status(404).json({ message: `Event not found`, error: error })
-            })
+    if (Number(checkUserData(req, res).access) > 1) {
+        res.status(401).json({ error: 'You do not have permission to create Timeline Events.' })
+        return
     }
+
+    const { id } = req.body
+    deleteTimelineEvent(id)
+        .then(() => res.json({ message: 'Success' }))
+        .catch(error => {
+            res.status(404).json({ message: `Event not found`, error: error })
+        })
 })

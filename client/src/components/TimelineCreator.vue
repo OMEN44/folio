@@ -19,7 +19,7 @@ const createEvent = (e) => {
     return
   }
   getAxios().post(
-    '/timeline',
+    '/timeline/create',
     {
       title: editorOptions.value.title,
       about: editorOptions.value.about,
@@ -38,23 +38,23 @@ const createEvent = (e) => {
 </script>
 
 <template>
-    <TextBox title="Create new event" class="div-create-event" :width="500">
-      <form class="form-create">
-        <div class="form-top">
-          <div>
-            <label>Title</label><input v-model="editorOptions.title" type="text">
-          </div>
-          <div style="margin-left: 10px">
-            <label>Date</label><input v-model="editorOptions.date" type="date">
-          </div>
+  <TextBox title="Create new event" class="div-create-event" :width="500">
+    <form class="form-create">
+      <div class="form-top">
+        <div>
+          <label>Title</label><input v-model="editorOptions.title" type="text">
         </div>
-        <label>About</label><textarea v-model="editorOptions.about" style="max-width: calc(100%)"></textarea>
-        <div class="form-top">
-          <button @click="createEvent">Submit</button>
-          <span v-html="errorMessage"></span>
+        <div style="margin-left: 10px">
+          <label>Date</label><input v-model="editorOptions.date" type="date">
         </div>
-      </form>
-    </TextBox>
+      </div>
+      <label>About</label><textarea v-model="editorOptions.about" style="max-width: calc(100%)"></textarea>
+      <div class="form-top">
+        <button @click="createEvent">Submit</button>
+        <span v-html="errorMessage"></span>
+      </div>
+    </form>
+  </TextBox>
 </template>
 
 <style scoped>

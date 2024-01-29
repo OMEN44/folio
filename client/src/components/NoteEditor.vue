@@ -3,9 +3,9 @@ import SvgIcon from "@jamescoyle/vue-icon"
 import { mdiDelete, mdiContentSave, mdiReload, mdiLock, mdiLockOpenVariant } from '@mdi/js'
 import 'highlight.js/styles/github-dark.css'
 import getAxios from '../plugins/axios';
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 
-const props = defineProps(['editorOpen'])
+const props = defineProps(['userId'])
 const emit = defineEmits(['updateNote'])
 
 const raw = ref('Nothing selected')
@@ -83,10 +83,9 @@ const updateNote = (noteData) => {
 
 defineExpose({ changeNote })
 </script>
-
 <template>
   <div class="div-editor-container">
-    <div class="div-input" :class="{ hidden: props.editorOpen !== 0 }">
+    <div class="div-input" v-if="props.userId">
       <span class="circle" />
       <div class="div-input-controls">
         <button class="button-border" @click="saveNote">

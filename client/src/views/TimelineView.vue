@@ -7,16 +7,16 @@ import getAxios from "../plugins/axios";
 import TimelineCreator from "../components/TimelineCreator.vue";
 
 const timelineDisplayData = ref(null)
-const loggedIn = ref(false)
+const accessLevel = ref(3)
 
 const updateTimeline = (filters?) => {
   // If logged in check users access level
   if (store.getters.isAuthenticated) {
-    getAxios().get('/access-level')
+    getAxios().get('/auth')
       .then(response => {
-        if (response.data.valid && response.data.value.access === 0)
-          loggedIn.value = true
-      }).catch(() => loggedIn.value = false)
+        if (response.data.valid)
+          accessLevel.value = response.data.value.accessLevel
+      }).catch(() => { })
   }
 
   // Get timeline data and format it
@@ -83,11 +83,11 @@ updateTimeline()
         possible.<br />I hope that at least one of the entries can inspire someone, somewhere to start their own project!
       </p>
     </div>
-    <Timeline-creator v-if="loggedIn" @updateTimeline="updateTimeline" />
+    <Timeline-creator v-if="accessLevel < 2" @updateTimeline="updateTimeline" />
     <Timeline-seach @updateTimeline="updateTimeline" />
     <div class="div-timeline">
       <timeline-event @event-deleted="updateTimeline" v-for="(item) in timelineDisplayData" v-bind="item"
-        :logged-in="loggedIn" />
+        :access-level="accessLevel" />
     </div>
   </div>
 </template>

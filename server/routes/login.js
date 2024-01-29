@@ -9,6 +9,14 @@ import {
 const router = express.Router()
 export default router
 
+/*
+User access levels:
+0: Super user access to everything and can propmote and demote other users
+1: Edit notes and timeline events
+2: Can view timeline and private notes but cannot edit them
+3: Can only view public sections of the site
+*/
+
 router.post('/', (req, res) => {
     const { username, password } = req.body;
     getUser(username, username).then(result => {
@@ -37,7 +45,7 @@ router.get('/', (req, res) => {
 router.post('/register', (req, res) => {
     const { username, password, email } = req.body
 
-    addUser(username, email, password, 1)
+    addUser(username, email, password, 3)
         .then(() => res.json({ message: 'Successfully registered' }))
         .catch(error => {
             if (error.name === 'SequelizeUniqueConstraintError')

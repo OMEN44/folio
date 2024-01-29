@@ -1,26 +1,10 @@
 <script setup lang="ts">
-import { defineProps, ref } from 'vue'
-
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiClose } from '@mdi/js'
-import store from '../store'
 import getAxios from '../plugins/axios'
 
-const props = defineProps(['id', 'title', 'route', 'about', 'image', 'date', 'newYear', 'loggedIn'])
+const props = defineProps(['id', 'title', 'route', 'about', 'image', 'date', 'newYear', 'accessLevel'])
 const emit = defineEmits(['eventDeleted'])
-
-const loggedIn = ref(false)
-
-const checkAccess = () => {
-  if (store.getters.isAuthenticated) {
-    getAxios().get('/access-level').then(response => {
-      if (response.data.valid && response.data.access === 0)
-        loggedIn.value = true
-    }).catch(() => loggedIn.value = false)
-  }
-}
-checkAccess()
-
 
 const deleteEvent = (e) => {
   console.log(props.id)
@@ -43,7 +27,7 @@ const deleteEvent = (e) => {
                 <svg-icon type="mdi" :size="40" :path="mdiOpenInApp"></svg-icon>
               </router-link>-->
       </div>
-      <svg-icon @click="deleteEvent" v-if="props.loggedIn" class="icon icon-hover" type="mdi" :size="30"
+      <svg-icon @click="deleteEvent" v-if="props.accessLevel < 2" class="icon icon-hover" type="mdi" :size="30"
         :path="mdiClose"></svg-icon>
     </div>
     <p class="p-date">{{ props.date.toLocaleString('default', { month: 'long' }) }} {{ props.date.getFullYear() }}</p>
