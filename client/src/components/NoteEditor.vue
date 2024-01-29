@@ -152,7 +152,7 @@ textarea {
   border: none;
   font-size: 15px;
   color: var(--text);
-  background-color: var(--background);
+  background-color: transparent;
 }
 
 textarea:focus {

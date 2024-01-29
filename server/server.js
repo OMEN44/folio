@@ -45,14 +45,17 @@ app.use(cors());
 app.use('/api/timeline', timeline)
 app.use('/api/login', login)
 app.use('/api/notes', notes)
+app.use((req, res, next) => {
+    if (!req.url.includes('api'))
+        res.sendFile(__dirname + '/public/index.html')
+    else next()
+})
 
-// Authenticate user and generate a JWT
-app.get('/api/access-level', (req, res) => {
+app.get('/access-level', (req, res) => {
     res.json({ valid: true, value: checkUserData(req, res) })
 })
 
 export const checkUserData = (req, res) => {
-
     const token = req.headers.authorization?.split(' ')[1];
     if (token === 'null') return false;
 
@@ -71,4 +74,13 @@ export const checkUserData = (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
+});
+
+const stdin = process.openStdin();
+stdin.addListener("data", (d) => {
+    switch (d.toString().trim()) {
+        case 'exit':
+            process.exit()
+            break
+    }
 });

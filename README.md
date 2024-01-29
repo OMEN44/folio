@@ -6,13 +6,13 @@ This folio is intended to act as a showcase for everything that I have worked on
 - [ ] Add a proper home page
 - [ ] Mkae a better login form
 - [ ] encrypt passwords
-- [ ] Remove repeted functions and styles
+- [x] Remove repeted functions and styles
 - [ ] Link the timeline and notes page
 - [ ] Change `message: 'success'` to `success: true` on the server
 - [ ] Use cookies not store
-- [ ] Add ability to change note privacy setting
+- [x] Add ability to change note privacy setting
 - [ ] Add overlays
-- [ ] Remove wacky errors that exist despite running perfectly
+- [x] Remove wacky errors that exist despite running perfectly
 - [ ] Optimise the shit outta it
 
 ## Recommended IDE Setup

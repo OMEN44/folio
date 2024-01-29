@@ -1,8 +1,9 @@
-import { Sequelize, DataTypes} from 'sequelize'
+import { Sequelize, DataTypes } from 'sequelize'
 
 export const sequelize = new Sequelize({
     dialect: 'sqlite',
-    storage: 'folio.sqlite'
+    storage: 'folio.sqlite',
+    logging: false
 })
 
 sequelize.authenticate().then(() => {
