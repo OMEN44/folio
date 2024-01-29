@@ -3,15 +3,20 @@ import bodyParser from 'body-parser'
 import jwt from 'jsonwebtoken'
 import cors from 'cors'
 
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Other routes
 import timeline from './routes/timeline.js'
 import login from './routes/login.js'
 import notes from './routes/notes.js'
 
-/*editNote(4, 'got some ideas', 'blank', 1)
-
-addUser('huon', 'huonswales@gmail.com', 'password', 0)
-addUser('user2', 'user@gmail.com', 'password', 1)
+/*
+import { addUser, addNote, addTimelineEvent } from './database.js';
+addUser('Huon', 'huonswales@gmail.com', 'password', 0)
+addUser('aclem43', 'alexiclemeur@gmail.com', 'password', 1)
 
 addNote('Test note 1', '# Title', true, 'test-note', 1)
 addNote('Electromagnetic induction', `\`\`\`cpp
@@ -37,6 +42,7 @@ addTimelineEvent('Terrain Generator', new Date(2021, 2), 'My first attempt at cr
 addTimelineEvent('Indrocraft MC server', new Date(2021, 5), 'I eventually took my newfound Java skills further creating the Indrocraft server, dedicated to students at my high school (at the time I was in grade 10). I launched this server at the start of a COVID-19 lockdown and had an instant rush of players! The server was running on a dell power edge server with 48GB of ram that I was given by a friend. At the servers peak it had 200 members and was always active boasting 3 worlds networked together each with a selection of custom plugins that can be found at this link:')
 addTimelineEvent('Minecraft', new Date(2020, 10), 'My friends and I discover the amazing world of Minecraft servers! I tried a number of different server hosting providers setting with Shockbyte hosting for quite some time as their interface made it easy for us to test out different custom plugins. My curiosity then led me to learn Java so that I could make plugins of my own.')
 */
+
 const app = express();
 export const secretKey = 'My-epic-secret-key-1234$'; // Replace with a secure secret key
 
@@ -49,6 +55,13 @@ app.use((req, res, next) => {
     if (!req.url.includes('api'))
         res.sendFile(__dirname + '/public/index.html')
     else next()
+})
+
+app.use(express.static(__dirname + '/public'))
+app.get('/', (req, res) => {
+
+    res.sendFile(__dirname + '/public/index.html')
+
 })
 
 app.get('/api/auth', (req, res) => {

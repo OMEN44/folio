@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
-import { ref } from "vue";
+import { Ref, ref } from "vue";
 import store from '../store/index'
 import NoteEditor from "../components/NoteEditor.vue";
 import getAxios from "../plugins/axios";
 import NoteMenu from "../components/NoteMenu.vue";
 
 const notes = ref([])
-const accessLevel = ref(1);
+const activeUser = ref(null);
 const editor = ref(null)
 const selected = ref(0)
 
@@ -15,11 +15,11 @@ const initNotes = (selection?) => {
   selected.value = selection === undefined ? 0 : selection
   // Ensure user access is restricted
   if (store.getters.isAuthenticated) {
-    getAxios().get('access-level')
+    getAxios().get('auth')
       .then(response => {
-        if (response.data.valid && response.data.value.access === 0)
-          accessLevel.value = 0
-      }).catch(() => accessLevel.value = 1)
+        if (response.data.valid)
+          activeUser.value = response.data.value
+      }).catch(() => activeUser.value = null)
   }
   // format data for dispaly
   getAxios().get('notes')
@@ -38,13 +38,13 @@ const initNotes = (selection?) => {
         // Set title to active note
       } else {
         // If there are no notes push a placeholder
-        notes.value.push({
+        notes.value = [{
           id: -1,
           title: 'No notes found',
           content: 'Login to create a note!',
           route: '',
           isPrivate: false,
-        })
+        }]
       }
       //update editor component
       editor.value.changeNote(notes.value[selected.value], selected.value)
@@ -66,7 +66,7 @@ initNotes()
         <span class="circle" id="center" />
         <span class="v-shape" />
       </div>
-      <NoteMenu :logged-in="accessLevel" :notes="notes" @update-notes="initNotes" />
+      <NoteMenu :user="activeUser" :notes="notes" :selected="selected" @update-notes="initNotes" />
     </div>
     <div class="div-notes-content">
       <div class="div-title">
@@ -74,7 +74,7 @@ initNotes()
         <span class="circle" id="tr" />
         <span class="circle" id="br" />
       </div>
-      <NoteEditor ref="editor" :editor-open="accessLevel" @update-note="initNotes" />
+      <NoteEditor ref="editor" :user="activeUser" @update-note="initNotes" />
     </div>
   </div>
 </template>

@@ -5,7 +5,7 @@ import 'highlight.js/styles/github-dark.css'
 import getAxios from '../plugins/axios';
 import { ref } from 'vue'
 
-const props = defineProps(['userId'])
+const props = defineProps(['user'])
 const emit = defineEmits(['updateNote'])
 
 const raw = ref('Nothing selected')
@@ -60,7 +60,7 @@ const deleteNote = (e) => {
 const saveNote = () => updateNote({
   id: note.value.id,
   content: raw.value,
-  access: note.value.isPrivate
+  isPrivate: note.value.isPrivate
 })
 
 const togglePrivate = () => {
@@ -85,7 +85,7 @@ defineExpose({ changeNote })
 </script>
 <template>
   <div class="div-editor-container">
-    <div class="div-input" v-if="props.userId">
+    <div class="div-input" v-if="note !== null && props.user !== null && note.authorId === props.user.userId">
       <span class="circle" />
       <div class="div-input-controls">
         <button class="button-border" @click="saveNote">
