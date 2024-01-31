@@ -9,7 +9,7 @@ const props = defineProps(['user'])
 const emit = defineEmits(['updateNote'])
 
 const raw = ref('Nothing selected')
-const note = ref(null)
+const note = ref<NoteType | null>(null)
 
 // Markdown renderer
 import MarkdownIt from "markdown-it";
@@ -23,6 +23,8 @@ import anchor from "markdown-it-anchor"
 import multiTable from "markdown-it-multimd-table"
 import taskList from "markdown-it-task-lists"
 import mark from "markdown-it-mark"
+import { notify } from "../script/notification";
+import { NoteType } from "../script/notes";
 
 const md = MarkdownIt()
   .use(MarkdownItHighlightJs)
@@ -48,8 +50,9 @@ const onUpdate = (e?) => {
   textArea.setAttribute('style', 'height:' + (textArea.scrollHeight) + 'px - 52px')
 }
 
-const deleteNote = (e) => {
+const deleteNote = () => {
   if (note.value.id === -1) return;
+  notify(`Deleted the note: ${note.value.title}`)
   getAxios().post('/notes/delete', {
     id: note.value.id
   })
@@ -57,11 +60,14 @@ const deleteNote = (e) => {
     .catch(error => console.log(error.response.data.error))
 }
 
-const saveNote = () => updateNote({
-  id: note.value.id,
-  content: raw.value,
-  isPrivate: note.value.isPrivate
-})
+const saveNote = () => {
+  notify(`Changes saved`)
+  updateNote({
+    id: note.value.id,
+    content: raw.value,
+    isPrivate: note.value.isPrivate
+  })
+}
 
 const togglePrivate = () => {
   updateNote({
@@ -70,6 +76,7 @@ const togglePrivate = () => {
     isPrivate: !note.value.isPrivate
   })
   note.value.isPrivate = !note.value.isPrivate
+  notify(`${note.value.title} is now a ${note.value.isPrivate ? 'private' : 'public'} note.`)
 }
 
 const undoChanges = () => raw.value = note.value.content
@@ -101,7 +108,7 @@ defineExpose({ changeNote })
           <svg-icon class="icon" type="mdi" :path="note !== null && note.isPrivate ? mdiLock : mdiLockOpenVariant" />
         </button>
       </div>
-      <textarea ref="textArea" :value="raw" @input="onUpdate"></textarea>
+      <textarea ref="textArea" :value="raw" @keydown.prevent.ctrl.s="saveNote" @input="onUpdate"></textarea>
     </div>
     <div class="div-output" v-html="md.render(<string>raw)"></div>
   </div>

@@ -51,17 +51,12 @@ app.use(cors());
 app.use('/api/timeline', timeline)
 app.use('/api/login', login)
 app.use('/api/notes', notes)
+
+app.use(express.static(__dirname + '/public'))
 app.use((req, res, next) => {
     if (!req.url.includes('api'))
         res.sendFile(__dirname + '/public/index.html')
     else next()
-})
-
-app.use(express.static(__dirname + '/public'))
-app.get('/', (req, res) => {
-
-    res.sendFile(__dirname + '/public/index.html')
-
 })
 
 app.get('/api/auth', (req, res) => {

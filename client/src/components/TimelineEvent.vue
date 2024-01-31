@@ -2,14 +2,17 @@
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiClose } from '@mdi/js'
 import getAxios from '../plugins/axios'
+import { notify } from '../script/notification';
 
 const props = defineProps(['id', 'title', 'route', 'about', 'image', 'date', 'newYear', 'accessLevel'])
 const emit = defineEmits(['eventDeleted'])
 
-const deleteEvent = (e) => {
-  console.log(props.id)
+const deleteEvent = () => {
   getAxios().post('/timeline/delete', { id: props.id })
-    .then(() => emit('eventDeleted'))
+    .then(() => {
+      notify('Deleted timeline event')
+      emit('eventDeleted')
+    })
     .catch(error => console.log(error))
 }
 

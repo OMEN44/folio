@@ -3,6 +3,7 @@ import SvgIcon from "@jamescoyle/vue-icon"
 import { mdiNotePlus } from '@mdi/js'
 import { ref, watch } from "vue";
 import getAxios from "../plugins/axios";
+import { notify } from "../script/notification";
 
 const props = defineProps(['user', 'notes', 'selected'])
 const emit = defineEmits(['updateNotes'])
@@ -20,7 +21,8 @@ const createNote = (e) => {
         }).then(() => {
             titleInput.value = '';
             emit("updateNotes", props.selected)
-        }).catch(error => console.log(error.response.data.error))
+            notify('New note created.')
+        }).catch(error => notify(error.response.data.error))
     }
 }
 </script>

@@ -15,7 +15,7 @@ const updateTimeline = (filters?) => {
     getAxios().get('/auth')
       .then(response => {
         if (response.data.valid)
-          accessLevel.value = response.data.value.accessLevel
+          accessLevel.value = response.data.value.access
       }).catch(() => { })
   }
 

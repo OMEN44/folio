@@ -2,7 +2,7 @@
 import axios from 'axios'
 import store from '../store/index';
 
-const BASE_URL = true ? 'http://localhost:3000' : 'http://omenmc.hopto.org:3000';
+const BASE_URL = 'http://omenmc.hopto.org:3000';
 
 const axiosInstance = axios.create({
     baseURL: `${BASE_URL}/api/`,
