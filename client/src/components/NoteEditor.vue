@@ -132,16 +132,8 @@ defineExpose({ changeNote })
 }
 
 .circle {
-  background-color: var(--background);
-  display: block;
-  position: absolute;
-  border: var(--primary) 4px solid;
-  border-radius: 100%;
-  width: 20px;
-  height: 20px;
   bottom: -12px;
   right: -12px;
-  z-index: 1;
 }
 
 .div-input-controls {

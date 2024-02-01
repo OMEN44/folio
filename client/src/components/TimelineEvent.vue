@@ -90,13 +90,6 @@ const deleteEvent = () => {
 .circle {
   left: -71px;
   top: -13px;
-  content: '';
-  background-color: var(--background);
-  border: var(--primary) 4px solid;
-  border-radius: 100%;
-  width: 20px;
-  height: 20px;
-  position: absolute;
 }
 
 .div-timeline-event::before {

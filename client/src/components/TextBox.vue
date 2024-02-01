@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, onBeforeMount} from "vue";
+import { ref, onBeforeMount } from "vue";
 
 const props = defineProps<{
   title: string,
@@ -18,17 +18,17 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <div class="div-container" :class="appearance" :style="{ width: widthValue + 'px'}">
+  <div class="div-container" :class="appearance" :style="{ width: widthValue + 'px' }">
     <div class="div-title" :class="appearance">
       <h2>{{ props.title }}</h2>
     </div>
     <div class="div-content" :class="appearance">
       <slot></slot>
     </div>
-    <span :class="appearance + ' tl'"/>
-    <span :class="appearance + ' tr'"/>
-    <span :class="appearance + ' br'"/>
-    <span :class="appearance + ' bl'"/>
+    <span :class="appearance + ' tl'" />
+    <span :class="appearance + ' tr'" />
+    <span :class="appearance + ' br'" />
+    <span :class="appearance + ' bl'" />
   </div>
 </template>
 
@@ -104,7 +104,7 @@ span.basic {
 }
 
 .rounded.tr:before {
-  content:"";
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
@@ -114,7 +114,7 @@ span.basic {
 }
 
 .rounded.tr:after {
-  content:"";
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
@@ -124,7 +124,7 @@ span.basic {
 }
 
 .rounded.br:before {
-  content:"";
+  content: "";
   position: absolute;
   top: 38px;
   right: 0;
@@ -134,7 +134,7 @@ span.basic {
 }
 
 .rounded.br:after {
-  content:"";
+  content: "";
   position: absolute;
   top: 44px;
   right: 0;
@@ -209,7 +209,7 @@ span.basic {
 }
 
 .faded.tr:before {
-  content:"";
+  content: "";
   position: absolute;
   top: -4px;
   right: -4px;
@@ -219,7 +219,7 @@ span.basic {
 }
 
 .faded.tr:after {
-  content:"";
+  content: "";
   position: absolute;
   top: -4px;
   right: -4px;
@@ -229,7 +229,7 @@ span.basic {
 }
 
 .faded.bl:before {
-  content:"";
+  content: "";
   position: absolute;
   bottom: -4px;
   left: -4px;
@@ -239,7 +239,7 @@ span.basic {
 }
 
 .faded.bl:after {
-  content:"";
+  content: "";
   position: absolute;
   bottom: -4px;
   left: -4px;
