@@ -60,7 +60,8 @@ const deleteNote = () => {
     .catch(error => console.log(error.response.data.error))
 }
 
-const saveNote = () => {
+const saveNote = (e) => {
+  console.log(e)
   notify(`Changes saved`)
   updateNote({
     id: note.value.id,
@@ -108,7 +109,7 @@ defineExpose({ changeNote })
           <svg-icon class="icon" type="mdi" :path="note !== null && note.isPrivate ? mdiLock : mdiLockOpenVariant" />
         </button>
       </div>
-      <textarea ref="textArea" :value="raw" @keydown.prevent.ctrl.s="saveNote" @input="onUpdate"></textarea>
+      <textarea ref="textArea" :value="raw" @keydown.ctrl.s.prevent.stop="saveNote" @input="onUpdate"></textarea>
     </div>
     <div class="div-output" v-html="md.render(<string>raw)"></div>
   </div>

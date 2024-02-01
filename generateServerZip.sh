@@ -4,29 +4,24 @@
 cd /home/huon/WebstormProjects/folio/client
 npm run build
 
+# switch to deployment mode
+sed -i 's/VITE_API_DEV=true/VITE_API_DEV=false/' .env
+
 # Copy files to folder
 mkdir /home/huon/Desktop/server
 mkdir /home/huon/Desktop/server/public
 
 rsync -a ~/WebstormProjects/folio/client/dist/* ~/Desktop/server/public/
-rsync -a --exclude=node_modules --exclude=folio-backup.sqlite ~/WebstormProjects/folio/server/* ~/Desktop/server/
+rsync -a --exclude=node_modules --exclude=*.sqlite ~/WebstormProjects/folio/server/* ~/Desktop/server/
 
-# Zip and remove server folder
+# Copy to server
 cd ~/Desktop
-tar -cf server.tar.gz server
-rm -r server
+ssh omen@omenmc.hopto.org -p 2024 'rm ~/server/public/assets/*'
+rsync --remove-source-files -avzh -e "ssh -p 2024" server omen@omenmc.hopto.org:/home/omen
 
-# remove old files from the server
-# ssh omen@omenmc.hopto.org -p 2024 "rm ~/server.tar.gz"
-# rm -r ~/server
-# rm ~/server.tar.gz
-# exit
+# switch to dev mode
+cd /home/huon/WebstormProjects/folio/client
+sed -i 's/VITE_API_DEV=false/VITE_API_DEV=true/' .env
 
-# Copy to the server
-# scp -P 2024 ~/Desktop/server.tar.gz omen@omenmc.hopto.org:/home/omen
-
-# ssh omen@omenmc.hopto.org -p 2024
-# cd ~
-# tar -xf server.tar.gz
-# exit
-
+echo Finished! Press any button to exit...
+read input

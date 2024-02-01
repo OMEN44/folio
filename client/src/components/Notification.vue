@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Ref, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { notificationList, remove } from '../script/notification';
 
 const container = ref(null)
