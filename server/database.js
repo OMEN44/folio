@@ -33,13 +33,14 @@ export const getUser = (username, email) => {
     })
 }
 
-export const addTimelineEvent = (title, date, about) => {
+export const addTimelineEvent = (title, date, about, note) => {
     return new Promise((resolve, reject) => {
         sequelize.sync().then(async () => {
             resolve(await Timeline.create({
                 title: title,
                 date: date,
-                about: about
+                about: about,
+                noteId: note
             }))
         }).catch(error => {
             reject(error)

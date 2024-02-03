@@ -1,18 +1,29 @@
 <script setup lang="ts">
 
-import { Ref, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import store from '../store/index'
 import NoteEditor from "../components/NoteEditor.vue";
 import getAxios from "../plugins/axios";
 import NoteMenu from "../components/NoteMenu.vue";
+import { NoteType } from "../script/notes";
+import { useRoute } from "vue-router";
+import router from "../router";
 
-const notes = ref([])
+const notes = ref<Array<NoteType>>([])
 const activeUser = ref(null);
 const editor = ref(null)
 const selected = ref(0)
 
-const initNotes = (selection?) => {
-  selected.value = selection === undefined ? 0 : selection
+watch(() => useRoute(), () => {
+  targetId.value
+  initNotes()
+})
+
+const targetId = computed(() => {
+  return useRoute() === undefined ? -1 : Number(useRoute().query.id)
+})
+
+const initNotes = async (selection?) => {
   // Ensure user access is restricted
   if (store.getters.isAuthenticated) {
     getAxios().get('auth')
@@ -22,7 +33,7 @@ const initNotes = (selection?) => {
       }).catch(() => activeUser.value = null)
   }
   // format data for dispaly
-  getAxios().get('notes')
+  await getAxios().get('notes')
     .then(result => {
       // Map notes to a new array for dispaly
       if (result.data.value.length > 0) {
@@ -44,13 +55,29 @@ const initNotes = (selection?) => {
           content: 'Login to create a note!',
           route: '',
           isPrivate: false,
+          authorId: -1,
+          authorName: '',
+          selectedIndex: -1
         }]
       }
-      //update editor component
-      editor.value.changeNote(notes.value[selected.value], selected.value)
     }).catch(error => console.log(error))
+
+  // Find the index of the target note
+  if (notes.value[0].id !== -1 && selection === undefined) {
+    notes.value.forEach((note, index) => {
+      if (note.id === targetId.value) {
+        selected.value = index
+      }
+    })
+  } else {
+    selected.value = selection
+    router.replace('/notes')
+  }
+  //update editor component
+  editor.value.changeNote(notes.value[selected.value], selected.value)
 }
 
+targetId.value
 initNotes()
 
 </script>

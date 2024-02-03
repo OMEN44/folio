@@ -16,14 +16,14 @@ router.get('/', (req, res) => {
 })
 
 router.post('/create', (req, res) => {
-    const { title, about, date } = req.body
+    const { title, about, date, noteId } = req.body
 
     if (Number(checkUserData(req, res).access) > 1) {
         res.status(401).json({ error: 'You do not have permission to create Timeline Events.' })
         return
     }
 
-    addTimelineEvent(title, date, about)
+    addTimelineEvent(title, date, about, noteId)
         .then(() => res.json({ message: 'Success' }))
         .catch(error => {
             if (error.name === 'SequelizeUniqueConstraintError')

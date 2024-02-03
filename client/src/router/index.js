@@ -6,7 +6,7 @@ import TimelineView from "@/views/TimelineView.vue";
 import AccountView from "@/views/AccountView.vue";
 import NotesView from "@/views/NotesView.vue";
 
-const router = createRouter({
+export const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
@@ -33,7 +33,7 @@ const router = createRouter({
         {
             path: '/:pathMatch(.*)*',
             name: 'notFound',
-            redirect: {name: 'home'},
+            redirect: { name: 'home' },
         },
     ],
 })

@@ -23,6 +23,12 @@ router.get('', (req, res) => {
     }
 })
 
+router.get('/public', (req, res) => {
+    getAllPublicNotes()
+        .then(data => res.json({ message: 'success', value: data }))
+        .catch(error => res.status(404).json({ message: 'Could not access timeline data', error: error }))
+})
+
 router.post('/update', (req, res) => {
     if (checkUserData(req, res).access < 2) {
         const { id, content, isPrivate } = req.body

@@ -7,11 +7,27 @@ import { notify } from '../script/notification';
 const emit = defineEmits(['updateTimeline'])
 
 const errorMessage = ref('')
+const notes = ref([])
 const editorOptions = ref({
   title: '',
   date: '',
-  about: ''
+  about: '',
+  noteId: -1
 })
+
+// setup
+
+getAxios().get('/notes/public')
+  .then((res) => {
+    if (res.data.value.length > 0) {
+      res.data.value.forEach((note) => {
+        notes.value.push({
+          label: `${note.title} - By ${note['user.username']}`,
+          id: note.id
+        })
+      })
+    }
+  })
 
 const createEvent = (e) => {
   e.preventDefault(e)
@@ -19,23 +35,17 @@ const createEvent = (e) => {
     errorMessage.value = 'Must fill all inputs!'
     return
   }
-  getAxios().post(
-    '/timeline/create',
-    {
-      title: editorOptions.value.title,
-      about: editorOptions.value.about,
-      date: editorOptions.value.date
-    }
-  ).then(response => {
-    errorMessage.value = response.data.message
-    editorOptions.value.title = ''
-    editorOptions.value.about = ''
-    editorOptions.value.date = ''
-    emit('updateTimeline')
-    notify('Created new timeline event.')
-  }).catch(error => {
-    errorMessage.value = error.response.data.error
-  })
+  getAxios().post('/timeline/create', editorOptions.value)
+    .then(response => {
+      errorMessage.value = response.data.message
+      editorOptions.value.title = ''
+      editorOptions.value.about = ''
+      editorOptions.value.date = ''
+      emit('updateTimeline')
+      notify('Created new timeline event.')
+    }).catch(error => {
+      errorMessage.value = error.response.data.error
+    })
 }
 </script>
 
@@ -51,6 +61,11 @@ const createEvent = (e) => {
         </div>
       </div>
       <label>About</label><textarea v-model="editorOptions.about" style="max-width: calc(100%)"></textarea>
+      <label>Select a public note to link with the event</label>
+      <select v-model="editorOptions.noteId">
+        <option value="-1">No note yet</option>
+        <option v-for="note in notes" :value="note.id">{{ note.label }}</option>
+      </select>
       <div class="form-top">
         <button @click="createEvent">Submit</button>
         <span v-html="errorMessage"></span>
@@ -87,5 +102,9 @@ const createEvent = (e) => {
 
 .form-top span {
   margin: 12px 0 0 5px;
+}
+
+label {
+  margin-top: 8px;
 }
 </style>

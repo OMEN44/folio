@@ -5,8 +5,9 @@ import store from '../store/index'
 import TimelineSeach from "../components/TimelineSeach.vue";
 import getAxios from "../plugins/axios";
 import TimelineCreator from "../components/TimelineCreator.vue";
+import { TimelineEventType } from "../script/timeline";
 
-const timelineDisplayData = ref(null)
+const timelineDisplayData = ref<TimelineEventType | null>(null)
 const accessLevel = ref(3)
 
 const updateTimeline = (filters?) => {
@@ -63,7 +64,7 @@ const updateTimeline = (filters?) => {
         id: project.id,
         title: project.title,
         about: project.about,
-        route: null,
+        noteId: project.noteId,
         newYear: (project.newYear !== undefined),
         date: new Date(project.date)
       }))

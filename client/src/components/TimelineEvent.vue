@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiClose } from '@mdi/js'
+import { mdiDelete, mdiOpenInNew } from '@mdi/js'
 import getAxios from '../plugins/axios'
 import { notify } from '../script/notification';
+import router from '../router';
 
-const props = defineProps(['id', 'title', 'route', 'about', 'image', 'date', 'newYear', 'accessLevel'])
+const props = defineProps(['id', 'title', 'noteId', 'about', 'image', 'date', 'newYear', 'accessLevel'])
 const emit = defineEmits(['eventDeleted'])
 
 const deleteEvent = () => {
@@ -14,6 +15,10 @@ const deleteEvent = () => {
       emit('eventDeleted')
     })
     .catch(error => console.log(error))
+}
+
+const openNote = (e) => {
+  router.push({ path: '/notes', query: { id: props.noteId } })
 }
 
 </script>
@@ -26,12 +31,11 @@ const deleteEvent = () => {
     <div class="div-header">
       <div class="div-title">
         <h2>{{ props.title }}</h2>
-        <!--      <router-link :v-if="props.route !== null" :to="props.route">
-                <svg-icon type="mdi" :size="40" :path="mdiOpenInApp"></svg-icon>
-              </router-link>-->
+        <svg-icon v-if="props.noteId > 0" class="icon-note icon icon-hover" type="mdi" :size="40" :path="mdiOpenInNew"
+          @click="openNote"></svg-icon>
       </div>
       <svg-icon @click="deleteEvent" v-if="props.accessLevel < 2" class="icon icon-hover" type="mdi" :size="30"
-        :path="mdiClose"></svg-icon>
+        :path="mdiDelete"></svg-icon>
     </div>
     <p class="p-date">{{ props.date.toLocaleString('default', { month: 'long' }) }} {{ props.date.getFullYear() }}</p>
     <div class="div-content">
@@ -43,6 +47,10 @@ const deleteEvent = () => {
 </template>
 
 <style scoped>
+.icon-note {
+  height: 20px;
+}
+
 .div-header:before {
   content: "";
   position: absolute;
