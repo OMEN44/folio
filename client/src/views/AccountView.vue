@@ -7,6 +7,7 @@ import getAxios from '../plugins/axios'
 import { getUserData } from "../script/utils";
 
 const errorMessage = ref('')
+const accessLevel = ref(-1)
 
 const logout = async (e) => {
   await store.dispatch('logout');
@@ -63,8 +64,10 @@ const register = async (e) => {
 
 const switchFormContent = (content) => {
   if (content === 'logout') {
-    getUserData().then(res => { errorMessage.value = res.username })
-    // errorMessage.value = getUserData()
+    getUserData().then(res => {
+      errorMessage.value = res.username
+      accessLevel.value = res.accessLevel
+    })
     document.getElementById('logout').classList.remove('hidden')
     document.getElementById('login').classList.add('hidden')
     document.getElementById('register').classList.add('hidden')
@@ -119,6 +122,16 @@ onMounted(() => {
           <span v-html="errorMessage"></span>
         </div>
         <button class="button-border" @click="logout">Logout</button>
+      </div>
+      <div v-if="accessLevel === 0">
+        <h3>To do list:</h3>
+        <ul>
+          <li>Overhaul login page</li>
+          <li>Overhaul TextBox component</li>
+          <li>Create mobile stylings</li>
+          <li>Encrypt password</li>
+          <li>Add overlays for confirmation</li>
+        </ul>
       </div>
     </div>
   </TextBox>
