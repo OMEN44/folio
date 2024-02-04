@@ -30,3 +30,5 @@ coverage
 
 # deployment files
 *.sqlite
+vscode/*
+startVisualStudioCode.bat
