@@ -25,6 +25,8 @@ import taskList from "markdown-it-task-lists"
 import mark from "markdown-it-mark"
 import { notify } from "../script/notification";
 import { NoteType } from "../script/notes";
+import Overlay from "./Overlay.vue";
+import { onBeforeRouteLeave } from "vue-router";
 
 const md = MarkdownIt()
   .use(MarkdownItHighlightJs)
@@ -37,7 +39,37 @@ const md = MarkdownIt()
   .use(taskList)
   .use(mark)
 
+const overlay = ref<InstanceType<typeof Overlay>>()
+
 const changeNote = (newNote, selectedIndex) => {
+  if (note.value !== null && raw.value !== note.value.content) {
+    overlay.value.openOverlay({
+      title: 'Changes are unsaved',
+      content: 'Would you like to save changes before leaving',
+      buttons: [
+        {
+          name: 'Yes',
+          primary: true,
+          action: () => {
+            saveNote()
+            overlay.value.closeOverlay()
+            updateEditor(newNote, selectedIndex)
+          }
+        },
+        {
+          name: 'No',
+          primary: false,
+          action: () => {
+            overlay.value.closeOverlay()
+            updateEditor(newNote, selectedIndex)
+          }
+        }
+      ]
+    })
+  } else { updateEditor(newNote, selectedIndex) }
+}
+
+const updateEditor = (newNote, selectedIndex) => {
   note.value = newNote
   note.value.selectedIndex = selectedIndex
   raw.value = note.value.content
@@ -52,16 +84,32 @@ const onUpdate = (e?) => {
 
 const deleteNote = () => {
   if (note.value.id === -1) return;
-  notify(`Deleted the note: ${note.value.title}`)
-  getAxios().post('/notes/delete', {
-    id: note.value.id
+  overlay.value.openOverlay({
+    title: `Delete the note: ${note.value.title}?`,
+    buttons: [
+      {
+        name: 'Yes',
+        primary: true,
+        action: () => {
+          notify(`Deleted the note: ${note.value.title}`)
+          getAxios().post('/notes/delete', {
+            id: note.value.id
+          })
+            .then(() => emit('updateNote', 0))
+            .catch(error => console.log(error.response.data.error))
+          overlay.value.closeOverlay()
+        }
+      },
+      {
+        name: 'No',
+        primary: false,
+        action: () => overlay.value.closeOverlay()
+      }
+    ]
   })
-    .then(() => emit('updateNote'))
-    .catch(error => console.log(error.response.data.error))
 }
 
-const saveNote = (e) => {
-  console.log(e)
+const saveNote = () => {
   notify(`Changes saved`)
   updateNote({
     id: note.value.id,
@@ -80,7 +128,26 @@ const togglePrivate = () => {
   notify(`${note.value.title} is now a ${note.value.isPrivate ? 'private' : 'public'} note.`)
 }
 
-const undoChanges = () => raw.value = note.value.content
+const undoChanges = () => {
+  overlay.value.openOverlay({
+    title: 'Undo all changes?',
+    buttons: [
+      {
+        name: 'Yes',
+        primary: true,
+        action: () => {
+          raw.value = note.value.content
+          overlay.value.closeOverlay()
+        }
+      },
+      {
+        name: 'No',
+        primary: false,
+        action: () => overlay.value.closeOverlay()
+      }
+    ]
+  })
+}
 
 const updateNote = (noteData) => {
   if (note.value.id === -1) return;
@@ -89,9 +156,38 @@ const updateNote = (noteData) => {
     .catch(error => console.log(error.response.data.error))
 }
 
+onBeforeRouteLeave((to, from, next) => {
+  if (raw.value !== note.value.content) {
+    overlay.value.openOverlay({
+      title: 'Changes are unsaved',
+      content: 'Would you like to save changes before leaving',
+      buttons: [
+        {
+          name: 'Yes',
+          primary: true,
+          action: () => {
+            saveNote()
+            overlay.value.closeOverlay()
+            next()
+          }
+        },
+        {
+          name: 'No',
+          primary: false,
+          action: () => {
+            overlay.value.closeOverlay()
+            next()
+          }
+        }
+      ]
+    })
+  } else next()
+})
+
 defineExpose({ changeNote })
 </script>
 <template>
+  <overlay ref="overlay" />
   <div class="div-editor-container">
     <div class="div-input" v-if="note !== null && props.user !== null && note.authorId === props.user.userId">
       <span class="circle" />

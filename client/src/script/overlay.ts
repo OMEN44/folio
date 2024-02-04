@@ -1,6 +1,6 @@
 export interface OverlayType {
     title: string,
-    content: string,
+    content?: string,
     buttons:
     {
         name: string,

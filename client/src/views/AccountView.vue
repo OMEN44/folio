@@ -131,6 +131,7 @@ onMounted(() => {
           <li>Create mobile stylings</li>
           <li>Encrypt password</li>
           <li>Add overlays for confirmation</li>
+          <li>Split notes into 2 files</li>
         </ul>
       </div>
     </div>

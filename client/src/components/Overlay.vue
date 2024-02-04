@@ -72,7 +72,7 @@ defineExpose({ openOverlay, closeOverlay })
     border: 4px var(--primary);
     border-style: solid none;
     position: relative;
-    padding: 10px;
+    padding: 20px;
 }
 
 .primary {
