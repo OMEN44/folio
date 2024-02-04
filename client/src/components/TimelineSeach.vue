@@ -9,8 +9,8 @@ const hideFilter = ref(true)
 const searchOptions = ref({
     searchTerm: '',
     onlyLinks: false,
-    newest: false,
-    oldest: true
+    newest: true,
+    oldest: false
 })
 
 const cancel = () => {
@@ -32,7 +32,7 @@ const filterClick = (e) => {
             searchOptions.value.newest = searchOptions.value.oldest
         }
         emit('updateTimeline', searchOptions.value)
-    } catch (_) {}
+    } catch (_) { }
 }
 </script>
 

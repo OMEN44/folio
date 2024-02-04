@@ -40,20 +40,20 @@ const updateTimeline = (filters?) => {
       }
       // sort by date
       rawData.sort((a, b) => {
-        if (filters && filters.newest)
-          return a.date < b.date ? 1 : -1
-        else
+        if (filters && filters.oldest)
           return a.date > b.date ? 1 : -1
+        else
+          return a.date < b.date ? 1 : -1
       })
       // give first event in the year the newYear tag
-      let currentYear = (filters && filters.newest) ? 10000 : 0
+      let currentYear = (filters && filters.oldest) ? 0 : 10000
       rawData.forEach((event) => {
         let isFirst = false
         const fullYear = new Date(event.date).getFullYear()
-        if (filters && filters.newest)
-          isFirst = fullYear < currentYear
-        else
+        if (filters && filters.oldest)
           isFirst = fullYear > currentYear
+        else
+          isFirst = fullYear < currentYear
         if (isFirst) {
           currentYear = fullYear
           event.newYear = true
