@@ -42,7 +42,7 @@ const md = MarkdownIt()
 const overlay = ref<InstanceType<typeof Overlay>>()
 
 const changeNote = (newNote, selectedIndex) => {
-  if (note.value !== null && raw.value !== note.value.content) {
+  if (note.value !== null && note.value !== undefined && raw.value !== note.value.content) {
     overlay.value.openOverlay({
       title: 'Changes are unsaved',
       content: 'Would you like to save changes before leaving',
@@ -70,9 +70,11 @@ const changeNote = (newNote, selectedIndex) => {
 }
 
 const updateEditor = (newNote, selectedIndex) => {
-  note.value = newNote
-  note.value.selectedIndex = selectedIndex
-  raw.value = note.value.content
+  if (newNote !== undefined) {
+    note.value = newNote
+    note.value.selectedIndex = selectedIndex
+    raw.value = note.value.content
+  }
 }
 
 const onUpdate = (e?) => {
@@ -157,7 +159,7 @@ const updateNote = (noteData) => {
 }
 
 onBeforeRouteLeave((to, from, next) => {
-  if (raw.value !== note.value.content) {
+  if (note.value !== null && note.value !== undefined && raw.value !== note.value.content) {
     overlay.value.openOverlay({
       title: 'Changes are unsaved',
       content: 'Would you like to save changes before leaving',

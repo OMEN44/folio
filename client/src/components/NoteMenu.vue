@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SvgIcon from "@jamescoyle/vue-icon"
 import { mdiNotePlus } from '@mdi/js'
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import getAxios from "../plugins/axios";
 import { notify } from "../script/notification";
 

@@ -56,7 +56,7 @@ const initNotes = async (selection?) => {
           route: '',
           isPrivate: false,
           authorId: -1,
-          authorName: '',
+          authorName: undefined,
           selectedIndex: -1
         }]
       }
