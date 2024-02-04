@@ -16,7 +16,7 @@ import notes from './routes/notes.js'
 /*
 import { addUser, addNote, addTimelineEvent } from './database.js';
 addUser('Huon', 'huonswales@gmail.com', 'password', 0)
-addUser('aclem43', 'alexiclemeur@gmail.com', 'password', 1)
+addUser('aclem43', 'aclemeur@gmail.com', 'password', 1)
 
 addNote('Test note 1', '# Title', true, 'test-note', 1)
 addNote('Electromagnetic induction', `\`\`\`cpp
