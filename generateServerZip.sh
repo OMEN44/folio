@@ -12,7 +12,7 @@ mkdir /home/huon/Desktop/server
 mkdir /home/huon/Desktop/server/public
 
 rsync -a ~/WebstormProjects/folio/client/dist/* ~/Desktop/server/public/
-rsync -a --exclude=node_modules --exclude=*.sqlite ~/WebstormProjects/folio/server/* ~/Desktop/server/
+rsync -a --exclude=node_modules --exclude=folio.sqlite --exclude=folio-backup.sqlite ~/WebstormProjects/folio/server/* ~/Desktop/server/
 
 # Copy to server
 cd ~/Desktop

@@ -4,43 +4,77 @@ import { mdiDelete, mdiOpenInNew } from '@mdi/js'
 import getAxios from '../plugins/axios'
 import { notify } from '../script/notification';
 import router from '../router';
+import Overlay from './Overlay.vue';
+import { ref } from 'vue';
+import { TimelineEventType } from '../script/timeline';
 
-const props = defineProps(['id', 'title', 'noteId', 'about', 'image', 'date', 'newYear', 'accessLevel'])
+const props = defineProps<{ eventData: TimelineEventType, accessLevel: number }>()
 const emit = defineEmits(['eventDeleted'])
 
-const deleteEvent = () => {
-  getAxios().post('/timeline/delete', { id: props.id })
-    .then(() => {
-      notify('Deleted timeline event')
-      emit('eventDeleted')
-    })
-    .catch(error => console.log(error))
+const deleteEvent = (e) => {
+  if (e) {
+    getAxios().post('/timeline/delete', { id: props.eventData.id })
+      .then(() => {
+        notify('Deleted timeline event')
+        emit('eventDeleted')
+      })
+      .catch(error => console.log(error))
+  }
+
+  overlay.value.closeOverlay()
 }
 
 const openNote = (e) => {
-  router.push({ path: '/notes', query: { id: props.noteId } })
+  router.push({ path: '/notes', query: { id: props.eventData.noteId } })
+}
+
+// Overlay controlls
+// const overlayConfig = ref<OverlayType | null>(null)
+const overlay = ref<InstanceType<typeof Overlay>>(null)
+
+const confirmDeleteEvent = (e) => {
+  overlay.value.openOverlay(
+    {
+      title: 'Deleting Timeline Event',
+      content: `Are you sure you want to deleted the timeline event: ${props.eventData.title}`,
+      buttons: [
+        {
+          name: 'Yes',
+          primary: true,
+          action: (e) => true
+        },
+        {
+          name: 'No',
+          primary: false,
+          action: (e) => false
+        }
+      ]
+    }
+  )
 }
 
 </script>
 
 <template>
+  <overlay ref="overlay" @result="deleteEvent" />
   <div class="div-timeline-event">
-    <span :class="{ year: props.newYear, circle: !props.newYear }">
-      {{ (props.newYear ? props.date.getFullYear() : '') }}
+    <span :class="{ year: props.eventData.newYear, circle: !props.eventData.newYear }">
+      {{ (props.eventData.newYear ? props.eventData.date.getFullYear() : '') }}
     </span>
     <div class="div-header">
       <div class="div-title">
-        <h2>{{ props.title }}</h2>
-        <svg-icon v-if="props.noteId > 0" class="icon-note icon icon-hover" type="mdi" :size="40" :path="mdiOpenInNew"
-          @click="openNote"></svg-icon>
+        <h2>{{ props.eventData.title }}</h2>
+        <svg-icon v-if="props.eventData.noteId > 0" class="icon-note icon icon-hover" type="mdi" :size="40"
+          :path="mdiOpenInNew" @click="openNote"></svg-icon>
       </div>
-      <svg-icon @click="deleteEvent" v-if="props.accessLevel < 2" class="icon icon-hover" type="mdi" :size="30"
+      <svg-icon @click="confirmDeleteEvent" v-if="props.accessLevel < 2" class="icon icon-hover" type="mdi" :size="30"
         :path="mdiDelete"></svg-icon>
     </div>
-    <p class="p-date">{{ props.date.toLocaleString('default', { month: 'long' }) }} {{ props.date.getFullYear() }}</p>
+    <p class="p-date">{{ props.eventData.date.toLocaleString('default', { month: 'long' }) }} {{
+      props.eventData.date.getFullYear() }}</p>
     <div class="div-content">
-      <p>{{ props.about }} </p>
-      <img v-if="props.image !== null" :src="props.image" :alt="props.image" />
+      <p>{{ props.eventData.about }} </p>
+      <!-- <img v-if="props.eventData.image !== null" :src="props.eventData.image" :alt="props.eventData.image" /> -->
     </div>
     <slot></slot>
   </div>

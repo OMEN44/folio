@@ -1,8 +1,8 @@
 export interface TimelineEventType {
     id: number,
     title: string,
+    noteId: number,
     about: string,
-    route: null,
     newYear?: boolean,
     date: any
 }

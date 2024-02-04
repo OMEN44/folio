@@ -87,7 +87,7 @@ updateTimeline()
     <Timeline-creator v-if="accessLevel < 2" @updateTimeline="updateTimeline" />
     <Timeline-seach @updateTimeline="updateTimeline" />
     <div class="div-timeline">
-      <timeline-event @event-deleted="updateTimeline" v-for="(item) in timelineDisplayData" v-bind="item"
+      <timeline-event @event-deleted="updateTimeline" v-for="(item) in timelineDisplayData" :event-data="item"
         :access-level="accessLevel" />
     </div>
   </div>
