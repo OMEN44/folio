@@ -3,8 +3,7 @@ import TextBox from './TextBox.vue';
 import { ref } from 'vue';
 import getAxios from '../plugins/axios';
 import { notify } from '../script/notification';
-
-const emit = defineEmits(['updateTimeline'])
+import { updateTimeline } from '../script/timeline';
 
 const errorMessage = ref('')
 const notes = ref([])
@@ -41,7 +40,7 @@ const createEvent = (e) => {
       editorOptions.value.title = ''
       editorOptions.value.about = ''
       editorOptions.value.date = ''
-      emit('updateTimeline')
+      updateTimeline()
       notify('Created new timeline event.')
     }).catch(error => {
       errorMessage.value = error.response.data.error

@@ -1,75 +1,8 @@
 <script setup lang="ts">
 import TimelineEvent from "../components/TimelineEvent.vue";
-import { ref } from "vue";
-import store from '../store/index'
 import TimelineSeach from "../components/TimelineSeach.vue";
-import getAxios from "../plugins/axios";
 import TimelineCreator from "../components/TimelineCreator.vue";
-import { TimelineEventType } from "../script/timeline";
-
-const timelineDisplayData = ref<TimelineEventType | null>(null)
-const accessLevel = ref(3)
-
-const updateTimeline = (filters?) => {
-  // If logged in check users access level
-  if (store.getters.isAuthenticated) {
-    getAxios().get('/auth')
-      .then(response => {
-        if (response.data.valid)
-          accessLevel.value = response.data.value.access
-      }).catch(() => { })
-  }
-
-  // Get timeline data and format it
-  getAxios().get('/timeline')
-    .then(response => {
-      if (response.data.value === undefined) return
-      let rawData = response.data.value
-      // filter for links option on filter
-      if (filters && filters.onlyLinks)
-        rawData = response.data.value.filter(event => {
-          return event.noteId !== null
-        })
-      // Filter for search term
-      if (filters && filters.searchTerm !== '') {
-        rawData = rawData.filter(event => {
-          return event.title.toLowerCase().includes(filters.searchTerm.toLowerCase())
-            || event.about.toLowerCase().includes(filters.searchTerm.toLowerCase())
-            || event.date.toLowerCase().includes(filters.searchTerm.toLowerCase())
-        })
-      }
-      // sort by date
-      rawData.sort((a, b) => {
-        if (filters && filters.oldest)
-          return a.date > b.date ? 1 : -1
-        else
-          return a.date < b.date ? 1 : -1
-      })
-      // give first event in the year the newYear tag
-      let currentYear = (filters && filters.oldest) ? 0 : 10000
-      rawData.forEach((event) => {
-        let isFirst = false
-        const fullYear = new Date(event.date).getFullYear()
-        if (filters && filters.oldest)
-          isFirst = fullYear > currentYear
-        else
-          isFirst = fullYear < currentYear
-        if (isFirst) {
-          currentYear = fullYear
-          event.newYear = true
-        }
-      })
-      // Format the raw Data for display
-      timelineDisplayData.value = rawData.map((project) => ({
-        id: project.id,
-        title: project.title,
-        about: project.about,
-        noteId: project.noteId,
-        newYear: (project.newYear !== undefined),
-        date: new Date(project.date)
-      }))
-    })
-}
+import { AccessLevel, TimelineData, updateTimeline } from "../script/timeline";
 
 updateTimeline()
 </script>
@@ -84,11 +17,10 @@ updateTimeline()
         possible.<br />I hope that at least one of the entries can inspire someone, somewhere to start their own project!
       </p>
     </div>
-    <Timeline-creator v-if="accessLevel < 2" @updateTimeline="updateTimeline" />
-    <Timeline-seach @updateTimeline="updateTimeline" />
+    <Timeline-creator v-if="AccessLevel < 2" />
+    <Timeline-seach />
     <div class="div-timeline">
-      <timeline-event @event-deleted="updateTimeline" v-for="(item) in timelineDisplayData" :event-data="item"
-        :access-level="accessLevel" />
+      <timeline-event v-for="(item) in TimelineData" :event-data="item" :access-level="AccessLevel" />
     </div>
   </div>
 </template>

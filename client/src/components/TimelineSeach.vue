@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import SvgIcon from "@jamescoyle/vue-icon"
-import { mdiTagSearch, mdiFilter, mdiClose } from '@mdi/js'
+import { mdiFilter, mdiClose } from '@mdi/js'
 import { ref } from "vue";
-
-const emit = defineEmits(['updateTimeline'])
+import { updateTimeline } from "../script/timeline";
 
 const hideFilter = ref(true)
 const searchOptions = ref({
@@ -14,14 +13,13 @@ const searchOptions = ref({
 })
 
 const cancel = () => {
-    emit('updateTimeline', searchOptions.value)
+    updateTimeline(searchOptions.value)
     searchOptions.value.searchTerm = '';
 }
 
-const search = (e) => {
-    e.preventDefault()
+const search = () => {
     if (searchOptions.value.searchTerm === '') return
-    emit('updateTimeline', searchOptions.value)
+    updateTimeline(searchOptions.value)
 }
 
 const filterClick = (e) => {
@@ -31,19 +29,16 @@ const filterClick = (e) => {
         } else if (e.originalTarget.attributes.id.value === 'oldestFirst') {
             searchOptions.value.newest = searchOptions.value.oldest
         }
-        emit('updateTimeline', searchOptions.value)
+        updateTimeline(searchOptions.value)
     } catch (_) { }
 }
 </script>
 
 <template>
-    <form class="filter">
-        <input class="input-filter" v-model="searchOptions.searchTerm" placeholder="Search Timeline">
+    <form class="filter" @submit="(e) => e.preventDefault()">
+        <input class="input-filter" v-model="searchOptions.searchTerm" placeholder="Search Timeline" @input="search">
         <button class="button-filter" type="button" @click="cancel">
             <svg-icon class="icon icon-hover" type="mdi" :size="30" :path="mdiClose"></svg-icon>
-        </button>
-        <button class="button-filter" type="submit" @click="search">
-            <svg-icon class="icon icon-hover" type="mdi" :size="30" :path="mdiTagSearch"></svg-icon>
         </button>
         <button class="button-filter" @click="hideFilter = !hideFilter" type="button">
             <svg-icon class="icon icon-hover" type="mdi" :size="30" :path="mdiFilter"></svg-icon>

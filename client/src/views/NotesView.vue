@@ -1,83 +1,15 @@
 <script setup lang="ts">
 
-import { computed, ref, watch } from "vue";
-import store from '../store/index'
+import { watch } from "vue";
 import NoteEditor from "../components/NoteEditor.vue";
-import getAxios from "../plugins/axios";
 import NoteMenu from "../components/NoteMenu.vue";
-import { NoteType } from "../script/notes";
+import { ActiveUser, Notes, Selected, initNotes } from "../script/notes";
 import { useRoute } from "vue-router";
-import router from "../router";
-
-const notes = ref<Array<NoteType>>([])
-const activeUser = ref(null);
-const editor = ref(null)
-const selected = ref(0)
 
 watch(() => useRoute(), () => {
-  targetId.value
   initNotes()
 })
 
-const targetId = computed(() => {
-  return useRoute() === undefined ? -1 : Number(useRoute().query.id)
-})
-
-const initNotes = async (selection?) => {
-  // Ensure user access is restricted
-  if (store.getters.isAuthenticated) {
-    getAxios().get('auth')
-      .then(response => {
-        if (response.data.valid)
-          activeUser.value = response.data.value
-      }).catch(() => activeUser.value = null)
-  }
-  // format data for dispaly
-  await getAxios().get('notes')
-    .then(result => {
-      // Map notes to a new array for dispaly
-      if (result.data.value.length > 0) {
-        notes.value = result.data.value.map(note => ({
-          id: note.id,
-          title: note.title,
-          content: note.content,
-          route: note.route,
-          isPrivate: note.private,
-          authorId: note['user.id'],
-          authorName: note['user.username']
-        }))
-        // Set title to active note
-      } else {
-        // If there are no notes push a placeholder
-        notes.value = [{
-          id: -1,
-          title: 'No notes found',
-          content: 'Login to create a note!',
-          route: '',
-          isPrivate: false,
-          authorId: -1,
-          authorName: undefined,
-          selectedIndex: -1
-        }]
-      }
-    }).catch(error => console.log(error))
-
-  // Find the index of the target note
-  if (notes.value[0].id !== -1 && selection === undefined) {
-    notes.value.forEach((note, index) => {
-      if (note.id === targetId.value) {
-        selected.value = index
-      }
-    })
-  } else {
-    selected.value = selection
-    router.replace('/notes')
-  }
-  //update editor component
-  editor.value.changeNote(notes.value[selected.value], selected.value)
-}
-
-targetId.value
 initNotes()
 
 </script>
@@ -93,15 +25,15 @@ initNotes()
         <span class="circle" id="center" />
         <span class="v-shape" />
       </div>
-      <NoteMenu :user="activeUser" :notes="notes" :selected="selected" @update-notes="initNotes" />
+      <NoteMenu :user="ActiveUser" :notes="Notes" :selected="Selected" @update-notes="initNotes" />
     </div>
     <div class="div-notes-content">
       <div class="div-title">
-        <h1 v-html="notes[selected] === undefined ? 'No notes found' : notes[selected].title"></h1>
+        <h1 v-html="Notes[Selected] === undefined ? 'No notes found' : Notes[Selected].title"></h1>
         <span class="circle" id="tr" />
         <span class="circle" id="br" />
       </div>
-      <NoteEditor ref="editor" :user="activeUser" @update-note="initNotes" />
+      <NoteEditor :user="ActiveUser" />
     </div>
   </div>
 </template>

@@ -6,30 +6,15 @@ import { notify } from '../script/notification';
 import router from '../router';
 import Overlay from './Overlay.vue';
 import { ref } from 'vue';
-import { TimelineEventType } from '../script/timeline';
+import { AccessLevel, TimelineEventType, updateTimeline } from '../script/timeline';
 
-const props = defineProps<{ eventData: TimelineEventType, accessLevel: number }>()
-const emit = defineEmits(['eventDeleted'])
+const props = defineProps<{ eventData: TimelineEventType }>()
 
-const deleteEvent = (e) => {
-  if (e) {
-    getAxios().post('/timeline/delete', { id: props.eventData.id })
-      .then(() => {
-        notify('Deleted timeline event')
-        emit('eventDeleted')
-      })
-      .catch(error => console.log(error))
-  }
-
-  overlay.value.closeOverlay()
-}
-
-const openNote = (e) => {
+const openNote = () => {
   router.push({ path: '/notes', query: { id: props.eventData.noteId } })
 }
 
 // Overlay controlls
-// const overlayConfig = ref<OverlayType | null>(null)
 const overlay = ref<InstanceType<typeof Overlay>>(null)
 
 const confirmDeleteEvent = (e) => {
@@ -41,12 +26,20 @@ const confirmDeleteEvent = (e) => {
         {
           name: 'Yes',
           primary: true,
-          action: (e) => true
+          action: () => {
+            getAxios().post('/timeline/delete', { id: props.eventData.id })
+              .then(() => {
+                notify('Deleted timeline event')
+                updateTimeline()
+              })
+              .catch(error => console.log(error))
+            overlay.value.closeOverlay()
+          }
         },
         {
           name: 'No',
           primary: false,
-          action: (e) => false
+          action: (e) => overlay.value.closeOverlay()
         }
       ]
     }
@@ -56,7 +49,7 @@ const confirmDeleteEvent = (e) => {
 </script>
 
 <template>
-  <overlay ref="overlay" @result="deleteEvent" />
+  <overlay ref="overlay" />
   <div class="div-timeline-event">
     <span :class="{ year: props.eventData.newYear, circle: !props.eventData.newYear }">
       {{ (props.eventData.newYear ? props.eventData.date.getFullYear() : '') }}
@@ -67,7 +60,7 @@ const confirmDeleteEvent = (e) => {
         <svg-icon v-if="props.eventData.noteId > 0" class="icon-note icon icon-hover" type="mdi" :size="40"
           :path="mdiOpenInNew" @click="openNote"></svg-icon>
       </div>
-      <svg-icon @click="confirmDeleteEvent" v-if="props.accessLevel < 2" class="icon icon-hover" type="mdi" :size="30"
+      <svg-icon @click="confirmDeleteEvent" v-if="AccessLevel < 2" class="icon icon-hover" type="mdi" :size="30"
         :path="mdiDelete"></svg-icon>
     </div>
     <p class="p-date">{{ props.eventData.date.toLocaleString('default', { month: 'long' }) }} {{
