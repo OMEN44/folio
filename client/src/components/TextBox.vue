@@ -3,22 +3,19 @@ import { ref, onBeforeMount } from "vue";
 
 const props = defineProps<{
   title: string,
-  width?: number,
   appearance?: string
 }>();
 
-const widthValue = ref(null)
 const appearance = ref(null)
 
 onBeforeMount(() => {
-  widthValue.value = (props.width) === undefined ? 300 : props.width;
   appearance.value = props.appearance === undefined ? "basic" : props.appearance;
 })
 
 </script>
 
 <template>
-  <div class="div-container" :class="appearance" :style="{ width: widthValue + 'px' }">
+  <div class="div-container" :class="appearance">
     <div class="div-title" :class="appearance">
       <h2>{{ props.title }}</h2>
     </div>

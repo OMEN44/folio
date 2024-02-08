@@ -5,9 +5,7 @@ import { ref } from 'vue';
 
 const showNav = ref<boolean>(false)
 
-// window.addEventListener('keyup', (e) => {
-//   if (e.key === 'r') showNav.value = !showNav.value
-// })
+
 </script>
 
 <template>
@@ -16,20 +14,20 @@ const showNav = ref<boolean>(false)
     <span class="small-circle right"></span>
     <div ref="navSlidePanel" class="div-navigation" :class="{ 'show-nav': showNav }">
       <div class="div-left">
-        <router-link class="link" to="/home">
+        <router-link class="link" to="/home" @click="showNav = !showNav">
           <h2>Home</h2>
         </router-link>
-        <router-link class="link" to="/timeline">
+        <router-link class="link" to="/timeline" @click="showNav = !showNav">
           <h2>Timeline</h2>
         </router-link>
-        <router-link class="link" to="/notes">
+        <router-link class="link" to="/notes" @click="showNav = !showNav">
           <h2>Notes</h2>
         </router-link>
       </div>
 
       <div class="div-right">
         <div class="link">
-          <router-link to="/account">
+          <router-link to="/account" @click="showNav = !showNav">
             <svg-icon class="icon-account" type="mdi" :size="40" :path="mdiAccount"></svg-icon>
           </router-link>
         </div>
@@ -145,7 +143,7 @@ const showNav = ref<boolean>(false)
 
 }
 
-@media (min-width: 800px) {
+@media (min-width: 799px) {
   .div-open {
     display: none;
   }

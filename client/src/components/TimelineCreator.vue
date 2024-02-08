@@ -49,7 +49,7 @@ const createEvent = (e) => {
 </script>
 
 <template>
-  <TextBox title="Create new event" class="div-create-event" :width="500">
+  <TextBox title="Create new event" class="div-create-event" :width="editorWidth">
     <form class="form-create">
       <div class="form-top">
         <div>
