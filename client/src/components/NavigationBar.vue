@@ -3,7 +3,7 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiAccount, mdiArrowRight, mdiArrowLeft } from '@mdi/js'
 import { ref } from 'vue';
 
-const showNav = ref<boolean>(true)
+const showNav = ref<boolean>(false)
 
 // window.addEventListener('keyup', (e) => {
 //   if (e.key === 'r') showNav.value = !showNav.value
