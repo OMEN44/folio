@@ -1,0 +1,64 @@
+/* Circle things */
+
+.circle {
+    content: '';
+    background-color: var(--background);
+    border: var(--primary) 4px solid;
+    border-radius: 100%;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    z-index: 3;
+}
+
+.small-circle {
+    background-color: var(--background);
+    border: solid var(--primary) 4px;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    position: absolute;
+    content: '';
+}
+
+/* Diagonal things */
+
+.angle-tr::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-width: 20px 0 0 20px;
+    border-style: solid;
+    border-color: var(--primary) transparent;
+}
+
+.angle-tr:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-width: 14px 0 0 14px;
+    border-style: solid;
+    border-color: var(--background) transparent;
+}
+
+.angle-br::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-width: 20px 20px 0 0;
+    border-style: solid;
+    border-color: transparent var(--primary);
+}
+
+.angle-br:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-width: 14px 14px 0 0;
+    border-style: solid;
+    border-color: transparent var(--background);
+}
