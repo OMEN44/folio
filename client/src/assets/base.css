@@ -105,14 +105,3 @@ img {
     transition: transform 150ms, box-shadow 150ms;
     touch-action: manipulation;
 }
-
-.circle {
-    content: '';
-    background-color: var(--background);
-    border: var(--primary) 4px solid;
-    border-radius: 100%;
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    z-index: 3;
-}

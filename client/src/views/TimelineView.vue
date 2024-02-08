@@ -32,12 +32,22 @@ updateTimeline()
 
 .div-intro {
   text-align: center;
-  padding: 50px 50px;
+  padding: 50px;
 }
 
 .div-timeline {
   margin: 20px;
   padding-left: 40px;
   border-left: solid 4px var(--primary);
+}
+
+@media (max-width: 800px) {
+  .container {
+    margin: 0;
+  }
+
+  .div-intro {
+    padding: 20px;
+  }
 }
 </style>
