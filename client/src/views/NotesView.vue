@@ -67,28 +67,6 @@ initNotes()
 
 /*Circles:*/
 
-.v-shape:before {
-  z-index: 1;
-  content: "";
-  position: absolute;
-  top: 0;
-  right: -22px;
-  border-width: 20px;
-  border-style: solid;
-  border-color: var(--primary) transparent transparent transparent;
-}
-
-.v-shape:after {
-  z-index: 1;
-  content: "";
-  position: absolute;
-  top: -6px;
-  right: -22px;
-  border-width: 20px;
-  border-style: solid;
-  border-color: var(--background) transparent transparent transparent;
-}
-
 #tl {
   top: -12px;
   left: -10px;

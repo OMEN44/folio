@@ -46,6 +46,11 @@ updateTimeline()
     margin: 0;
   }
 
+  .div-timeline {
+    margin-top: 40px;
+    padding-left: 15px;
+  }
+
   .div-intro {
     padding: 20px;
   }

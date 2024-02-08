@@ -51,7 +51,8 @@ const confirmDeleteEvent = (e) => {
 <template>
   <overlay ref="overlay" />
   <div class="div-timeline-event">
-    <span :class="{ year: props.eventData.newYear, circle: !props.eventData.newYear }">
+    <span class="circle"></span>
+    <span :class="{ year: props.eventData.newYear }">
       {{ (props.eventData.newYear ? props.eventData.date.getFullYear() : '') }}
     </span>
     <div class="div-header">
@@ -78,26 +79,6 @@ const confirmDeleteEvent = (e) => {
   height: 20px;
 }
 
-.div-header:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -25px;
-  border-width: 25px 0 0 25px;
-  border-style: solid;
-  border-color: var(--primary) transparent;
-}
-
-.div-header:after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -19px;
-  border-width: 20px 0 0 20px;
-  border-style: solid;
-  border-color: var(--accent) transparent;
-}
-
 .div-timeline-event {
   padding: 10px;
   border: 4px solid;
@@ -108,7 +89,7 @@ const confirmDeleteEvent = (e) => {
 }
 
 .year {
-  left: -92px;
+  z-index: 3;
   top: -19px;
   content: '';
   background-color: var(--background);
@@ -172,5 +153,56 @@ i:hover {
 
 img {
   margin-left: 10px;
+}
+
+.div-header:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -25px;
+  border-width: 25px 0 0 25px;
+  border-style: solid;
+  border-color: var(--primary) transparent;
+}
+
+.div-header:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -19px;
+  border-width: 20px 0 0 20px;
+  border-style: solid;
+  border-color: var(--accent) transparent;
+}
+
+@media (min-width: 800px) {
+  .year {
+    left: -92px;
+  }
+}
+
+@media (max-width: 800px) {
+  .div-timeline-event::before {
+    width: 30px;
+    left: -30px;
+  }
+
+  .div-header:before {
+    border-width: 20px 0 0 20px;
+    left: -20px;
+  }
+
+  .div-header:after {
+    border-width: 15px 0 0 15px;
+    left: -14px;
+  }
+
+  .year {
+    right: -20px;
+  }
+
+  .circle {
+    left: -46px;
+  }
 }
 </style>
