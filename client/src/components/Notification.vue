@@ -2,9 +2,10 @@
 import { ref, watch } from 'vue';
 import { notificationList, remove } from '../script/notification';
 
-const container = ref(null)
+const container = ref<HTMLElement | null>(null)
 watch(notificationList, () => {
-    container.value.scrollTop = container.value.scrollHeight
+    if (container.value)
+        container.value.scrollTop = container.value.scrollHeight
 }, { deep: true })
 </script>
 

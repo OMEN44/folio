@@ -13,7 +13,7 @@ const escape = (e?) => {
 }
 
 const executeAction = (e) => {
-    emits('result', config.value.buttons[Number(e.target.id)].action(e))
+    emits('result', config.value?.buttons[Number(e.target.id)].action(e))
 }
 
 const openOverlay = (configData: OverlayType) => {

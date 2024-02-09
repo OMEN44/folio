@@ -9,6 +9,7 @@ const notes = ref<Array<NoteType>>([])
 const activeUser = ref(null);
 const selected = ref(0)
 
+export const showMenu = ref<boolean>(false)
 export const Notes = readonly(notes)
 export const Selected = readonly(selected)
 export const ActiveUser = readonly(activeUser)
@@ -50,7 +51,7 @@ export const initNotes = async (selection?) => {
                     route: '',
                     isPrivate: false,
                     authorId: -1,
-                    authorName: undefined,
+                    authorName: '',
                     selectedIndex: -1
                 }]
             }
@@ -69,6 +70,7 @@ export const initNotes = async (selection?) => {
     }
     //update editor component
     changeNote(notes.value[selected.value], selected.value)
+    showMenu.value = false
 }
 
 export interface NoteType {

@@ -15,10 +15,10 @@ const openNote = () => {
 }
 
 // Overlay controlls
-const overlay = ref<InstanceType<typeof Overlay>>(null)
+const overlay = ref<InstanceType<typeof Overlay>>()
 
 const confirmDeleteEvent = (e) => {
-  overlay.value.openOverlay(
+  overlay.value?.openOverlay(
     {
       title: 'Deleting Timeline Event',
       content: `Are you sure you want to deleted the timeline event: ${props.eventData.title}`,
@@ -33,13 +33,13 @@ const confirmDeleteEvent = (e) => {
                 updateTimeline()
               })
               .catch(error => console.log(error))
-            overlay.value.closeOverlay()
+            overlay.value?.closeOverlay()
           }
         },
         {
           name: 'No',
           primary: false,
-          action: (e) => overlay.value.closeOverlay()
+          action: (e) => overlay.value?.closeOverlay()
         }
       ]
     }

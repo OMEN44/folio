@@ -40,7 +40,7 @@ const createNote = (e) => {
         <div class="div-note" v-for="(element, index) in props.notes" :id="String(index)" @click="changeSelection"
             :class="{ highlight: index === props.selected }">
             <h3>{{ element['title'] }}</h3>
-            <span v-if="element['authorName'] !== undefined">By {{ element['authorName'] }}</span>
+            <span v-if="element['authorName'] !== ''">By {{ element['authorName'] }}</span>
         </div>
     </div>
 </template>

@@ -1,19 +1,30 @@
-import { readonly, ref } from "vue"
+import { readonly, ref, watch } from "vue"
 import Overlay from '../components/Overlay.vue'
 import { NoteType, initNotes } from "./notes"
 import { notify } from "./notification"
 import getAxios from "../plugins/axios"
+import { RefSymbol } from "@vue/reactivity"
 
 export const overlay = ref<InstanceType<typeof Overlay>>()
+export const textArea = ref<HTMLTextAreaElement>()
 const raw = ref('Nothing selected')
-const note = ref<NoteType | null>(null)
+const note = ref<NoteType>({
+    id: -1,
+    title: 'No notes found',
+    content: 'Login to create a note!',
+    route: '',
+    isPrivate: false,
+    authorId: -1,
+    authorName: '',
+    selectedIndex: -1
+})
 
 export const Note = readonly(note)
 export const RawMarkdown = readonly(raw)
 
 export const changeNote = (newNote, selectedIndex) => {
-    if (note.value !== null && note.value !== undefined && raw.value !== note.value.content) {
-        overlay.value.openOverlay({
+    if (note.value.id !== -1 && raw.value !== note.value.content) {
+        overlay.value?.openOverlay({
             title: 'Changes are unsaved',
             content: 'Would you like to save changes before leaving',
             buttons: [
@@ -22,7 +33,7 @@ export const changeNote = (newNote, selectedIndex) => {
                     primary: true,
                     action: () => {
                         saveNote()
-                        overlay.value.closeOverlay()
+                        overlay.value?.closeOverlay()
                         updateEditor(newNote, selectedIndex)
                     }
                 },
@@ -30,17 +41,20 @@ export const changeNote = (newNote, selectedIndex) => {
                     name: 'No',
                     primary: false,
                     action: () => {
-                        overlay.value.closeOverlay()
+                        overlay.value?.closeOverlay()
                         updateEditor(newNote, selectedIndex)
                     }
                 }
             ]
         })
-    } else { updateEditor(newNote, selectedIndex) }
+    } else {
+        updateEditor(newNote, selectedIndex)
+        onUpdate()
+    }
 }
 
 const updateEditor = (newNote, selectedIndex) => {
-    if (newNote !== undefined) {
+    if (newNote !== undefined && newNote !== null) {
         note.value = newNote
         note.value.selectedIndex = selectedIndex
         raw.value = note.value.content
@@ -48,15 +62,17 @@ const updateEditor = (newNote, selectedIndex) => {
 }
 
 export const onUpdate = (e?) => {
-    const textArea = document.getElementsByTagName('textarea')[0]
+    if (textArea.value) {
+        textArea.value.style.height = '18px';
+        textArea.value.style.height = textArea.value.scrollHeight + 'px'
+    }
     if (e)
         raw.value = e.target.value
-    textArea.setAttribute('style', 'height:' + (textArea.scrollHeight) + 'px - 52px')
 }
 
 export const deleteNote = () => {
     if (note.value.id === -1) return;
-    overlay.value.openOverlay({
+    overlay.value?.openOverlay({
         title: `Delete the note: ${note.value.title}?`,
         buttons: [
             {
@@ -69,13 +85,13 @@ export const deleteNote = () => {
                     })
                         .then(() => initNotes(0))
                         .catch(error => console.log(error.response.data.error))
-                    overlay.value.closeOverlay()
+                    overlay.value?.closeOverlay()
                 }
             },
             {
                 name: 'No',
                 primary: false,
-                action: () => overlay.value.closeOverlay()
+                action: () => overlay.value?.closeOverlay()
             }
         ]
     })
@@ -102,7 +118,7 @@ export const togglePrivate = () => {
 }
 
 export const undoChanges = () => {
-    overlay.value.openOverlay({
+    overlay.value?.openOverlay({
         title: 'Undo all changes?',
         buttons: [
             {
@@ -110,13 +126,13 @@ export const undoChanges = () => {
                 primary: true,
                 action: () => {
                     raw.value = note.value.content
-                    overlay.value.closeOverlay()
+                    overlay.value?.closeOverlay()
                 }
             },
             {
                 name: 'No',
                 primary: false,
-                action: () => overlay.value.closeOverlay()
+                action: () => overlay.value?.closeOverlay()
             }
         ]
     })

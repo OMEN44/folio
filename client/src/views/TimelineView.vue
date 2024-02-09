@@ -47,12 +47,13 @@ updateTimeline()
   }
 
   .div-timeline {
-    margin-top: 40px;
+    margin: 40px 5px 20px 5px;
     padding-left: 15px;
   }
 
   .div-intro {
-    padding: 20px;
+    padding: 10px;
+    margin-bottom: 10px;
   }
 }
 </style>

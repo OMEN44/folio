@@ -2,9 +2,19 @@
 import SvgIcon from "@jamescoyle/vue-icon"
 import { mdiDelete, mdiContentSave, mdiReload, mdiLock, mdiLockOpenVariant } from '@mdi/js'
 import { onBeforeRouteLeave } from "vue-router";
-import { Note, RawMarkdown, deleteNote, onUpdate, overlay, saveNote, togglePrivate, undoChanges } from "../script/noteEditor";
+import { Note, RawMarkdown, deleteNote, onUpdate, overlay, saveNote, togglePrivate, undoChanges, textArea } from "../script/noteEditor";
 
 const props = defineProps(['user'])
+
+window.addEventListener('keyup', (e) => {
+  if (e.key === 'r') {
+    console.log(textArea.value?.scrollHeight)
+  }
+})
+
+watch(() => textArea.value?.scrollHeight, () => {
+  console.log('change')
+})
 
 // Markdown renderer
 import MarkdownIt from "markdown-it";
@@ -19,6 +29,7 @@ import multiTable from "markdown-it-multimd-table"
 import taskList from "markdown-it-task-lists"
 import mark from "markdown-it-mark"
 import Overlay from "./Overlay.vue";
+import { watch } from "vue";
 const md = MarkdownIt()
   .use(MarkdownItHighlightJs)
   .use(sup)
@@ -33,17 +44,17 @@ const md = MarkdownIt()
 
 
 onBeforeRouteLeave((to, from, next) => {
-  if (Note.value !== null && Note.value !== undefined && RawMarkdown.value !== Note.value.content) {
-    overlay.value.openOverlay({
+  if (Note.value.id !== -1 && RawMarkdown.value !== Note.value.content) {
+    overlay.value?.openOverlay({
       title: 'Changes are unsaved',
-      content: 'Would you like to save changes before leaving',
+      content: `Would you like to save changes before leaving\n${RawMarkdown.value} !== ${Note.value.content}`,
       buttons: [
         {
           name: 'Yes',
           primary: true,
           action: () => {
             saveNote()
-            overlay.value.closeOverlay()
+            overlay.value?.closeOverlay()
             next()
           }
         },
@@ -51,7 +62,7 @@ onBeforeRouteLeave((to, from, next) => {
           name: 'No',
           primary: false,
           action: () => {
-            overlay.value.closeOverlay()
+            overlay.value?.closeOverlay()
             next()
           }
         }
@@ -132,5 +143,19 @@ textarea:focus {
 .div-output {
   padding: 10px;
   flex: 1;
+}
+
+@media (max-width: 1100px) {
+  .div-editor-container {
+    flex-direction: column;
+  }
+
+  .div-input {
+    width: auto;
+    height: fit-content;
+    border-style: none none solid none;
+    border-width: 4px;
+    border-color: var(--primary);
+  }
 }
 </style>

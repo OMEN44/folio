@@ -5,7 +5,10 @@ import { ref } from 'vue';
 
 const showNav = ref<boolean>(false)
 
-
+window.matchMedia('(max-width: 800px)').addEventListener('change', (e) => {
+  if (e.matches)
+    showNav.value = false
+})
 </script>
 
 <template>
@@ -58,12 +61,13 @@ const showNav = ref<boolean>(false)
 @media (max-width: 800px) {
 
   .div-container {
-    z-index: 100;
+    z-index: 10;
     display: flex;
     flex-direction: row;
     position: fixed;
     top: 10px;
     left: 0;
+    pointer-events: none;
   }
 
   .div-navigation {
@@ -75,6 +79,7 @@ const showNav = ref<boolean>(false)
     transition: width 0.5s;
     z-index: 20;
     margin-left: -10px;
+    pointer-events: all;
   }
 
   .left {
@@ -98,6 +103,8 @@ const showNav = ref<boolean>(false)
     text-align: center;
     padding-top: 5px;
     clip-path: polygon(0 0, 65% 0, 100% 35%, 100% 65%, 65% 100%, 0 100%);
+    pointer-events: all;
+    cursor: pointer;
   }
 
   .border {
