@@ -18,7 +18,7 @@ rsync -av --exclude=node_modules --exclude=folio.sqlite --exclude=folio-backup.s
 echo Transfered files to ~/Desktop/server
 
 # Replace old files
-ssh omen@omenmc.hopto.org -p 2024 'rm -r ~/server/public/assets && rm -r ~/server/public/routes && rm ~/server/public/*.json && rm ~/server/public/*.js'
+ssh omen@omenmc.hopto.org -p 2024 'rm -r ~/server/public && rm -r ~/server/routes && rm ~/server/*.json && rm ~/server/*.js'
 cd ~/Desktop
 rsync -avzh -e "ssh -p 2024" server omen@omenmc.hopto.org:/home/omen
 echo Replaced old files on server.

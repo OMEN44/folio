@@ -6,12 +6,6 @@ import { Note, RawMarkdown, deleteNote, onUpdate, overlay, saveNote, togglePriva
 
 const props = defineProps(['user'])
 
-window.addEventListener('keyup', (e) => {
-  if (e.key === 'r') {
-    console.log(textArea.value?.scrollHeight)
-  }
-})
-
 watch(() => textArea.value?.scrollHeight, () => {
   console.log('change')
 })

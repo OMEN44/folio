@@ -85,6 +85,7 @@ h1 {
   flex-direction: column;
   flex: 1;
   position: relative;
+  width: 100%;
 }
 
 .button-menu {
