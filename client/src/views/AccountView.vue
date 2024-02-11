@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import TextBox from "../components/TextBox.vue";
-import store from '../store/index'
-import { onMounted, ref, getCurrentInstance } from "vue";
+import { onMounted, ref } from "vue";
 import '@/assets/base.css'
 import getAxios from '../plugins/axios'
 import { getUserData } from "../script/utils";
+import { useCookies } from "vue3-cookies";
 
 const errorMessage = ref('')
 const accessLevel = ref(-1)
+const { cookies } = useCookies()
 
 const logout = async (e) => {
-  await store.dispatch('logout');
+  cookies.remove('authToken')
   errorMessage.value = ''
   switchFormContent('login')
 }
@@ -27,7 +28,7 @@ const login = async (e) => {
         password: pass
       }).then(async response => {
         const data = response.data;
-        await store.dispatch('login', data.token)
+        cookies.set('authToken', data.token, '7d')
         errorMessage.value = data.username
         switchFormContent('logout')
       }).catch(error => {
@@ -83,7 +84,7 @@ const switchFormContent = (content) => {
 }
 
 onMounted(() => {
-  switchFormContent(store.getters.isAuthenticated ? 'logout' : 'login')
+  switchFormContent(cookies.isKey('authToken') ? 'logout' : 'login')
 })
 
 </script>

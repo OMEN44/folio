@@ -106,4 +106,18 @@ const createEvent = (e) => {
 label {
   margin-top: 8px;
 }
+
+@media (max-width: 800px) {
+  .div-create-event {
+    width: 95%;
+  }
+
+  .form-top {
+    flex-direction: column;
+  }
+
+  .form-top div {
+    margin-left: 0;
+  }
+}
 </style>

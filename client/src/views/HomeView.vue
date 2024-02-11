@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useCookies } from 'vue3-cookies';
+const { cookies } = useCookies()
+console.log(cookies.get('userId'))
 </script>
 
 <template>

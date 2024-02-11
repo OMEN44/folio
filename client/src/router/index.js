@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import store from '../store';
 
 import HomeView from "@/views/HomeView.vue";
 import TimelineView from "@/views/TimelineView.vue";
@@ -38,12 +37,12 @@ export const router = createRouter({
     ],
 })
 
-router.beforeEach((to, from, next) => {
-    if (to.meta.requiresAuth && !store.getters.isAuthenticated) {
-        next({ name: 'account' });
-    } else {
-        next();
-    }
-})
+// router.beforeEach((to, from, next) => {
+//     if (to.meta.requiresAuth && !store.getters.isAuthenticated) {
+//         next({ name: 'account' });
+//     } else {
+//         next();
+//     }
+// })
 
 export default router

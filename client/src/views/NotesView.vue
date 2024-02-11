@@ -75,7 +75,7 @@ h1 {
 }
 
 .div-menu {
-  min-width: 200px;
+  min-width: 300px;
   position: relative;
 }
 
@@ -150,7 +150,7 @@ h1 {
   left: -12px;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
   .mobile {
     display: block;
   }

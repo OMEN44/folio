@@ -62,7 +62,6 @@ defineExpose({ openOverlay, closeOverlay })
 
 .div-content {
     z-index: 12;
-    width: 200px;
     height: fit-content;
     display: fixed;
     margin-left: calc(50% - 200px);
@@ -106,5 +105,12 @@ button {
 .br {
     bottom: -12px;
     right: -10px;
+}
+
+@media (max-width: 800px) {
+    .div-content {
+        width: 80%;
+        margin: calc(100vh / 2 - 100px) auto;
+    }
 }
 </style>

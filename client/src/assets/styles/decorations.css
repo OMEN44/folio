@@ -104,3 +104,7 @@
     border-style: solid;
     border-color: var(--background) transparent transparent transparent;
 }
+
+code {
+    background-color: blue;
+}

@@ -60,7 +60,9 @@ app.use((req, res, next) => {
 })
 
 app.get('/api/auth', (req, res) => {
-    res.json({ valid: true, value: checkUserData(req, res) })
+    const authResult = checkUserData(req, res)
+    if (authResult !== false)
+        res.json({ valid: true, value: authResult })
 })
 
 export const checkUserData = (req, res) => {

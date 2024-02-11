@@ -1,5 +1,4 @@
 import { computed, readonly, ref } from "vue"
-import store from "../store"
 import getAxios from "../plugins/axios"
 import { useRoute } from "vue-router";
 import router from "../router";
@@ -20,13 +19,11 @@ export const targetId = computed(() => {
 
 export const initNotes = async (selection?) => {
     // Ensure user access is restricted
-    if (store.getters.isAuthenticated) {
-        getAxios().get('auth')
-            .then(response => {
-                if (response.data.valid)
-                    activeUser.value = response.data.value
-            }).catch(() => activeUser.value = null)
-    }
+    getAxios().get('auth')
+        .then(response => {
+            if (response.data.valid)
+                activeUser.value = response.data.value
+        }).catch(() => activeUser.value = null)
     // format data for dispaly
     await getAxios().get('notes')
         .then(result => {

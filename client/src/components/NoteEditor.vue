@@ -6,10 +6,6 @@ import { Note, RawMarkdown, deleteNote, onUpdate, overlay, saveNote, togglePriva
 
 const props = defineProps(['user'])
 
-watch(() => textArea.value?.scrollHeight, () => {
-  console.log('change')
-})
-
 // Markdown renderer
 import MarkdownIt from "markdown-it";
 import MarkdownItHighlightJs from "markdown-it-highlightjs"
@@ -23,7 +19,6 @@ import multiTable from "markdown-it-multimd-table"
 import taskList from "markdown-it-task-lists"
 import mark from "markdown-it-mark"
 import Overlay from "./Overlay.vue";
-import { watch } from "vue";
 const md = MarkdownIt()
   .use(MarkdownItHighlightJs)
   .use(sup)
