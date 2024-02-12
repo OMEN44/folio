@@ -105,6 +105,64 @@
     border-color: var(--background) transparent transparent transparent;
 }
 
+/* Markdown styling */
 code {
-    background-color: blue;
+    background-color: #0D1117;
+    color: #71bdfc;
+    border-radius: 4px;
+    padding: 2px 5px;
+}
+
+blockquote {
+    border-left: 3px var(--primary) solid;
+    padding-left: 10px;
+    margin-left: 20px;
+    position: relative;
+    background-color: var(--accent);
+    width: fit-content;
+    padding: 10px 15px;
+}
+
+blockquote::before {
+    background-color: var(--background);
+    border: solid var(--primary) 3px;
+    height: 13px;
+    width: 13px;
+    border-radius: 50%;
+    position: absolute;
+    top: -7px;
+    left: -8px;
+    content: '';
+}
+
+blockquote::after {
+    background-color: var(--background);
+    border: solid var(--primary) 3px;
+    height: 13px;
+    width: 13px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -7px;
+    left: -8px;
+    content: '';
+}
+
+table,
+th,
+tr,
+td {
+    margin: 5px;
+    border-collapse: collapse;
+    border: solid 2px;
+    padding: 5px;
+}
+
+.task-list-item {
+    list-style-type: none;
+    margin-left: -20px;
+}
+
+mark {
+    background: var(--primary);
+    color: var(--text);
 }

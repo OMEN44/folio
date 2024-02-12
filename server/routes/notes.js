@@ -49,7 +49,7 @@ router.post('/create', (req, res) => {
     const authUser = checkUserData(req, res)
     if (authUser.valid && authUser.value.access < 2) {
         const { title } = req.body
-        addNote(title, '# Title\nAdd some content', true, title, user.userId)
+        addNote(title, '# Title\nAdd some content', true, title, authUser.value.userId)
             .then(() => res.json({ success: true }))
             .catch(error => {
                 console.log(error)

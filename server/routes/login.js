@@ -36,11 +36,12 @@ router.post('/', (req, res) => {
 router.get('/', (req, res) => {
     const userData = checkUserData(req, res)
     if (!userData.valid) res.status(401).json({ success: false, error: 'Invalid token' })
-    res.json({
-        "accessLevel": userData.value.access,
-        "userId": userData.value.userId,
-        "username": userData.value.username
-    })
+    else
+        res.json({
+            "accessLevel": userData.value.access,
+            "userId": userData.value.userId,
+            "username": userData.value.username
+        })
 })
 
 router.post('/register', (req, res) => {

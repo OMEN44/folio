@@ -134,6 +134,10 @@ textarea:focus {
   flex: 1;
 }
 
+p {
+  margin: 0;
+}
+
 @media (max-width: 1100px) {
   .div-editor-container {
     flex-direction: column;
