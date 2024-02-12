@@ -59,11 +59,6 @@ app.use((req, res, next) => {
     else next()
 })
 
-app.use((req, res, next) => {
-    console.log(req.url)
-    next()
-})
-
 app.get('/api/auth', (req, res) => {
     res.json(checkUserData(req, res))
 })
