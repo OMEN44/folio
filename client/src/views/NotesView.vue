@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { ref, watch } from "vue";
+import { watch } from "vue";
 import NoteEditor from "../components/NoteEditor.vue";
 import NoteMenu from "../components/NoteMenu.vue";
 import { ActiveUser, Notes, Selected, initNotes, showMenu } from "../script/notes";

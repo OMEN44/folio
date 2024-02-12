@@ -3,6 +3,7 @@ import getAxios from "../plugins/axios"
 import { useRoute } from "vue-router";
 import router from "../router";
 import { changeNote } from "./noteEditor";
+import { useCookies } from "vue3-cookies";
 
 const notes = ref<Array<NoteType>>([])
 const activeUser = ref(null);
@@ -19,11 +20,18 @@ export const targetId = computed(() => {
 
 export const initNotes = async (selection?) => {
     // Ensure user access is restricted
-    getAxios().get('auth')
-        .then(response => {
-            if (response.data.valid)
-                activeUser.value = response.data.value
-        }).catch(() => activeUser.value = null)
+    if (useCookies().cookies.isKey('authToken')) {
+        getAxios().get('auth')
+            .then(response => {
+                if (response.data.valid)
+                    activeUser.value = response.data.value
+            }).catch((error) => {
+                console.log(error)
+                activeUser.value = null
+            })
+    } else {
+        activeUser.value = null
+    }
     // format data for dispaly
     await getAxios().get('notes')
         .then(result => {

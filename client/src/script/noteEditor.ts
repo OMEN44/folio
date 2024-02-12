@@ -1,9 +1,8 @@
-import { readonly, ref, watch } from "vue"
+import { readonly, ref } from "vue"
 import Overlay from '../components/Overlay.vue'
 import { NoteType, initNotes } from "./notes"
 import { notify } from "./notification"
 import getAxios from "../plugins/axios"
-import { RefSymbol } from "@vue/reactivity"
 
 export const overlay = ref<InstanceType<typeof Overlay>>()
 export const textArea = ref<HTMLTextAreaElement>()
@@ -21,7 +20,7 @@ const note = ref<NoteType>({
 
 export const Note = readonly(note)
 export const RawMarkdown = readonly(raw)
-
+console.log('')
 export const changeNote = (newNote, selectedIndex) => {
     if (note.value.id !== -1 && raw.value !== note.value.content) {
         overlay.value?.openOverlay({
