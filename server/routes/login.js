@@ -35,10 +35,11 @@ router.post('/', (req, res) => {
 
 router.get('/', (req, res) => {
     const userData = checkUserData(req, res)
+    if (!userData.valid) res.status(401).json({ success: false, error: 'Invalid token' })
     res.json({
-        "accessLevel": userData.access,
-        "userId": userData.userId,
-        "username": userData.username
+        "accessLevel": userData.value.access,
+        "userId": userData.value.userId,
+        "username": userData.value.username
     })
 })
 
@@ -46,7 +47,7 @@ router.post('/register', (req, res) => {
     const { username, password, email } = req.body
 
     addUser(username, email, password, 3)
-        .then(() => res.json({ message: 'Successfully registered' }))
+        .then(() => res.json({ success: true }))
         .catch(error => {
             if (error.name === 'SequelizeUniqueConstraintError')
                 res.status(409).json({ error: `User: ${username} or email: ${email} are already in use.` })

@@ -5,12 +5,14 @@ import '@/assets/base.css'
 import getAxios from '../plugins/axios'
 import { getUserData } from "../script/utils";
 import { useCookies } from "vue3-cookies";
+import store from "../store";
 
 const errorMessage = ref('')
 const accessLevel = ref(-1)
 const { cookies } = useCookies()
 
 const logout = async (e) => {
+  // await store.dispatch('logout')
   cookies.remove('authToken')
   errorMessage.value = ''
   switchFormContent('login')
@@ -28,6 +30,7 @@ const login = async (e) => {
         password: pass
       }).then(async response => {
         const data = response.data;
+        // await store.dispatch('login', data.token)
         cookies.set('authToken', data.token, '7d')
         errorMessage.value = data.username
         switchFormContent('logout')
@@ -53,8 +56,10 @@ const register = async (e) => {
     password: pass,
     email: email
   }).then(response => {
-    errorMessage.value = response.data.message
-    switchFormContent('login')
+    if (response.data.success) {
+      errorMessage.value = 'Successfully registered'
+      switchFormContent('login')
+    }
   }).catch(error => {
     if (error.response.status === 409)
       errorMessage.value = error.response.data.error
@@ -84,7 +89,7 @@ const switchFormContent = (content) => {
 }
 
 onMounted(() => {
-  switchFormContent(cookies.isKey('authToken') ? 'logout' : 'login')
+  switchFormContent(cookies.isKey('authToken')/*store.getters.isAuthenticated*/ ? 'logout' : 'login')
 })
 
 </script>
