@@ -59,26 +59,24 @@ app.use((req, res, next) => {
     else next()
 })
 
+app.use((req, res, next) => {
+    console.log(req.url)
+    next()
+})
+
 app.get('/api/auth', (req, res) => {
-    const authResult = checkUserData(req, res)
-    if (authResult !== false)
-        res.json({ valid: true, value: authResult })
+    res.json(checkUserData(req, res))
 })
 
 export const checkUserData = (req, res) => {
     const token = req.headers.authorization?.split(' ')[1];
-    if (token === 'null') return false;
+    if (token === 'null') return { valid: false };
 
-    if (token) {
-        try {
-            return jwt.verify(token, secretKey)
-        } catch (error) {
-            res.status(401).json({ error: 'Invalid token' });
-        }
-    } else {
-        res.status(401).json({ error: 'No token provided' });
+    try {
+        return { valid: true, value: jwt.verify(token, secretKey) }
+    } catch (_) {
+        return { valid: false }
     }
-    return false
 }
 
 const PORT = process.env.PORT || 3000;

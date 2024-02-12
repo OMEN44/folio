@@ -11,38 +11,38 @@ export default router
 
 router.get('/', (req, res) => {
     getTimelineData()
-        .then((data) => res.json({ message: 'success', value: data }))
-        .catch(error => res.status(404).json({ message: 'Could not access timeline data', error: error }))
+        .then((data) => res.json({ success: true, value: data }))
+        .catch(error => res.status(404).json({ success: false, error: error }))
 })
 
 router.post('/create', (req, res) => {
     const { title, about, date, noteId } = req.body
 
-    if (Number(checkUserData(req, res).access) > 1) {
-        res.status(401).json({ error: 'You do not have permission to create Timeline Events.' })
-        return
+    const authUser = checkUserData(req, res)
+    if (authUser.valid && authUser.value.access < 2) {
+        addTimelineEvent(title, date, about, noteId)
+            .then(() => res.json({ success: true }))
+            .catch(error => {
+                if (error.name === 'SequelizeUniqueConstraintError')
+                    res.status(409).json({ success: false, error: `Event with this title and time already exist` })
+                else
+                    res.status(409).json({ success: false, error: error.message })
+            })
+    } else {
+        res.status(401).json({ success: false, error: 'Access denied' })
     }
-
-    addTimelineEvent(title, date, about, noteId)
-        .then(() => res.json({ message: 'Success' }))
-        .catch(error => {
-            if (error.name === 'SequelizeUniqueConstraintError')
-                res.status(409).json({ error: `Event with this title and time already exist` })
-            else
-                res.status(409).json({ error: error.message })
-        })
 })
 
 router.post('/delete', (req, res) => {
-    if (Number(checkUserData(req, res).access) > 1) {
-        res.status(401).json({ error: 'You do not have permission to create Timeline Events.' })
-        return
+    const authUser = checkUserData(req, res)
+    if (authUser.valid && authUser.value.access < 2) {
+        const { id } = req.body
+        deleteTimelineEvent(id)
+            .then(() => res.json({ success: true }))
+            .catch(error => {
+                res.status(404).json({ success: false, error: error })
+            })
+    } else {
+        res.status(401).json({ success: false, error: 'Access denied' })
     }
-
-    const { id } = req.body
-    deleteTimelineEvent(id)
-        .then(() => res.json({ message: 'Success' }))
-        .catch(error => {
-            res.status(404).json({ message: `Event not found`, error: error })
-        })
 })

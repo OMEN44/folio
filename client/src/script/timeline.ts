@@ -1,5 +1,7 @@
 import { readonly, ref } from "vue"
 import getAxios from "../plugins/axios"
+import store from "../store"
+import { useCookies } from "vue3-cookies"
 
 const timelineDisplayData = ref<TimelineEventType | null>(null)
 const accessLevel = ref(3)
@@ -9,11 +11,13 @@ export const AccessLevel = readonly(accessLevel)
 
 export const updateTimeline = (filters?) => {
     // If logged in check users access level
-    getAxios().get('/auth')
-        .then(response => {
-            if (response.data.valid)
-                accessLevel.value = response.data.value.access
-        }).catch(() => { })
+    if (useCookies().cookies.isKey('authToken')) {
+        getAxios().get('/auth')
+            .then(response => {
+                if (response.data.valid)
+                    accessLevel.value = response.data.value.access
+            }).catch(() => { })
+    }
 
     // Get timeline data and format it
     getAxios().get('/timeline')
