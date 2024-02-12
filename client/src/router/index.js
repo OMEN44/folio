@@ -9,14 +9,14 @@ export const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
-            path: '/home',
-            name: 'home',
-            component: HomeView,
-        },
-        {
             path: '/timeline',
             name: 'timeline',
             component: TimelineView,
+        },
+        {
+            path: '/home',
+            name: 'home',
+            component: HomeView,
         },
         {
             path: '/account',
@@ -32,7 +32,7 @@ export const router = createRouter({
         {
             path: '/:pathMatch(.*)*',
             name: 'notFound',
-            redirect: { name: 'home' },
+            redirect: { name: 'timeline' },
         },
     ],
 })

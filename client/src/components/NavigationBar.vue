@@ -17,9 +17,9 @@ window.matchMedia('(max-width: 800px)').addEventListener('change', (e) => {
     <span class="small-circle right"></span>
     <div ref="navSlidePanel" class="div-navigation" :class="{ 'show-nav': showNav }">
       <div class="div-left">
-        <router-link class="link" to="/home" @click="showNav = !showNav">
+        <!-- <router-link class="link" to="/home" @click="showNav = !showNav">
           <h2>Home</h2>
-        </router-link>
+        </router-link> -->
         <router-link class="link" to="/timeline" @click="showNav = !showNav">
           <h2>Timeline</h2>
         </router-link>
@@ -123,7 +123,7 @@ window.matchMedia('(max-width: 800px)').addEventListener('change', (e) => {
   }
 
   .div-left {
-    height: 140px;
+    height: 100px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -168,7 +168,7 @@ window.matchMedia('(max-width: 800px)').addEventListener('change', (e) => {
   .left {
     z-index: 3;
     top: 58px;
-    left: 400px;
+    left: 280px;
   }
 
   .div-left {
