@@ -1,6 +1,6 @@
 import { readonly, ref } from "vue"
 import getAxios from "../plugins/axios"
-import router from "../router";
+import router from "../plugins/router.js";
 import { changeNote } from "./noteEditor";
 import { useCookies } from "vue3-cookies";
 

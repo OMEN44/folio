@@ -3,7 +3,7 @@ import TimelineEvent from "../components/TimelineEvent.vue";
 import TimelineSeach from "../components/TimelineSeach.vue";
 import TimelineCreator from "../components/TimelineCreator.vue";
 import { AccessLevel, TimelineData, updateTimeline } from "../script/timeline";
-import router from "../router";
+import router from "../plugins/router.js";
 
 const openTimeline = () => {
   document.getElementsByClassName('container')[0].scrollIntoView({ behavior: "smooth" })

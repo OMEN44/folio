@@ -3,7 +3,7 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiDelete, mdiOpenInNew } from '@mdi/js'
 import getAxios from '../plugins/axios'
 import { notify } from '../script/notification';
-import router from '../router';
+import router from '../plugins/router.js';
 import Overlay from './Overlay.vue';
 import { ref } from 'vue';
 import { AccessLevel, TimelineEventType, updateTimeline } from '../script/timeline';
