@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import SvgIcon from "@jamescoyle/vue-icon"
-import { mdiDelete, mdiContentSave, mdiReload, mdiLock, mdiLockOpenVariant } from '@mdi/js'
-import { onBeforeRouteLeave } from "vue-router";
-import { Note, RawMarkdown, deleteNote, onUpdate, overlay, saveNote, togglePrivate, undoChanges, textArea } from "../script/noteEditor";
+import { mdiDelete, mdiContentSave, mdiReload, mdiLock, mdiLockOpenVariant, mdiShare } from '@mdi/js'
+import { onBeforeRouteLeave, useRoute } from "vue-router";
+import { Note, RawMarkdown, deleteNote, onUpdate, overlay, saveNote, togglePrivate, undoChanges, textArea, copyLink } from "../script/noteEditor";
 
 const props = defineProps(['user'])
 
@@ -19,6 +19,7 @@ import multiTable from "markdown-it-multimd-table"
 import taskList from "markdown-it-task-lists"
 import mark from "markdown-it-mark"
 import Overlay from "./Overlay.vue";
+
 const md = MarkdownIt()
   .use(MarkdownItHighlightJs)
   .use(sup)
@@ -30,6 +31,9 @@ const md = MarkdownIt()
   .use(taskList)
   .use(mark)
 
+
+const route = useRoute()
+console.log(route)
 
 
 onBeforeRouteLeave((to, from, next) => {
@@ -82,7 +86,14 @@ onBeforeRouteLeave((to, from, next) => {
       </div>
       <textarea ref="textArea" :value="RawMarkdown" @keydown.ctrl.s.prevent.stop="saveNote" @input="onUpdate"></textarea>
     </div>
-    <div class="div-output" v-html="md.render(<string>RawMarkdown)"></div>
+    <div class="div-output">
+      <div class="div-input-controls">
+        <button class="button-border" @click="copyLink">
+          <svg-icon class="icon" type="mdi" :path="mdiShare" />
+        </button>
+      </div>
+      <div class="div-markdown" v-html="md.render(<string>RawMarkdown)"></div>
+    </div>
   </div>
 </template>
 
@@ -130,8 +141,11 @@ textarea:focus {
 }
 
 .div-output {
-  padding: 10px;
   flex: 1;
+}
+
+.div-markdown {
+  padding: 10px;
 }
 
 p {

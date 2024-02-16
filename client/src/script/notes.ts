@@ -1,6 +1,5 @@
-import { computed, readonly, ref } from "vue"
+import { readonly, ref } from "vue"
 import getAxios from "../plugins/axios"
-import { useRoute } from "vue-router";
 import router from "../router";
 import { changeNote } from "./noteEditor";
 import { useCookies } from "vue3-cookies";
@@ -13,10 +12,6 @@ export const showMenu = ref<boolean>(false)
 export const Notes = readonly(notes)
 export const Selected = readonly(selected)
 export const ActiveUser = readonly(activeUser)
-
-export const targetId = computed(() => {
-    return useRoute() === undefined ? -1 : Number(useRoute().query.id)
-})
 
 export const initNotes = async (selection?) => {
     // Ensure user access is restricted
@@ -63,13 +58,15 @@ export const initNotes = async (selection?) => {
         }).catch(error => console.log(error))
 
     // Find the index of the target note
-    if (notes.value[0].id !== -1 && selection === undefined) {
+    selected.value = 0;
+    const targetNote = new URLSearchParams(window.location.search).get('id');
+    if (notes.value[0].id !== -1 && selection === undefined && targetNote !== null) {
         notes.value.forEach((note, index) => {
-            if (note.id === targetId.value) {
+            if (note.id === Number(targetNote)) {
                 selected.value = index
             }
         })
-    } else {
+    } else if (selection !== undefined) {
         selected.value = selection
         router.replace('/notes')
     }

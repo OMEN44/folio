@@ -24,14 +24,14 @@ updateTimeline()
       <h2>Who am I?</h2>
       <p>I'm Huon Swales, I have been interested in robots and computers for as long as I can remember, this passion has
         sparked many projects starting from humble lego and taking me to where I am today. I created this website with the
-        goal ofsharing my journey through this fascinating world of technology with anyone who shares my passion. If your
-        curios about developing new skills, looking for a new project idea or just someone who enjoys a good code snippet,
-        you're in the right palce!</p>
+        goal of sharing my journey through this fascinating world of technology with anyone who shares my passion. If
+        you're curious about developing new skills, looking for a new project idea or just someone who enjoys a good code
+        snippet, you're in the right palce!</p>
       <h2>What you'll find here</h2>
       <div class="div-welcome-buttons">
         <p>I have split the site into two pages; the timeline and notes. The timeline page gives a quick overview of all
           the
-          projects that I have worked on in cronological order. The notes page offers more detail and multimedia content
+          projects that I have worked on in chronological order. The notes page offers more detail and multimedia content
           that I couldnt fit into a timeline entry. To link these two I have added a button to the timeline entries that
           have their own notes page so that you can quickly navigate between notes and the timeline.</p>
         <div class="div-buttons">

@@ -3,6 +3,7 @@ import Overlay from '../components/Overlay.vue'
 import { NoteType, initNotes } from "./notes"
 import { notify } from "./notification"
 import getAxios from "../plugins/axios"
+import { useRoute } from "vue-router"
 
 export const overlay = ref<InstanceType<typeof Overlay>>()
 export const textArea = ref<HTMLTextAreaElement>()
@@ -142,4 +143,9 @@ const updateNote = (noteData) => {
     getAxios().post('/notes/update', noteData)
         .then(() => initNotes(note.value.selectedIndex))
         .catch(error => console.log(error.response.data.error))
+}
+
+export const copyLink = () => {
+    navigator.clipboard.writeText(`${window.location}?id=${note.value.id}`)
+    notify('Coppied link to clipboard')
 }

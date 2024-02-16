@@ -145,6 +145,10 @@ onMounted(() => {
 </template>
 
 <style scoped>
+p {
+  margin: 0;
+}
+
 #logout span {
   margin: 0 6px;
   font-size: 20px;

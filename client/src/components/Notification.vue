@@ -19,6 +19,10 @@ watch(notificationList, () => {
 </template>
 
 <style scoped>
+p {
+    margin: 0;
+}
+
 .div-container {
     z-index: 10;
     display: flex;
