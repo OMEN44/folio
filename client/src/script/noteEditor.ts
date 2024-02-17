@@ -147,5 +147,5 @@ const updateNote = (noteData) => {
 
 export const copyLink = () => {
     navigator.clipboard.writeText(`${window.location}?id=${note.value.id}`)
-    notify('Coppied link to clipboard')
+    notify('Copied link to clipboard')
 }

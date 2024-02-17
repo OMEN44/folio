@@ -33,7 +33,6 @@ const md = MarkdownIt()
 
 
 const route = useRoute()
-console.log(route)
 
 
 onBeforeRouteLeave((to, from, next) => {

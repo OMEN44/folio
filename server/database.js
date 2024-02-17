@@ -33,6 +33,27 @@ export const getUser = (username, email) => {
     })
 }
 
+export const getUsers = () => {
+    return new Promise((resolve, reject) => {
+        sequelize.sync().then(async () => {
+            resolve(await User.findAll({
+                raw: true,
+                attributes: ['id', 'username', 'email', 'access']
+            }))
+        }).catch((error) => reject(error))
+    })
+}
+
+export const updateUser = (id, access) => {
+    return new Promise((resolve, reject) => {
+        sequelize.sync().then(async () => {
+            const user = await User.findByPk(id)
+            user.access = access
+            resolve(await user.save())
+        }).catch((error) => reject(error))
+    })
+}
+
 export const addTimelineEvent = (title, date, about, note) => {
     return new Promise((resolve, reject) => {
         sequelize.sync().then(async () => {

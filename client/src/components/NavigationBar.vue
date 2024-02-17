@@ -2,6 +2,7 @@
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiAccount, mdiArrowRight, mdiArrowLeft } from '@mdi/js'
 import { ref } from 'vue';
+import { switchAccountView } from '../script/Account';
 
 const showNav = ref<boolean>(false)
 
@@ -9,6 +10,11 @@ window.matchMedia('(max-width: 800px)').addEventListener('change', (e) => {
   if (e.matches)
     showNav.value = false
 })
+
+const openAccountView = () => {
+  showNav.value = !showNav.value
+  switchAccountView(1)
+}
 </script>
 
 <template>
@@ -30,9 +36,9 @@ window.matchMedia('(max-width: 800px)').addEventListener('change', (e) => {
 
       <div class="div-right">
         <div class="link">
-          <router-link to="/account" @click="showNav = !showNav">
+          <div @click="openAccountView">
             <svg-icon class="icon-account" type="mdi" :size="40" :path="mdiAccount"></svg-icon>
-          </router-link>
+          </div>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 <script setup>
 import NavigationBar from "@/components/NavigationBar.vue";
 import Notification from "./components/Notification.vue";
+import AccountLogin from "./components/AccountLogin.vue";
 </script>
 
 <template>
@@ -8,6 +9,7 @@ import Notification from "./components/Notification.vue";
     <navigation-bar />
   </header>
   <main>
+    <AccountLogin />
     <Notification />
     <RouterView />
   </main>
