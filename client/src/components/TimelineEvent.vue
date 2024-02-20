@@ -101,6 +101,7 @@ const confirmDeleteEvent = (e) => {
   text-align: center;
   padding-top: 3px;
   font-size: 18px;
+  line-height: 1.2;
 }
 
 .circle {

@@ -166,6 +166,7 @@ const openAccountView = () => {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    line-height: 1.15;
   }
 
   /* Link styles */
