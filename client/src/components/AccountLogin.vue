@@ -20,6 +20,8 @@ const escape = (e?) => {
     switchAccountView(0)
 }
 
+const ver = APP_VERSION
+
 loadLoginData()
 </script>
 
@@ -48,7 +50,7 @@ loadLoginData()
                     <button class="button-border" @click="logout" type="submit">Logout</button>
                 </div>
                 <div class="div-changelog">
-                    <h3>Folio Change log <span class="version">currently v{{ '0.0.0' }}</span></h3>
+                    <h3>Folio Change log <span class="version">currently v{{ ver }}</span></h3>
                 </div>
                 <div class="div-accounts" v-if="User !== null && User.access === 0">
                     <h3>Edit user access level</h3>
