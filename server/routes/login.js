@@ -24,7 +24,7 @@ router.post('/', (req, res) => {
     getUser(username, username).then(result => {
         if (result.length === 1) {
             if (result[0].password === password) {
-                const token = jwt.sign({ userId: result[0].id, username: result[0].username, access: result[0].access }, secretKey, { expiresIn: '1h' });
+                const token = jwt.sign({ userId: result[0].id, username: result[0].username, access: result[0].access }, secretKey, { expiresIn: '7d' });
                 res.json({ token: token, id: result[0].id, name: result[0].username, access: result[0].access });
             } else {
                 res.status(401).json({ error: 'Invalid username or password' });

@@ -60,7 +60,8 @@ loadLoginData()
                                 <p>{{ user.name }}</p>
                                 <span>{{ user.email }}</span>
                             </div>
-                            <select @change="(e) => updateAccessLevel(Number(e.target?.value), user.id)"
+                            <select
+                                @change="(e) => updateAccessLevel(Number((e.target as HTMLInputElement).value), user.id)"
                                 :value="user.access">
                                 <option value="0">0 - Super User</option>
                                 <option value="1">1 - Admin</option>
