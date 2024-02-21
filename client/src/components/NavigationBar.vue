@@ -216,6 +216,7 @@ const openAccountView = () => {
   .div-right {
     border-bottom: var(--primary) solid 4px;
     position: relative;
+    cursor: pointer;
   }
 
   .right {

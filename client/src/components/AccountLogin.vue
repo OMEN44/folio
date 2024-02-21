@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import changeLog from '../assets/changelog.json'
+
 import {
     IsShown,
     switchAccountView,
@@ -20,7 +22,8 @@ const escape = (e?) => {
     switchAccountView(0)
 }
 
-const ver = APP_VERSION
+// @ts-ignore
+const ver: string = APP_VERSION
 
 loadLoginData()
 </script>
@@ -50,7 +53,8 @@ loadLoginData()
                     <button class="button-border" @click="logout" type="submit">Logout</button>
                 </div>
                 <div class="div-changelog">
-                    <h3>Folio Change log <span class="version">currently v{{ ver }}</span></h3>
+                    <h3>Folio Change log <span>currently v{{ ver }}</span></h3>
+                    <h4 v-for="change in changeLog">{{ change.version }}<span> - {{ change.message }}</span></h4>
                 </div>
                 <div class="div-accounts" v-if="User !== null && User.access === 0">
                     <h3>Edit user access level</h3>
@@ -89,19 +93,29 @@ loadLoginData()
 </template>
 
 <style scoped lang="scss">
-.version {
-    font-size: 14px;
-    font-weight: lighter;
-}
-
 .div-changelog {
-    margin-top: 10px;
+    margin: 10px 0;
+    max-height: 200px;
+    overflow-y: scroll;
+
+    span {
+        font-size: 14px;
+        font-weight: lighter;
+    }
 }
 
 .div-user-list {
-
     max-height: 200px;
     overflow-y: scroll;
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.div-user-list::-webkit-scrollbar {
+    display: none;
 }
 
 .div-user {
@@ -113,6 +127,10 @@ loadLoginData()
     justify-content: space-between;
     margin: 5px 0;
 
+    @media (max-width: 800px) {
+        flex-direction: column;
+    }
+
     p {
         margin: 0;
     }
@@ -120,6 +138,10 @@ loadLoginData()
     select {
         height: fit-content;
         margin: auto 0;
+
+        @media (max-width: 800px) {
+            margin: 5px 0;
+        }
     }
 
     div {
@@ -146,12 +168,7 @@ loadLoginData()
     z-index: 12;
     height: fit-content;
     display: fixed;
-    margin: auto;
-
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
+    margin: 100px auto;
 
     width: 400px;
     background-color: var(--accent);
@@ -221,7 +238,7 @@ input:focus {
 @media (max-width: 800px) {
     .form-content {
         width: 80%;
-        margin: calc(100vh / 2 - 100px) auto;
+        margin: 100px auto;
     }
 }
 </style>

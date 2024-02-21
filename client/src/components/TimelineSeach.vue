@@ -95,6 +95,7 @@ const filterClick = (e) => {
 }
 
 .filter {
+    line-height: 0.3;
     margin: 0 auto;
     display: flex;
     position: relative;

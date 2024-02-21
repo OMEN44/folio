@@ -1,6 +1,5 @@
 import { readonly, ref } from "vue"
 import getAxios from "../plugins/axios"
-import store from "../store"
 import { useCookies } from "vue3-cookies"
 
 const timelineDisplayData = ref<TimelineEventType | null>(null)
@@ -17,7 +16,7 @@ export const updateTimeline = (filters?) => {
                 if (response.data.valid)
                     accessLevel.value = response.data.value.access
             }).catch(() => { })
-    }
+    } else accessLevel.value = 3
 
     // Get timeline data and format it
     getAxios().get('/timeline')

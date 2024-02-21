@@ -69,6 +69,7 @@ img {
 .icon {
     transition: color 0.5s;
     color: var(--text);
+    cursor: pointer;
 }
 
 .icon-hover:hover {

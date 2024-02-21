@@ -116,7 +116,7 @@ code {
 blockquote {
     border-left: 3px var(--primary) solid;
     padding-left: 10px;
-    margin-left: 20px;
+    margin: 10px 0 10px 20px;
     position: relative;
     background-color: var(--accent);
     width: fit-content;

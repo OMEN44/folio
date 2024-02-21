@@ -10,8 +10,6 @@ const emit = defineEmits(['updateNotes'])
 
 const titleInput = ref('')
 
-const changeSelection = (e) => emit("updateNotes", Number(e.target.id))
-
 // Create new note
 const createNote = (e) => {
     e.preventDefault()
@@ -25,6 +23,24 @@ const createNote = (e) => {
         }).catch(error => notify(error.response.data.error))
     }
 }
+
+const counter = ref<number>(0)
+const timer = ref<any>(null)
+
+const clickHandler = (e) => {
+    counter.value++
+    if (counter.value === 1) {
+        timer.value = setTimeout(function () {
+            emit("updateNotes", Number(e.target.id))
+            counter.value = 0
+        }, 600);
+    } else {
+        clearTimeout(timer.value);
+        console.log('double')
+        counter.value = 0;
+    }
+}
+
 </script>
 
 <template>
@@ -37,7 +53,8 @@ const createNote = (e) => {
             </button>
         </form>
         <!-- select note -->
-        <div class="div-note" v-for="(element, index) in props.notes" :id="String(index)" @click="changeSelection"
+        <div class="div-note" v-for="(element, index) in  props.notes " :id="String(index)"
+            @click="(e: Event) => emit('updateNotes', Number((e.target as HTMLInputElement).id))"
             :class="{ highlight: index === props.selected }">
             <h3>{{ element['title'] }}</h3>
             <span v-if="element['authorName'] !== ''">By {{ element['authorName'] }}</span>
