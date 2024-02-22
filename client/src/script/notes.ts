@@ -1,17 +1,20 @@
 import { readonly, ref } from "vue"
 import getAxios from "../plugins/axios"
 import router from "../plugins/router.js";
-import { changeNote } from "./noteEditor";
+import { Note, changeNote, updateNote } from "./noteEditor";
 import { useCookies } from "vue3-cookies";
 
 const notes = ref<Array<NoteType>>([])
 const activeUser = ref(null);
 const selected = ref(0)
+const titleEditorActive = ref<boolean>(false)
 
+export const titleInput = ref<string>()
 export const showMenu = ref<boolean>(false)
 export const Notes = readonly(notes)
 export const Selected = readonly(selected)
 export const ActiveUser = readonly(activeUser)
+export const TitleEditorActive = readonly(titleEditorActive)
 
 export const initNotes = async (selection?) => {
     // Ensure user access is restricted
@@ -73,6 +76,22 @@ export const initNotes = async (selection?) => {
     //update editor component
     changeNote(notes.value[selected.value], selected.value)
     showMenu.value = false
+}
+
+export const editTitle = (e) => {
+    titleEditorActive.value = true;
+}
+
+export const saveTitle = (e: Event) => {
+    titleEditorActive.value = false
+    if (titleInput.value !== undefined || titleInput.value === '') {
+        updateNote({
+            id: Note.value.id,
+            title: titleInput.value,
+            content: Note.value.content,
+            isPrivate: Note.value.isPrivate
+        })
+    }
 }
 
 export interface NoteType {

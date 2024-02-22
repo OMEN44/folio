@@ -135,10 +135,11 @@ export const addNote = (title, content, access, route, author) => {
     )
 }
 
-export const editNote = (id, content, isPrivate) => {
+export const editNote = (id, title, content, isPrivate) => {
     return new Promise((resolve, reject) => {
         sequelize.sync().then(async () => {
             const note = await Notes.findByPk(id)
+            note.title = title
             note.content = content
             note.private = isPrivate
             resolve(await note.save())

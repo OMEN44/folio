@@ -3,10 +3,10 @@
 import { watch } from "vue";
 import NoteEditor from "../components/NoteEditor.vue";
 import NoteMenu from "../components/NoteMenu.vue";
-import { ActiveUser, Notes, Selected, initNotes, showMenu } from "../script/notes";
+import { ActiveUser, Notes, Selected, initNotes, showMenu, editTitle, TitleEditorActive, titleInput, saveTitle } from "../script/notes";
 import { useRoute } from "vue-router";
 import SvgIcon from "@jamescoyle/vue-icon"
-import { mdiMenu } from '@mdi/js'
+import { mdiMenu, mdiContentSave } from '@mdi/js'
 
 watch(() => useRoute(), () => {
   initNotes()
@@ -38,11 +38,20 @@ window.matchMedia('(max-width: 800px)').addEventListener('change', (e) => {
     </div>
     <div class="div-notes-content">
       <span class="angle-tl" />
-      <div class="div-title">
+      <div class="div-title" @dblclick="editTitle">
         <button class="button-menu" @click="showMenu = !showMenu">
           <svg-icon class="icon" type="mdi" :path="mdiMenu" />
         </button>
-        <h1 v-html="Notes[Selected] === undefined ? 'No notes found' : Notes[Selected].title"></h1>
+        <h1 v-if="!TitleEditorActive" v-text="Notes[Selected] === undefined ? 'No notes found' : Notes[Selected].title">
+        </h1>
+        <!-- Edit title -->
+        <form v-if="TitleEditorActive" class="form-title-editor">
+          <input type="text" v-model="titleInput" maxlength="24"
+            :placeholder="Notes[Selected] === undefined ? 'No notes found' : Notes[Selected].title" autofocus>
+          <button @click.prevent="saveTitle">
+            <svg-icon type="mdi" class="icon" :path="mdiContentSave" />
+          </button>
+        </form>
         <span class="circle tr" />
         <span class="circle br" />
         <span class="circle" id="center" />
@@ -53,7 +62,45 @@ window.matchMedia('(max-width: 800px)').addEventListener('change', (e) => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+.form-title-editor {
+  margin: 0 10px;
+  display: flex;
+  flex-direction: row;
+  height: 48px;
+  width: 100%;
+
+  input {
+    flex: 1;
+    font-size: 2em;
+    width: 100%;
+    background-color: transparent;
+    color: var(--text);
+    border: none;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    padding-top: 3px;
+    height: 100%;
+    width: 50px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
 .div-container {
   display: flex;
   margin: 60px 80px;

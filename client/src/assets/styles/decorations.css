@@ -166,3 +166,11 @@ mark {
     background: var(--primary);
     color: var(--text);
 }
+
+a {
+    color: var(--link);
+}
+
+a:visited {
+    color: var(--secondary);
+}

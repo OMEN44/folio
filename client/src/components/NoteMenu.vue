@@ -13,6 +13,7 @@ const titleInput = ref('')
 // Create new note
 const createNote = (e) => {
     e.preventDefault()
+    if (titleInput.value.length > 24) return
     if (titleInput.value !== '') {
         getAxios().post('notes/create', {
             title: titleInput.value
@@ -24,32 +25,16 @@ const createNote = (e) => {
     }
 }
 
-const counter = ref<number>(0)
-const timer = ref<any>(null)
-
-const clickHandler = (e) => {
-    counter.value++
-    if (counter.value === 1) {
-        timer.value = setTimeout(function () {
-            emit("updateNotes", Number(e.target.id))
-            counter.value = 0
-        }, 600);
-    } else {
-        clearTimeout(timer.value);
-        console.log('double')
-        counter.value = 0;
-    }
-}
-
 </script>
 
 <template>
     <div>
         <!-- Create note -->
         <form class="form-create" v-if="props.user !== null && props.user.access < 2">
-            <input class="input-text-border" type="text" v-model="titleInput" placeholder="New note title...">
+            <input class="input-text-border" type="text" v-model="titleInput" placeholder="New note title..."
+                maxlength="24">
             <button class="button-border" @click="createNote">
-                <svg-icon type="mdi" :path="mdiNotePlus" />
+                <svg-icon type="mdi" class="icon" :path="mdiNotePlus" />
             </button>
         </form>
         <!-- select note -->
@@ -122,5 +107,9 @@ input:focus {
 
 .div-note * {
     pointer-events: none;
+}
+
+button {
+    height: 42px;
 }
 </style>
