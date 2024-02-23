@@ -17,6 +17,8 @@ export const ActiveUser = readonly(activeUser)
 export const TitleEditorActive = readonly(titleEditorActive)
 
 export const initNotes = async (selection?) => {
+    titleEditorActive.value = false
+    titleInput.value = ''
     // Ensure user access is restricted
     if (useCookies().cookies.isKey('authToken')) {
         getAxios().get('auth')
