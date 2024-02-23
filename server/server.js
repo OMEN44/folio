@@ -12,6 +12,7 @@ const __dirname = path.dirname(__filename);
 import timeline from './routes/timeline.js'
 import login from './routes/login.js'
 import notes from './routes/notes.js'
+import images from './routes/images.js'
 
 /*
 import { addUser, addNote, addTimelineEvent } from './database.js';
@@ -51,6 +52,7 @@ app.use(cors());
 app.use('/api/timeline', timeline)
 app.use('/api/login', login)
 app.use('/api/notes', notes)
+app.use('/api/images', images)
 
 app.use(express.static(__dirname + '/public'))
 app.use((req, res, next) => {

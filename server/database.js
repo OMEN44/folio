@@ -1,6 +1,30 @@
 import { Op } from 'sequelize'
 import { sequelize, Notes, User, Timeline } from './databaseConfig.js'
 
+export const addImage = (title, data) => {
+    return new Promise((resolve, reject) => {
+        sequelize.sync().then(async () => {
+            resolve(await images.create({
+                title: title,
+                data: data
+            }))
+        }).catch(error => {
+            reject(error)
+        })
+    }
+    )
+}
+
+export const getImage = (id) => {
+    return new Promise((resolve, reject) => {
+        sequelize.sync().then(async () => {
+            resolve(await images.findByPk(id))
+        }).catch((error) => reject(error))
+    });
+}
+
+
+
 export const addUser = (username, email, password, access) => {
     return new Promise((resolve, reject) => {
         sequelize.sync().then(async () => {
