@@ -149,3 +149,11 @@ export const copyLink = () => {
     navigator.clipboard.writeText(`${window.location}?id=${note.value.id}`)
     notify('Copied link to clipboard')
 }
+
+export const uploadImage = (data) => {
+    return new Promise((resolve, reject) => {
+        getAxios().post('/images/upload', { data })
+            .then(response => resolve(response.data))
+            .catch(error => reject(error.response.data.error))
+    })
+}

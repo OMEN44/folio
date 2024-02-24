@@ -47,7 +47,7 @@ addTimelineEvent('Minecraft', new Date(2020, 10), 'My friends and I discover the
 const app = express();
 export const secretKey = 'My-epic-secret-key-1234$'; // Replace with a secure secret key
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(cors());
 app.use('/api/timeline', timeline)
 app.use('/api/login', login)

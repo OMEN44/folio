@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import SvgIcon from "@jamescoyle/vue-icon"
-import { mdiDelete, mdiContentSave, mdiReload, mdiLock, mdiLockOpenVariant, mdiShare } from '@mdi/js'
+import { mdiDelete, mdiContentSave, mdiReload, mdiLock, mdiLockOpenVariant, mdiShare, mdiImage } from '@mdi/js'
 import { onBeforeRouteLeave, useRoute } from "vue-router";
-import { Note, RawMarkdown, deleteNote, onUpdate, overlay, saveNote, togglePrivate, undoChanges, textArea, copyLink } from "../script/noteEditor";
+import { Note, RawMarkdown, deleteNote, onUpdate, overlay, saveNote, togglePrivate, undoChanges, textArea, copyLink, uploadImage } from "../script/noteEditor";
 
 const props = defineProps(['user'])
 
@@ -63,8 +63,28 @@ onBeforeRouteLeave((to, from, next) => {
   } else next()
 })
 
+
+const upload = () => {
+  const file = document.getElementById('file') as HTMLInputElement
+  file.click()
+  file.onchange = () => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      uploadImage(e.target?.result as string).then((res: any) => {
+        if (res) {
+
+          onUpdate({ target: { value: `![image](/api/images/${res.id})` } } as any)
+        }
+      })
+      console.log(e.target?.result)
+    }
+    reader.readAsDataURL(file.files![0])
+
+  }
+}
 </script>
 <template>
+  <input type="file" id="file" style="display:none;" accept="jpg, jpeg, png" />
   <overlay ref="overlay" />
   <div class="div-editor-container">
     <div class="div-input" v-if="Note !== null && props.user !== null && Note.authorId === props.user.userId">
@@ -81,6 +101,9 @@ onBeforeRouteLeave((to, from, next) => {
         </button>
         <button class="button-border" @click="togglePrivate">
           <svg-icon class="icon" type="mdi" :path="Note !== null && Note.isPrivate ? mdiLock : mdiLockOpenVariant" />
+        </button>
+        <button class="button-border" @click="upload">
+          <svg-icon class="icon" type="mdi" :path="mdiImage" />
         </button>
       </div>
       <textarea ref="textArea" :value="RawMarkdown" @keydown.ctrl.s.prevent.stop="saveNote" @input="onUpdate"></textarea>

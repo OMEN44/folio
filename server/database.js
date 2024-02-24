@@ -1,26 +1,26 @@
 import { Op } from 'sequelize'
-import { sequelize, Notes, User, Timeline } from './databaseConfig.js'
+import { sequelize, Notes, User, Timeline, Images } from './databaseConfig.js'
 
-export const addImage = (title, data) => {
-    return new Promise((resolve, reject) => {
-        sequelize.sync().then(async () => {
-            resolve(await images.create({
-                title: title,
-                data: data
-            }))
-        }).catch(error => {
-            reject(error)
-        })
+export const addImage = async (data) => {
+    try {
+        await sequelize.sync();
+        const newImage = await Images.create({
+            data: data
+        });
+        return newImage;
+    } catch (error) {
+        throw error;
     }
-    )
 }
 
-export const getImage = (id) => {
-    return new Promise((resolve, reject) => {
-        sequelize.sync().then(async () => {
-            resolve(await images.findByPk(id))
-        }).catch((error) => reject(error))
-    });
+export const getImage = async (id) => {
+    try {
+        await sequelize.sync();
+        const image = await Images.findByPk(id);
+        return image;
+    } catch (error) {
+        throw error;
+    }
 }
 
 
