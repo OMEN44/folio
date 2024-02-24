@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import changeLog from '../assets/changelog.json'
 
+
 import {
     IsShown,
     switchAccountView,

@@ -1,6 +1,7 @@
 import express from 'express'
 import jwt from 'jsonwebtoken'
 import { checkUserData, secretKey } from '../server.js'
+import argon2 from 'argon2'
 import {
     addUser,
     getUser,
@@ -21,9 +22,9 @@ User access levels:
 
 router.post('/', (req, res) => {
     const { username, password } = req.body;
-    getUser(username, username).then(result => {
+    getUser(username, username).then(async result => {
         if (result.length === 1) {
-            if (result[0].password === password) {
+            if (await argon2.verify(result[0].password, username + password)) {
                 const token = jwt.sign({ userId: result[0].id, username: result[0].username, access: result[0].access }, secretKey, { expiresIn: '7d' });
                 res.json({ token: token, id: result[0].id, name: result[0].username, access: result[0].access });
             } else {
@@ -58,10 +59,10 @@ router.get('/all', (req, res) => {
     }
 })
 
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
     const { username, password, email } = req.body
-
-    addUser(username, email, password, 3)
+    const hashedPassword = await argon2.hash(username + password)
+    addUser(username, email, hashedPassword, 3)
         .then(() => res.json({ success: true }))
         .catch(error => {
             if (error.name === 'SequelizeUniqueConstraintError')

@@ -102,6 +102,7 @@ export const saveNote = () => {
     note.value.content = raw.value
     updateNote({
         id: note.value.id,
+        title: note.value.title,
         content: raw.value,
         isPrivate: note.value.isPrivate
     })
@@ -110,6 +111,7 @@ export const saveNote = () => {
 export const togglePrivate = () => {
     updateNote({
         id: note.value.id,
+        title: note.value.title,
         content: raw.value,
         isPrivate: !note.value.isPrivate
     })
@@ -138,8 +140,8 @@ export const undoChanges = () => {
     })
 }
 
-const updateNote = (noteData) => {
-    if (note.value.id === -1) return;
+export const updateNote = (noteData: { id: number, title: string, content: string, isPrivate: boolean }) => {
+    if (note.value.id === -1 || noteData.title === '') return;
     getAxios().post('/notes/update', noteData)
         .then(() => initNotes(note.value.selectedIndex))
         .catch(error => console.log(error.response.data.error))

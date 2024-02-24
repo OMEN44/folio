@@ -34,8 +34,8 @@ router.get('/public', (req, res) => {
 router.post('/update', (req, res) => {
     const authUser = checkUserData(req, res)
     if (authUser.valid && authUser.value.access < 2) {
-        const { id, content, isPrivate } = req.body
-        editNote(id, content, isPrivate)
+        const { id, title, content, isPrivate } = req.body
+        editNote(id, title, content, isPrivate)
             .then(() => res.json({ success: true }))
             .catch(error => {
                 res.status(404).json({ success: false, error: error })
