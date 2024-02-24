@@ -70,20 +70,6 @@ export const Timeline = sequelize.define('timeline',
     }
 )
 
-export const Images = sequelize.define('images',
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            allowNull: false,
-            primaryKey: true
-        },
-        data: {
-            type: DataTypes.BLOB,
-            allowNull: false
-        }
-    }
-)
 
 export const Notes = sequelize.define('notes',
     {
@@ -133,12 +119,6 @@ Timeline.sync().then(() => {
 
 Notes.sync().then(() => {
     console.log('Notes table created successfully!');
-}).catch((error) => {
-    console.error('Unable to create table : ', error);
-});
-
-Images.sync().then(() => {
-    console.log('Images table created successfully!');
 }).catch((error) => {
     console.error('Unable to create table : ', error);
 });

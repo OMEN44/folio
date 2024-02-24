@@ -1,28 +1,5 @@
 import { Op } from 'sequelize'
-import { sequelize, Notes, User, Timeline, Images } from './databaseConfig.js'
-
-export const addImage = async (data) => {
-    try {
-        await sequelize.sync();
-        const newImage = await Images.create({
-            data: data
-        });
-        return newImage;
-    } catch (error) {
-        throw error;
-    }
-}
-
-export const getImage = async (id) => {
-    try {
-        await sequelize.sync();
-        const image = await Images.findByPk(id);
-        return image;
-    } catch (error) {
-        throw error;
-    }
-}
-
+import { sequelize, Notes, User, Timeline } from './databaseConfig.js'
 
 
 export const addUser = (username, email, password, access) => {

@@ -78,7 +78,7 @@ const upload = () => {
       })
       console.log(e.target?.result)
     }
-    reader.readAsDataURL(file.files![0])
+    reader.readAsArrayBuffer(file.files![0])
 
   }
 }
