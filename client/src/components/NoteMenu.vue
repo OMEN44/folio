@@ -30,17 +30,21 @@ const getLastEdditedMessage = (date: Date): string => {
 
     // time in minutes
     const timeDiff = (now.getTime() - date.getTime()) / (1000 * 60)
-
+    let displayTime: number | null = null
     if (timeDiff < 0.99) {
         return 'Edited just now'
     } else if (timeDiff < 60) {
-        return `Edited ${Math.round(timeDiff)} minutes ago`
+        displayTime = Math.round(timeDiff)
+        return `Edited ${displayTime} minute${displayTime !== 1 ? 's' : ''} ago`
     } else if (timeDiff < (60 * 24)) {
-        return `Edited ${Math.round(timeDiff / 60)} hours ago`
+        displayTime = Math.round(timeDiff / 60)
+        return `Edited ${displayTime} hour${displayTime !== 1 ? 's' : ''} ago`
     } else if (timeDiff < (60 * 24 * 30)) {
-        return `Edited ${Math.round(timeDiff / 60 / 24)} days ago`
+        displayTime = Math.round(timeDiff / 60 / 24)
+        return `Edited ${displayTime} day${displayTime !== 1 ? 's' : ''} ago`
     } else if (timeDiff < (60 * 24 * 30 * 12)) {
-        return `Edited ${Math.round(timeDiff / 60 / 24 / 30)} months ago`
+        displayTime = Math.round(timeDiff / 60 / 24 / 30)
+        return `Edited ${displayTime} month${displayTime !== 1 ? 's' : ''} ago`
     } else {
         return 'Edited over a year ago'
     }

@@ -175,13 +175,17 @@ a:visited {
     color: var(--secondary);
 }
 
+.task-list-item {
+    padding: 0;
+}
+
 input[type=checkbox][disabled] {
     appearance: none;
     -webkit-appearance: none;
     background-color: var(--background);
     border: 3px solid var(--primary);
     padding: 6px;
-    margin: 1px 6px 0 0;
+    margin: -3px 6px;
     border-radius: 6px;
     display: inline-block;
     position: relative;
