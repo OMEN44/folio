@@ -2,7 +2,7 @@
 import SvgIcon from "@jamescoyle/vue-icon"
 import { mdiDelete, mdiContentSave, mdiReload, mdiLock, mdiLockOpenVariant, mdiShare } from '@mdi/js'
 import { onBeforeRouteLeave, useRoute } from "vue-router";
-import { Note, RawMarkdown, deleteNote, onUpdate, overlay, saveNote, togglePrivate, undoChanges, textArea, copyLink } from "../script/noteEditor";
+import { Note, RawMarkdown, deleteNote, onUpdate, overlay, saveNote, togglePrivate, undoChanges, textArea, copyLink, keydownHandler } from "../script/noteEditor";
 
 const props = defineProps(['user'])
 
@@ -20,7 +20,10 @@ import taskList from "markdown-it-task-lists"
 import mark from "markdown-it-mark"
 import Overlay from "./Overlay.vue";
 
-const md = MarkdownIt()
+const md = MarkdownIt({
+  html: true,
+  breaks: true
+})
   .use(MarkdownItHighlightJs)
   .use(sup)
   .use(sub)
@@ -30,10 +33,6 @@ const md = MarkdownIt()
   .use(multiTable)
   .use(taskList)
   .use(mark)
-
-
-const route = useRoute()
-
 
 onBeforeRouteLeave((to, from, next) => {
   if (Note.value.id !== -1 && RawMarkdown.value !== Note.value.content) {
@@ -83,7 +82,7 @@ onBeforeRouteLeave((to, from, next) => {
           <svg-icon class="icon" type="mdi" :path="Note !== null && Note.isPrivate ? mdiLock : mdiLockOpenVariant" />
         </button>
       </div>
-      <textarea ref="textArea" :value="RawMarkdown" @keydown.ctrl.s.prevent.stop="saveNote" @input="onUpdate"></textarea>
+      <textarea ref="textArea" :value="RawMarkdown" @keydown="keydownHandler" @input="onUpdate"></textarea>
     </div>
     <div class="div-output">
       <div class="div-input-controls">

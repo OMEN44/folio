@@ -79,6 +79,8 @@ updateTimeline()
 
 .desktop {
   display: block;
+  max-width: fit-content;
+  width: 50%;
 
   @media (max-width: 800px) {
     display: none;
@@ -87,6 +89,8 @@ updateTimeline()
 
 .mobile {
   display: none;
+  max-width: fit-content;
+  width: 100%;
 
   @media (max-width: 800px) {
     display: block;
@@ -103,6 +107,20 @@ updateTimeline()
   height: 77.5%;
   clip-path: polygon(0 20%, 20% 0%, 90% 0%, 100% 10%, 100% 57.5%, 80% 77.5%, 10% 77.5%, 0 67.5%);
   shape-outside: polygon(0 20%, 20% 0%, 90% 0%, 100% 10%, 100% 57.5%, 80% 77.5%, 10% 77.5%, 0 67.5%);
+
+  &::after {
+    content: 'Here I am!                              ';
+    position: absolute;
+    top: 15px;
+    left: calc(5% + 5px);
+    background-color: var(--background);
+    width: 60%;
+    height: 15%;
+    font-size: 150%;
+    text-align: center;
+    padding: calc((15% / 2) - (1em));
+    clip-path: polygon(0 0, 100% 0, 70% 100%, 0 100%);
+  }
 
   @media (max-width: 800px) {
     margin: 10px auto;

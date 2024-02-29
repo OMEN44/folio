@@ -44,7 +44,8 @@ export const initNotes = async (selection?) => {
                     route: note.route,
                     isPrivate: note.private,
                     authorId: note['user.id'],
-                    authorName: note['user.username']
+                    authorName: note['user.username'],
+                    lastUpdated: new Date(note.updatedAt)
                 }))
                 // Set title to active note
             } else {
@@ -104,5 +105,6 @@ export interface NoteType {
     isPrivate: boolean,
     authorName: string,
     authorId: number,
-    selectedIndex: number
+    selectedIndex: number,
+    lastUpdated?: Date
 }

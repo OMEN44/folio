@@ -1,12 +1,11 @@
-import { readonly, ref } from "vue"
+import { nextTick, readonly, ref } from "vue"
 import Overlay from '../components/Overlay.vue'
 import { NoteType, initNotes } from "./notes"
 import { notify } from "./notification"
 import getAxios from "../plugins/axios"
-import { useRoute } from "vue-router"
 
 export const overlay = ref<InstanceType<typeof Overlay>>()
-export const textArea = ref<HTMLTextAreaElement>()
+export const textArea = ref<HTMLTextAreaElement | undefined>()
 const raw = ref('Nothing selected')
 const note = ref<NoteType>({
     id: -1,
@@ -21,7 +20,6 @@ const note = ref<NoteType>({
 
 export const Note = readonly(note)
 export const RawMarkdown = readonly(raw)
-console.log('')
 export const changeNote = (newNote, selectedIndex) => {
     if (note.value.id !== -1 && raw.value !== note.value.content) {
         overlay.value?.openOverlay({
@@ -49,7 +47,9 @@ export const changeNote = (newNote, selectedIndex) => {
         })
     } else {
         updateEditor(newNote, selectedIndex)
-        onUpdate()
+        nextTick(() => {
+            onUpdate()
+        })
     }
 }
 
@@ -150,4 +150,28 @@ export const updateNote = (noteData: { id: number, title: string, content: strin
 export const copyLink = () => {
     navigator.clipboard.writeText(`${window.location}?id=${note.value.id}`)
     notify('Copied link to clipboard')
+}
+
+export const keydownHandler = (e: KeyboardEvent) => {
+    if (e.ctrlKey) {
+        switch (e.key) {
+            case 's': {
+                e.preventDefault()
+                saveNote()
+            }
+        }
+    } else {
+        switch (e.key) {
+            case 'Tab': {
+                e.preventDefault()
+                const pos = textArea.value?.selectionStart
+                if (pos !== undefined) {
+                    raw.value = raw.value.slice(0, pos) + '        ' + raw.value.slice(pos)
+                    nextTick(() => {
+                        textArea.value?.setSelectionRange(pos + 8, pos + 8)
+                    })
+                }
+            }
+        }
+    }
 }

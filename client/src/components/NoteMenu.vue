@@ -25,6 +25,29 @@ const createNote = (e) => {
     }
 }
 
+const getLastEdditedMessage = (date: Date): string => {
+    const now: Date = new Date()
+
+    // time in minutes
+    const timeDiff = (now.getTime() - date.getTime()) / (1000 * 60)
+
+    console.log(timeDiff)
+    console.log(timeDiff < 0.99)
+    if (timeDiff < 0.99) {
+        return 'Edited just now'
+    } else if (timeDiff < 60) {
+        return `Edited ${Math.round(timeDiff)} minutes ago`
+    } else if (timeDiff < (60 * 24)) {
+        return `Edited ${Math.round(timeDiff / 60)} hours ago`
+    } else if (timeDiff < (60 * 24 * 30)) {
+        return `Edited ${Math.round(timeDiff / 60 / 24)} days ago`
+    } else if (timeDiff < (60 * 24 * 30 * 12)) {
+        return `Edited ${Math.round(timeDiff / 60 / 24 / 30)} months ago`
+    } else {
+        return 'Edited over a year ago'
+    }
+}
+
 </script>
 
 <template>
@@ -42,12 +65,15 @@ const createNote = (e) => {
             @click="(e: Event) => emit('updateNotes', Number((e.target as HTMLInputElement).id))"
             :class="{ highlight: index === props.selected }">
             <h3>{{ element['title'] }}</h3>
-            <span v-if="element['authorName'] !== ''">By {{ element['authorName'] }}</span>
+            <div>
+                <span v-if="element['authorName'] !== ''">By {{ element['authorName'] }}</span>
+                <em v-if="element['authorName'] !== ''">{{ getLastEdditedMessage(new Date(element['lastUpdated'])) }}</em>
+            </div>
         </div>
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .div-note {
     height: fit-content;
     padding: 10px 15px;
@@ -58,6 +84,12 @@ const createNote = (e) => {
     cursor: pointer;
     z-index: 0;
     border-radius: 8px;
+
+    div {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
 }
 
 .highlight {
