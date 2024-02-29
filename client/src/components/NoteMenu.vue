@@ -31,8 +31,6 @@ const getLastEdditedMessage = (date: Date): string => {
     // time in minutes
     const timeDiff = (now.getTime() - date.getTime()) / (1000 * 60)
 
-    console.log(timeDiff)
-    console.log(timeDiff < 0.99)
     if (timeDiff < 0.99) {
         return 'Edited just now'
     } else if (timeDiff < 60) {
