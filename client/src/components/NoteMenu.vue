@@ -91,6 +91,10 @@ const getLastEdditedMessage = (date: Date): string => {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+
+        em {
+            font-size: 13px;
+        }
     }
 }
 

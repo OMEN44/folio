@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiDelete, mdiOpenInNew } from '@mdi/js'
+import { mdiDelete, mdiOpenInNew, mdiPencil } from '@mdi/js'
 import getAxios from '../plugins/axios'
 import { notify } from '../script/notification';
 import router from '../plugins/router.js';
 import Overlay from './Overlay.vue';
 import { ref } from 'vue';
-import { AccessLevel, TimelineEventType, updateTimeline } from '../script/timeline';
+import { AccessLevel, TimelineEventType, editEvent, updateTimeline } from '../script/timeline';
 
 const props = defineProps<{ eventData: TimelineEventType }>()
 
@@ -61,8 +61,12 @@ const confirmDeleteEvent = (e) => {
         <svg-icon v-if="props.eventData.noteId > 0" class="icon-note icon icon-hover" type="mdi" :size="40"
           :path="mdiOpenInNew" @click="openNote"></svg-icon>
       </div>
-      <svg-icon @click="confirmDeleteEvent" v-if="AccessLevel < 2" class="icon icon-hover" type="mdi" :size="30"
-        :path="mdiDelete"></svg-icon>
+      <div>
+        <svg-icon @click="(e) => editEvent(e, props.eventData.id)" v-if="AccessLevel < 2" class="icon icon-hover" type="mdi" :size="30"
+          :path="mdiPencil"></svg-icon>
+        <svg-icon @click="confirmDeleteEvent" v-if="AccessLevel < 2" class="icon icon-hover" type="mdi" :size="30"
+          :path="mdiDelete"></svg-icon>
+      </div>
     </div>
     <p class="p-date">{{ props.eventData.date.toLocaleString('default', { month: 'long' }) }} {{
       props.eventData.date.getFullYear() }}</p>

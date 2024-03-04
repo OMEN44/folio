@@ -109,7 +109,7 @@ updateTimeline()
   shape-outside: polygon(0 20%, 20% 0%, 90% 0%, 100% 10%, 100% 57.5%, 80% 77.5%, 10% 77.5%, 0 67.5%);
 
   &::after {
-    content: 'Here I am!                              ';
+    content: 'Here I am!';
     position: absolute;
     top: 15px;
     left: calc(5% + 5px);

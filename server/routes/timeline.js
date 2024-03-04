@@ -3,6 +3,7 @@ import { checkUserData } from '../server.js'
 import {
     getTimelineData,
     addTimelineEvent,
+    updateTimelineEvent,
     deleteTimelineEvent
 } from '../database.js'
 
@@ -21,6 +22,25 @@ router.post('/create', (req, res) => {
     const authUser = checkUserData(req, res)
     if (authUser.valid && authUser.value.access < 2) {
         addTimelineEvent(title, date, about, noteId)
+            .then(() => res.json({ success: true }))
+            .catch(error => {
+                if (error.name === 'SequelizeUniqueConstraintError')
+                    res.status(409).json({ success: false, error: `Event with this title and time already exist` })
+                else
+                    res.status(409).json({ success: false, error: error.message })
+            })
+    } else {
+        res.status(401).json({ success: false, error: 'Access denied' })
+    }
+})
+
+router.post('/update', (req, res) => {
+    const { editing, title, about, date, noteId } = req.body
+
+    console.log(editing, title, about, date, noteId)
+    const authUser = checkUserData(req, res)
+    if (authUser.valid && authUser.value.access < 2) {
+        updateTimelineEvent(editing, title, date, about, noteId)
             .then(() => res.json({ success: true }))
             .catch(error => {
                 if (error.name === 'SequelizeUniqueConstraintError')

@@ -57,12 +57,36 @@ export const updateUser = (id, access) => {
 export const addTimelineEvent = (title, date, about, note) => {
     return new Promise((resolve, reject) => {
         sequelize.sync().then(async () => {
-            resolve(await Timeline.create({
-                title: title,
-                date: date,
-                about: about,
-                noteId: note
-            }))
+            if (note === '-1')
+                resolve(await Timeline.create({
+                    title: title,
+                    date: date,
+                    about: about
+                }))
+            else
+                resolve(await Timeline.create({
+                    title: title,
+                    date: date,
+                    about: about,
+                    noteId: note
+                }))
+
+        }).catch(error => {
+            reject(error)
+        })
+    }
+    )
+}
+
+export const updateTimelineEvent = (id, title, date, about, note) => {
+    return new Promise((resolve, reject) => {
+        sequelize.sync().then(async () => {
+            const timelineEvent = await Timeline.findByPk(id)
+            timelineEvent.title = title
+            timelineEvent.date = date
+            timelineEvent.about = about
+            timelineEvent.noteId = note
+            resolve(await timelineEvent.save())
         }).catch(error => {
             reject(error)
         })

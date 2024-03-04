@@ -1,12 +1,84 @@
 import { readonly, ref } from "vue"
 import getAxios from "../plugins/axios"
 import { useCookies } from "vue3-cookies"
+import { notify } from "./notification"
 
-const timelineDisplayData = ref<TimelineEventType | null>(null)
+const timelineDisplayData = ref<Array<TimelineEventType> | null>(null)
 const accessLevel = ref(3)
+const errorMessage = ref('')
 
+export const editorOptions = ref<{ title: string, date: string, about: string, noteId: number, editing: number }>({
+    title: '',
+    date: '',
+    about: '',
+    noteId: -1,
+    editing: -1
+})
+
+export const ErrorMessage = readonly(errorMessage)
 export const TimelineData = readonly(timelineDisplayData)
 export const AccessLevel = readonly(accessLevel)
+
+export const editEvent = (e: Event, id: number) => {
+    document.getElementsByClassName('div-create-event')[0].scrollIntoView({ behavior: "smooth" })
+    e.preventDefault()
+
+    TimelineData.value?.forEach((element) => {
+        if (element.id === id) {
+            const date = new Date(element.date)
+            editorOptions.value.date = `${date.getFullYear()}-${date.getUTCMonth() < 10 ? '0' + (date.getUTCMonth() + 1) : (date.getUTCMonth() + 1)}-01`
+            editorOptions.value.about = element.about
+            editorOptions.value.title = element.title
+            editorOptions.value.noteId = element.noteId
+            editorOptions.value.editing = id
+            return
+        }
+    })
+}
+
+export const cancelEdit = (e: Event) => {
+    e.preventDefault()
+    editorOptions.value = {
+        title: '',
+        date: '',
+        about: '',
+        noteId: -1,
+        editing: -1
+    }
+}
+
+export const createEvent = (e) => {
+    console.log(editorOptions.value)
+    e.preventDefault(e)
+    if (editorOptions.value.title === '' || editorOptions.value.title === '' || editorOptions.value.about === '') {
+        errorMessage.value = 'Must fill all inputs!'
+        return
+    }
+    if (editorOptions.value.editing === -1) {
+        getAxios().post('/timeline/create', editorOptions.value)
+            .then(response => {
+                errorMessage.value = response.data.message
+                editorOptions.value.title = ''
+                editorOptions.value.about = ''
+                editorOptions.value.date = ''
+                updateTimeline()
+                notify('Created new timeline event.')
+            }).catch(error => {
+                errorMessage.value = error.response.data.error
+            })
+    } else {
+        getAxios().post('/timeline/update', editorOptions.value)
+            .then(res => {
+                errorMessage.value = res.data.message
+                cancelEdit(e)
+                updateTimeline()
+                notify('Updated timeline.')
+                editorOptions.value.editing = -1
+            }).catch(error => {
+                errorMessage.value = error.response.data.error
+            })
+    }
+}
 
 export const updateTimeline = (filters?) => {
     // If logged in check users access level

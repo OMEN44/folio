@@ -2,17 +2,9 @@
 import TextBox from './TextBox.vue';
 import { ref } from 'vue';
 import getAxios from '../plugins/axios';
-import { notify } from '../script/notification';
-import { updateTimeline } from '../script/timeline';
+import { ErrorMessage, cancelEdit, createEvent, editorOptions } from '../script/timeline';
 
-const errorMessage = ref('')
 const notes = ref([])
-const editorOptions = ref({
-  title: '',
-  date: '',
-  about: '',
-  noteId: -1
-})
 
 // setup
 
@@ -27,25 +19,6 @@ getAxios().get('/notes/public')
       })
     }
   })
-
-const createEvent = (e) => {
-  e.preventDefault(e)
-  if (editorOptions.value.title === '' || editorOptions.value.title === '' || editorOptions.value.about === '') {
-    errorMessage.value = 'Must fill all inputs!'
-    return
-  }
-  getAxios().post('/timeline/create', editorOptions.value)
-    .then(response => {
-      errorMessage.value = response.data.message
-      editorOptions.value.title = ''
-      editorOptions.value.about = ''
-      editorOptions.value.date = ''
-      updateTimeline()
-      notify('Created new timeline event.')
-    }).catch(error => {
-      errorMessage.value = error.response.data.error
-    })
-}
 </script>
 
 <template>
@@ -67,7 +40,8 @@ const createEvent = (e) => {
       </select>
       <div class="form-top">
         <button @click="createEvent">Submit</button>
-        <span v-html="errorMessage"></span>
+        <button v-if="editorOptions.editing !== -1" @click="cancelEdit">Cancel</button>
+        <span v-html="ErrorMessage"></span>
       </div>
     </form>
   </TextBox>
