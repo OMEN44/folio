@@ -16,8 +16,13 @@ import { User } from "./script/Account";
   </main>
 </template>
 
-<style>
+<style lang="scss">
 main {
   margin: 30px 20px 0 20px;
+
+  @media (max-width: 1000px) {
+    margin: 30px 0 0 0;
+    overflow-x: hidden;
+  }
 }
 </style>

@@ -166,9 +166,9 @@ export const keydownHandler = (e: KeyboardEvent) => {
                 e.preventDefault()
                 const pos = textArea.value?.selectionStart
                 if (pos !== undefined) {
-                    raw.value = raw.value.slice(0, pos) + '        ' + raw.value.slice(pos)
+                    raw.value = raw.value.slice(0, pos) + '    ' + raw.value.slice(pos)
                     nextTick(() => {
-                        textArea.value?.setSelectionRange(pos + 8, pos + 8)
+                        textArea.value?.setSelectionRange(pos + 4, pos + 4)
                     })
                 }
             }

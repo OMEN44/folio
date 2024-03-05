@@ -129,6 +129,10 @@ updateTimeline()
 
 .div-welcome-container {
   position: relative;
+
+  @media (max-width: 800px) {
+    margin: 30px 20px 0 20px;
+  }
 }
 
 .div-buttons {
@@ -165,6 +169,10 @@ button {
 
 .container {
   margin: 0 10%;
+
+  @media (max-width: 800px) {
+    margin: 30px 40px 0 40px;
+  }
 }
 
 .div-timeline {
@@ -198,10 +206,6 @@ button {
   .div-welcome {
     margin-top: 70px;
     padding: 30px 20px;
-  }
-
-  .container {
-    margin: 0;
   }
 
   .div-timeline {

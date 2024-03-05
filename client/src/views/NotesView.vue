@@ -203,7 +203,7 @@ h1 {
   }
 
   .div-container {
-    margin: 60px 20px;
+    margin: 60px 0;
   }
 
   .div-menu {

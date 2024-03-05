@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import changeLog from '../assets/changelog.json'
-
-
 import {
     IsShown,
     switchAccountView,
@@ -54,7 +52,7 @@ loadLoginData()
                     <button class="button-border" @click="logout" type="submit">Logout</button>
                 </div>
                 <div class="div-changelog">
-                    <h3>Folio Change log <span>currently v{{ ver }}</span></h3>
+                    <h3>Folio Change log <span>currently v{{ changeLog[0].version }}</span></h3>
                     <h4 v-for="change in changeLog">{{ change.version }}<span> - {{ change.message }}</span></h4>
                 </div>
                 <div class="div-accounts" v-if="User !== null && User.access === 0">

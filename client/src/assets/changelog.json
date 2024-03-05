@@ -1,7 +1,35 @@
 [
     {
+        "version": "1.1.8",
+        "message": "Fixed changelog viewer and pressing tab now indents dot points."
+    },
+    {
+        "version": "1.1.7",
+        "message": "Timeline event editor implemented for admins."
+    },
+    {
+        "version": "1.1.6",
+        "message": "Implemented note title editor."
+    },
+    {
+        "version": "1.1.5",
+        "message": "Encrypted passwords."
+    },
+    {
+        "version": "1.1.4",
+        "message": "Added image to home page."
+    },
+    {
+        "version": "1.1.3",
+        "message": "styling pairity accross browsers."
+    },
+    {
+        "version": "1.1.2",
+        "message": "Fixed a number of styles."
+    },
+    {
         "version": "1.1.1",
-        "message": "Added changing notes title"
+        "message": "Added changing notes title."
     },
     {
         "version": "1.1.0",
