@@ -4,6 +4,7 @@ import HomeView from "@/views/HomeView.vue";
 import TimelineView from "@/views/TimelineView.vue";
 import AccountView from "@/views/AccountView.vue";
 import NotesView from "@/views/NotesView.vue";
+import NotesViewNew from '@/views/NotesViewNew.vue'
 
 export const router = createRouter({
     history: createWebHistory(),
@@ -27,6 +28,12 @@ export const router = createRouter({
             path: '/notes',
             name: 'notes',
             component: NotesView,
+            /*meta: { requiresAuth: true },*/
+        },
+        {
+            path: '/test',
+            name: 'test',
+            component: NotesViewNew,
             /*meta: { requiresAuth: true },*/
         },
         {
