@@ -1,42 +1,20 @@
 # Huon's project folio
 
-This folio is intended to act as a showcase for everything that I have worked on .
+This is currently v2 of my folio. Check the branches for the v1 code.
 
-- [x] add Notes page
-- [ ] Add a proper home page
-- [ ] Mkae a better login form
-- [ ] encrypt passwords
-- [x] Remove repeted functions and styles
-- [ ] Link the timeline and notes page
-- [ ] Change `message: 'success'` to `success: true` on the server
-- [ ] Use cookies not store
-- [x] Add ability to change note privacy setting
-- [ ] Add overlays
-- [x] Remove wacky errors that exist despite running perfectly
-- [ ] Optimise the shit outta it
+# Cloning this project
 
-## Recommended IDE Setup
+### Clone repo
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+`git clone https://github.com/OMEN44/folio.git`
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+### Install dependencies
 
 ```sh
-npm install
+cd client
+npm i
 ```
 
-### Compile and Hot-Reload for Development
+### Run client
 
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+`npm run dev`

@@ -17,7 +17,7 @@
     .div-text-box-container {
         border: 3px var(--blue-border) solid;
         border-radius: 5px;
-        padding: 5px;
+        padding: 3px;
         margin: 20px 5%;
         
 
