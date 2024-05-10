@@ -2,6 +2,10 @@
 import TextBox from "../components/TextBox.vue"
 import AltTextBox from "../components/AltTextBox.vue"
 
+const goToAbout = () => {
+    const aboutDiv: HTMLDivElement = document.getElementsByClassName('div-about')[0] as HTMLDivElement
+    aboutDiv.scrollIntoView({ behavior: "smooth"})
+}
 </script>
 
 <template>
@@ -9,8 +13,21 @@ import AltTextBox from "../components/AltTextBox.vue"
         <h2 class="hello">Hello World, I'm</h2>
         <h1>Huon Swales</h1>
         <h2>This is my folio <span class="flashy"></span></h2>
-        <div class="div-scroll-button">
+        <div class="div-scroll-button" @click="goToAbout">
             <span>See whats inside</span><p>⤵</p>
+        </div>
+    </div>
+
+    <div class="div-about">
+        <div class="div-left">
+            <h2>A bit about me</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus laudantium non amet at quam neque illo natus tempore minus consequuntur voluptas nam omnis recusandae soluta voluptatum expedita, eveniet officiis adipisci. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum dicta vitae officiis perspiciatis excepturi facilis a aut nostrum dolore iste culpa, nobis incidunt consectetur, expedita tempore magnam! Labore, ducimus ipsum!</p>
+        </div>
+        <div class="divider"></div>
+        <div class="div-right">
+            <h2>Reach out</h2>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maxime magni repellat minima quasi neque accusantium provident. Vitae, ipsa! Explicabo exercitationem a architecto qui quo, officia pariatur enim esse quas asperiores!</p>
+            <button class="button-fancy">Contact me!</button>
         </div>
     </div>
 
@@ -36,28 +53,9 @@ import AltTextBox from "../components/AltTextBox.vue"
         <img src="/me.png" alt="Image of Huon Swales">
     </alt-text-box>
 
-    <!-- <div class="div-about">
-        
-    </div> -->
     <div class="div-timeline-preview">
 
     </div>
-
-    <svg width="0" height="0" viewBox="0 0 100 100">
-      <defs>
-        <clipPath id="textBox" clipPathUnits="objectBoundingBox">
-          <path d="
-          M 0,0.05 
-          L 0.7,0.05 
-          L 0.75,0
-          L 1,0 
-          L 1,1 
-          L 0,1 
-          L 0,0.05 
-          Z"></path>
-        </clipPath>
-      </defs>
-    </svg>
 </template>
 
 <style scoped lang="scss">
@@ -77,13 +75,8 @@ import AltTextBox from "../components/AltTextBox.vue"
         margin-bottom: 40px;
     }
 
-    h2 {
-        font-weight: 400;
-        font-size: 30px;
-        position: relative;
-    }
-
     .div-scroll-button {
+        cursor: pointer;
         display: flex;
         flex-direction: row;
         position: absolute;
@@ -136,21 +129,55 @@ import AltTextBox from "../components/AltTextBox.vue"
 }
 
 .div-about {
-    margin: 20px 10%;
-    border: 2px var(--blue-border) solid;
-    border-radius: 5px;
-    padding: 20px;
     display: flex;
     flex-direction: row;
-    clip-path: url(#textBox);
-    background-color: var(--orange-border);
-    
-    img {
-        height: 400px;
+    margin: 10%;
+
+    .divider {
+        background-color: var(--blue-border);
+        width: 2px;
+        margin: 0 5%;
+        position: relative;
+        
+        &::before {
+            content: "";
+            position: absolute;
+            width: 300%;
+            left: -200%;
+            top: -10px;
+            height: 20px;
+            border-radius: 4px 4px 0 4px;
+            background-color: var(--blue-border);
+        }
+        
+        &::after {
+            content: "";
+            position: absolute;
+            width: 300%;
+            left: -200%;
+            bottom: -10px;
+            height: 20px;
+            border-radius: 4px 0 4px 4px;
+            background-color: var(--blue-border);
+        }
+    }
+
+    .div-left {
+        flex: 1;
+    }
+
+    .div-right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        button {
+            margin: auto;
+        }
     }
 
     @media (max-width: 700px) {
-        margin: 20px 4px;        
+        flex-direction: column;
     }
 }
 </style>
