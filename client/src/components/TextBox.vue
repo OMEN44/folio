@@ -26,16 +26,30 @@
             position: relative;
             border-radius: 0 5px 0 0;
             padding: 5px 15px 5px 25px;
-
+            background-color: var(--background);
+            margin-bottom: -3px;
+            z-index: 3;
+            
             ::before {
                 content: '';
                 position: absolute;
                 left: -5px;
                 top: -2px;
                 background-color: var(--blue-border);
-                height: 10%;
-                width: 15%;
+                height: 6px;
+                width: 17px;
                 border-radius: 4px 0 4px 4px;
+            }
+            
+            ::after {
+                content: '';
+                position: absolute;
+                bottom: -3px;
+                left: -5px;
+                background-color: var(--blue-border);
+                height: 6px;
+                width: 17px;
+                border-radius: 0 4px 4px 4px;
             }
         }
 

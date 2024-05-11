@@ -17,38 +17,15 @@ h2 {
 }
 
 .button-fancy {
-	border-radius: 0;
-	margin: 0;
-	padding: 0;
-	font-weight: 700;
-	border-style: none;
-	display: block;
-	width: 80%;
-	font-size: 18px;
-	background: none;
-	color: var(--blue-border) !important;
-	transition: all 280ms ease-in-out 0s;
-	letter-spacing: 1px;
-}
-
-.button-fancy::after, .button-fancy::before {
-	bottom: 0;
-	content: " ";
-	display: block;
-	margin: 10px auto;
-	position: relative;
-	transition: all 280ms ease-in-out 0s;
-	width: 0;
-	box-shadow: 0px 0px 0px var(--blue-border);
+	border: 2px var(--blue-border) solid;
+	padding: 10px 15px;
+	border-radius: 4px;
+	background-color: var(--background);
+	color: var(--text);
+	transition: all 0.4s;
 }
 
 .button-fancy:hover {
-	letter-spacing: 4px;
-}
-
-.button-fancy:hover::after, .button-fancy:hover::before {
-	border: 1px solid var(--blue-border);
-	transition: width 350ms ease-in-out 0s;
-	width: 100%;
-	box-shadow: 0 0 19px 1px var(--blue-border);
+	color: var(--blue-border);
+    box-shadow: 0 0 20px 0 var(--blue-border);
 }

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import TextBox from "../components/TextBox.vue"
-import AltTextBox from "../components/AltTextBox.vue"
 
 const goToAbout = () => {
     const aboutDiv: HTMLDivElement = document.getElementsByClassName('div-about')[0] as HTMLDivElement
@@ -31,18 +30,10 @@ const goToAbout = () => {
         </div>
     </div>
 
-<text-box >
-    <div class="div-about-content">
-        <h1>Who am I?</h1>
-        <p>I'm Huon Swales, I have been interested in robots and computers for as long as I can remember, this passion has sparked many projects starting from humble lego and taking me to where I am today. I created this website with the goal of sharing my journey through this fascinating world of technology with anyone who shares my passion. If you're curious about developing new skills, looking for a new project idea or just someone who enjoys a good code snippet, you're in the right palce!</p>
-    
-        <h1>What you'll find here</h1>
-        <p>I have split the site into two pages; the timeline and notes. The timeline page gives a quick overview of all the projects that I have worked on in chronological order. The notes page offers more detail and multimedia content that I couldnt fit into a timeline entry. To link these two I have added a button to the timeline entries that have their own notes page so that you can quickly navigate between notes and the timeline.</p>
-    </div>
-    <img src="/me.png" alt="Image of Huon Swales">
-</text-box>
 
-    <alt-text-box >
+    <h1>Who am I?</h1>
+
+    <text-box >
         <div class="div-about-content">
             <h1>Who am I?</h1>
             <p>I'm Huon Swales, I have been interested in robots and computers for as long as I can remember, this passion has sparked many projects starting from humble lego and taking me to where I am today. I created this website with the goal of sharing my journey through this fascinating world of technology with anyone who shares my passion. If you're curious about developing new skills, looking for a new project idea or just someone who enjoys a good code snippet, you're in the right palce!</p>
@@ -51,11 +42,7 @@ const goToAbout = () => {
             <p>I have split the site into two pages; the timeline and notes. The timeline page gives a quick overview of all the projects that I have worked on in chronological order. The notes page offers more detail and multimedia content that I couldnt fit into a timeline entry. To link these two I have added a button to the timeline entries that have their own notes page so that you can quickly navigate between notes and the timeline.</p>
         </div>
         <img src="/me.png" alt="Image of Huon Swales">
-    </alt-text-box>
-
-    <div class="div-timeline-preview">
-
-    </div>
+    </text-box>
 </template>
 
 <style scoped lang="scss">
@@ -178,6 +165,18 @@ const goToAbout = () => {
 
     @media (max-width: 700px) {
         flex-direction: column;
+
+        .div-left, .div-right {
+            margin: 10px 0;
+
+            button {
+                margin: 20px 0 0 0;
+            }
+        }
+
+        .divider {
+            display: none;
+        }
     }
 }
 </style>
