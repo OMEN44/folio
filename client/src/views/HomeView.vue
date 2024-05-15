@@ -159,7 +159,7 @@ const goToAbout = () => {
         flex-direction: column;
 
         button {
-            margin: auto;
+            margin: 20px auto;
         }
     }
 
