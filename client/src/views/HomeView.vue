@@ -1,10 +1,20 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import TextBox from "../components/TextBox.vue"
 
 const goToAbout = () => {
     const aboutDiv: HTMLDivElement = document.getElementsByClassName('div-about')[0] as HTMLDivElement
     aboutDiv.scrollIntoView({ behavior: "smooth"})
 }
+
+const loc = ref<boolean>(true);
+
+window.addEventListener('keyup', (e) => {
+    if (e.key =='r') {
+        loc.value = !loc.value
+    }
+})
+
 </script>
 
 <template>
@@ -18,34 +28,71 @@ const goToAbout = () => {
     </div>
 
     <div class="div-about">
-        <div class="div-left">
-            <h2>A bit about me</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus laudantium non amet at quam neque illo natus tempore minus consequuntur voluptas nam omnis recusandae soluta voluptatum expedita, eveniet officiis adipisci. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum dicta vitae officiis perspiciatis excepturi facilis a aut nostrum dolore iste culpa, nobis incidunt consectetur, expedita tempore magnam! Labore, ducimus ipsum!</p>
-        </div>
-        <div class="divider"></div>
-        <div class="div-right">
-            <h2>Reach out</h2>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maxime magni repellat minima quasi neque accusantium provident. Vitae, ipsa! Explicabo exercitationem a architecto qui quo, officia pariatur enim esse quas asperiores!</p>
-            <button class="button-fancy">Contact me!</button>
+        <div class="div-about-content">
+            <div class="div-left">
+                <h2>A bit about me</h2>
+                <p>I have been interested in robots and computers for as long as I can remember, this passion has sparked many projects starting from humble lego and taking me to where I am today. I created this website with the goal of sharing my journey through this fascinating world of technology with anyone who shares my passion. If you're curious about developing new skills, looking for a new project idea or just someone who enjoys a good code snippet, you're in the right palce!</p>
+            </div>
+            <div class="divider"></div>
+            <div class="div-right">
+                <h2>Reach out</h2>
+                <p>As both part of my studies and as a hobby I am always working on a new project or improving an old one. I am always looking for new opportunites to put my skills to use or answer questions you may have about one of the projects I showcase on this website, so feel free to send me a message with the button below!</p>
+                <button class="button-fancy">Contact me!</button>
+            </div>
         </div>
     </div>
 
+    <div class="div-title">
+        <h1>Spotlight Projects</h1>
+    </div>
 
-    <h1>Who am I?</h1>
+    <text-box title="Genetic algorithm" :title-location="loc ? 'left' : 'right'">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas voluptate corrupti provident atque inventore fugiat doloribus, voluptates recusandae minus, eligendi, dolore optio similique? Laborum quas temporibus vitae, quibusdam voluptatem aspernatur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta, consectetur impedit consequuntur, mollitia nam expedita accusamus reprehenderit sequi sapiente excepturi obcaecati delectus inventore qui distinctio doloribus molestiae aliquid aperiam magnam. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ex, laudantium corporis, asperiores soluta magni voluptates animi perferendis consequatur necessitatibus cum facilis officia laborum libero illo. Ullam excepturi ut magni officiis. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus, dolore tempore aspernatur quaerat sed magni, repellendus tenetur omnis vel cupiditate voluptate modi aperiam illo in distinctio sint. Quidem, maiores cupiditate. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Harum sit praesentium impedit itaque veritatis aspernatur soluta delectus earum facilis deleniti! Optio, alias iusto iste minima velit exercitationem cum quos debitis.
+    </text-box>
 
-    <text-box >
-        <div class="div-about-content">
-            <h1>Who am I?</h1>
-            <p>I'm Huon Swales, I have been interested in robots and computers for as long as I can remember, this passion has sparked many projects starting from humble lego and taking me to where I am today. I created this website with the goal of sharing my journey through this fascinating world of technology with anyone who shares my passion. If you're curious about developing new skills, looking for a new project idea or just someone who enjoys a good code snippet, you're in the right palce!</p>
+    <text-box title="Pong" :title-location="loc ? 'left' : 'right'">
         
-            <h1>What you'll find here</h1>
-            <p>I have split the site into two pages; the timeline and notes. The timeline page gives a quick overview of all the projects that I have worked on in chronological order. The notes page offers more detail and multimedia content that I couldnt fit into a timeline entry. To link these two I have added a button to the timeline entries that have their own notes page so that you can quickly navigate between notes and the timeline.</p>
-        </div>
-        <img src="/me.png" alt="Image of Huon Swales">
     </text-box>
 </template>
 
 <style scoped lang="scss">
+.div-title {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+    h1 {
+        border-bottom: var(--blue-border) solid 2px;
+        position: relative;
+        padding-bottom: 10px;
+
+        @media (max-width: 700px) {
+            margin-top: 50px;
+        }
+
+        &::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 6px;
+            background-color: var(--blue-border);
+            border-radius: 4px 0 4px 4px;
+            bottom: -6px;
+            left: -4px;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 6px;
+            background-color: var(--blue-border);
+            border-radius: 0 4px 4px 4px;
+            bottom: -6px;
+            right: -4px;
+        }
+    }
+}
+
 .div-welcome {
     padding: 10%;
     height: calc(100vh - 24px);
@@ -116,55 +163,65 @@ const goToAbout = () => {
 }
 
 .div-about {
-    display: flex;
-    flex-direction: row;
-    margin: 10%;
+    height: 100vh;
+    font-size: 20px;
+    display: table-cell;
+    vertical-align: middle;
 
-    .divider {
-        background-color: var(--blue-border);
-        width: 2px;
-        margin: 0 5%;
-        position: relative;
-        
-        &::before {
-            content: "";
-            position: absolute;
-            width: 300%;
-            left: -200%;
-            top: -10px;
-            height: 20px;
-            border-radius: 4px 4px 0 4px;
-            background-color: var(--blue-border);
-        }
-        
-        &::after {
-            content: "";
-            position: absolute;
-            width: 300%;
-            left: -200%;
-            bottom: -10px;
-            height: 20px;
-            border-radius: 4px 0 4px 4px;
-            background-color: var(--blue-border);
-        }
-    }
-
-    .div-left {
-        flex: 1;
-    }
-
-    .div-right {
-        flex: 1;
+    .div-about-content {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        margin: 10%;
+    
+        .divider {
+            background-color: var(--blue-border);
+            width: 2px;
+            margin: 0 5%;
+            position: relative;
+            
+            &::before {
+                content: "";
+                position: absolute;
+                width: 300%;
+                left: -200%;
+                top: -10px;
+                height: 20px;
+                border-radius: 4px 4px 0 4px;
+                background-color: var(--blue-border);
+            }
+            
+            &::after {
+                content: "";
+                position: absolute;
+                width: 300%;
+                left: -200%;
+                bottom: -10px;
+                height: 20px;
+                border-radius: 4px 0 4px 4px;
+                background-color: var(--blue-border);
+            }
+        }
 
-        button {
-            margin: 20px auto;
+        .div-left {
+            flex: 1;
+        }
+
+        .div-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+
+            button {
+                margin: 20px auto;
+            }
         }
     }
 
     @media (max-width: 700px) {
-        flex-direction: column;
+        .div-about-content {
+            flex-direction: column;
+            font-size: 17px;
+        }
 
         .div-left, .div-right {
             margin: 10px 0;
