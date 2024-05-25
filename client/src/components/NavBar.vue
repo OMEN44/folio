@@ -12,9 +12,9 @@ import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
             <font-awesome-icon :icon="faBars" />
         </div>
         <div class="page-links">
-            <p>Home</p>
-            <p>Timeline</p>
-            <p>Notes</p>
+            <router-link class="link" to="/home"><p>Home</p></router-link>
+            <router-link class="link" to="/timeline"><p>Timeline</p></router-link>
+            <router-link class="link" to="/notes"><p>Notes</p></router-link>
             <p>Other</p>
         </div>
         <div class="external-links">
@@ -26,11 +26,16 @@ import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 </template>
 
 <style scoped lang="scss">
+.link {
+    text-decoration: none;
+}
+
 .div-nav-container {
     position: fixed;
     top: 0;
     right: 0;
-    transition: width 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+    transition-delay: 1.5s;
     width: 62px;
     height: fit-content;
     margin: 10px;
@@ -44,7 +49,8 @@ import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
     z-index: 3;
 
     &:hover {
-        width: 80%
+        width: 80%;
+        transition-delay: 0s;
     }
 
     .div-icon {
@@ -103,12 +109,17 @@ import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
         }
     }
 
-    @media (max-width: 700px) {
+    @media (max-width: 900px) {
         flex-direction: column;
         width: 0;
+        transition-delay: 0s;
 
         &:hover {
-            width: 60%
+            width: 60%;
+
+            .div-icon {
+                right: calc(60% + 8px);
+            }
         }
 
         .div-icon {
@@ -126,9 +137,22 @@ import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
             }
         }
 
-        li {
-            display: flex;
+        .page-links {
+            margin: 15px;
+        }
+
+        .external-links {
+            margin: 10px 0 15px 0;
+        }
+    }
+
+    @media (max-width: 700px) {
+        .page-links {
             flex-direction: column;
+        }
+
+        .external-links {
+            margin: 10px auto 15px auto;
         }
     }
 }

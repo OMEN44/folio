@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import HomeView from '../views/HomeView.vue'
+import TimelineView from '../views/TimelineView.vue'
 
 export const router = createRouter({
     history: createWebHistory(),
@@ -8,7 +9,7 @@ export const router = createRouter({
         {
             path: '/timeline',
             name: 'timeline',
-            component: HomeView,
+            component: TimelineView,
         },
         {
             path: '/home',
