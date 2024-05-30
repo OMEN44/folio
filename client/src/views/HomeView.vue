@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import CardSpotlight from "../components/CardSpotlight.vue";
+import { showTerminal } from "../scripts/terminal";
 
 const goToAbout = () => {
   const aboutDiv: HTMLDivElement = document.getElementsByClassName(
@@ -22,7 +23,7 @@ window.addEventListener("keyup", (e) => {
   <div class="div-welcome">
     <h2 class="hello">Hello World, I'm</h2>
     <h1>Huon Swales</h1>
-    <h2>This is my folio <span class="flashy"></span></h2>
+    <h2>This is my folio <span class="flashy" @click="showTerminal = true"></span></h2>
     <div class="div-scroll-button" @click="goToAbout">
       <span>See whats inside</span>
       <p>⤵</p>
