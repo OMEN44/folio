@@ -5,7 +5,7 @@ import router from '../plugins/router';
 const outputs = ref<Array<[string | null, string]>>([])
 const prefix = ref<Array<string>>(["<username>@huon.dev", ":", '/', "$ "])
 
-export const showTerminal = ref<boolean>(true)
+export const showTerminal = ref<boolean>(false)
 export const commandInput = ref<HTMLInputElement | null>();
 
 export const Outputs = readonly(outputs)
