@@ -5,17 +5,15 @@ import { commandInput, showTerminal } from './scripts/terminal';
 
 window.addEventListener('keydown', (e: KeyboardEvent) => {
   switch (e.key) {
-    case "T": {
+    case "T": 
       if (e.altKey && e.shiftKey) {
         showTerminal.value = true
         commandInput.value?.focus()
-        break;
       }
-    }
-    case "Escape": {
+      break;
+    case "Escape": 
       showTerminal.value = false
       break;
-    }
   }
 })
 </script>
