@@ -37,6 +37,7 @@ import { commandInput, commandHandler, loadTerminal, Outputs, Prefix, showTermin
 
     p {
         font-family: ubuntu mono;
+        overflow-wrap: break-word;
     }
 
     span {
@@ -55,7 +56,15 @@ import { commandInput, commandHandler, loadTerminal, Outputs, Prefix, showTermin
         font-size: 20px;
         padding: 15px;
         overflow-y: scroll;
+        overflow-x: hidden;
         scrollbar-width: none;
+
+        @media (max-width: 700px) {
+            margin: 10px 0 0 10px;
+            height: 60%;
+            width: calc(100vw - 20px);
+            font-size: 16px;
+        }
 
         &::-webkit-scrollbar {
             display: none;
@@ -65,6 +74,10 @@ import { commandInput, commandHandler, loadTerminal, Outputs, Prefix, showTermin
             display: flex;
             flex-direction: row;
 
+            @media (max-width: 700px) {
+                width: calc(100vw - 20px - 30px);
+            }
+
             input {
                 flex: 1;
                 color: var(--text);
@@ -72,6 +85,11 @@ import { commandInput, commandHandler, loadTerminal, Outputs, Prefix, showTermin
                 font-size: 20px;
                 border: none;
                 margin-left: 9px;
+                width: 100%;
+
+                @media (max-width: 700px) {
+                    font-size: 16px;
+                }
             }
         }
     }
