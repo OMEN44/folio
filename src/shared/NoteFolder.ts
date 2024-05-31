@@ -1,19 +1,19 @@
 import { Entity, Fields, Relations } from "remult";
 import { Account } from "./Acount";
 
-@Entity('noteFolder', {
-    allowApiCrud: true
+@Entity("noteFolder", {
+    allowApiCrud: true,
 })
 export class NoteFolder {
     @Fields.cuid()
-    id  = ""
+    id = "";
 
     @Relations.toOne(() => Account)
-    account?: Account
+    account?: Account;
 
     @Fields.string()
-    title = ""
+    title = "";
 
     @Fields.boolean()
-    public = false
+    public = false;
 }

@@ -1,28 +1,28 @@
 import { Entity, Fields, Validators } from "remult";
 
-@Entity('account', {
-    allowApiCrud: true
+@Entity("account", {
+    allowApiCrud: true,
 })
 export class Account {
     @Fields.cuid()
-    id = ""
+    id = "";
 
     @Fields.string<Account>({
-        validate: Validators.minLength(3)
+        validate: Validators.minLength(3),
     })
-    username = ""
+    username = "";
 
     @Fields.string()
-    email = ""
+    email = "";
 
     @Fields.string()
-    password = ""
+    password = "";
 
     @Fields.number<Account>({
-        defaultValue: () => 3
+        defaultValue: () => 3,
     })
-    access = 3
+    access = 3;
 
     @Fields.createdAt()
-    createdAt = new Date()
+    createdAt = new Date();
 }
