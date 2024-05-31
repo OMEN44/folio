@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import CardSpotlight from "../components/CardSpotlight.vue";
-import { showTerminal } from "../scripts/terminal";
+import { showTerminal } from "../scripts/terminal/terminal";
 
 const goToAbout = () => {
   const aboutDiv: HTMLDivElement = document.getElementsByClassName(
@@ -23,7 +23,9 @@ window.addEventListener("keyup", (e) => {
   <div class="div-welcome">
     <h2 class="hello">Hello World, I'm</h2>
     <h1>Huon Swales</h1>
-    <h2>This is my folio <span class="flashy" @click="showTerminal = true"></span></h2>
+    <h2>
+      This is my folio <span class="flashy" @click="showTerminal = true"></span>
+    </h2>
     <div class="div-scroll-button" @click="goToAbout">
       <span>See whats inside</span>
       <p>⤵</p>
@@ -35,12 +37,13 @@ window.addEventListener("keyup", (e) => {
       <div class="div-left">
         <h2>A bit about me</h2>
         <p>
-          I have been interested in robotics for as long as I can
-          remember, this passion has sparked many projects and taken me to where 
-          I am today. I created this website with the goal of sharing my journey through this fascinating world of
-          technology with anyone who shares my passion. If you're curious about
-          developing new skills, looking for a new project idea or just someone
-          who enjoys a good code snippet, you're in the right place!
+          I have been interested in robotics for as long as I can remember, this
+          passion has sparked many projects and taken me to where I am today. I
+          created this website with the goal of sharing my journey through this
+          fascinating world of technology with anyone who shares my passion. If
+          you're curious about developing new skills, looking for a new project
+          idea or just someone who enjoys a good code snippet, you're in the
+          right place!
         </p>
       </div>
       <div class="divider"></div>

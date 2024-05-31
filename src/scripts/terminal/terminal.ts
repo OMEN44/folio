@@ -1,7 +1,7 @@
 import { nextTick, readonly, ref } from "vue";
-import router from "../plugins/router";
+import router from "../../plugins/router";
 import { remult } from "remult";
-import { Account } from "../shared/Acount";
+import { Account } from "../../shared/Acount";
 
 // (directy of command, text output) first element should be null for command outputs.
 const outputs = ref<Array<[string | null, string]>>([]);
