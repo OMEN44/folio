@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import CardSpotlight from "../components/CardSpotlight.vue";
-import { showTerminal } from "../scripts/terminal";
+import { showTerminal } from "../scripts/terminal/terminal";
 
 const goToAbout = () => {
     const aboutDiv: HTMLDivElement = document.getElementsByClassName(
