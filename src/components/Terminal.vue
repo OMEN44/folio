@@ -1,19 +1,55 @@
 <script setup lang="ts">
-import { commandInput, commandHandler, loadTerminal, Outputs, Prefix, showTerminal } from '../scripts/terminal';
+import {
+    commandInput,
+    commandHandler,
+    loadTerminal,
+    Outputs,
+    Prefix,
+    showTerminal,
+} from "../scripts/terminal";
 </script>
 
 <template>
-<div class="div-terminal-container" v-if="showTerminal" @click="showTerminal = false">
-    <div class="div-terminal" @click="(e) => {commandInput?.focus(); e.stopPropagation()}">
-        <p class="output" v-for="output in Outputs">
-            <span v-if="output[0]"><span class="dark-blue" v-text="Prefix[0]"/>:<span class="blue" v-text="output[0]"/>$</span> {{ output[1] }}
-        </p>
-        <div class="div-input" @keydown="commandHandler">
-            <p><span v-for="(term, index) in Prefix" :class="{'dark-blue': index === 0, blue: index == 2}" v-text="term"/></p>
-            <input autofocus type="text" ref="commandInput" @focus="loadTerminal($route.fullPath)">
+    <div
+        class="div-terminal-container"
+        v-if="showTerminal"
+        @click="showTerminal = false"
+    >
+        <div
+            class="div-terminal"
+            @click="
+                (e) => {
+                    commandInput?.focus();
+                    e.stopPropagation();
+                }
+            "
+        >
+            <p class="output" v-for="output in Outputs">
+                <span v-if="output[0]"
+                    ><span class="dark-blue" v-text="Prefix[0]" />:<span
+                        class="blue"
+                        v-text="output[0]"
+                    />$</span
+                >
+                {{ output[1] }}
+            </p>
+            <div class="div-input" @keydown="commandHandler">
+                <p>
+                    <span
+                        v-for="(term, index) in Prefix"
+                        :class="{ 'dark-blue': index === 0, blue: index == 2 }"
+                        v-text="term"
+                    />
+                </p>
+                <input
+                    autofocus
+                    type="text"
+                    ref="commandInput"
+                    @focus="loadTerminal($route.fullPath)"
+                />
+            </div>
         </div>
     </div>
-</div>
 </template>
 
 <style scoped lang="scss">
@@ -22,7 +58,7 @@ import { commandInput, commandHandler, loadTerminal, Outputs, Prefix, showTermin
 }
 
 .dark-blue {
-    color: var(--blue-border);
+    color: var(--blue);
 }
 
 .div-terminal-container {
@@ -33,7 +69,7 @@ import { commandInput, commandHandler, loadTerminal, Outputs, Prefix, showTermin
     width: 100vw;
     height: 100vh;
     z-index: 5;
-	backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
 
     p {
         font-family: ubuntu mono;
@@ -47,7 +83,7 @@ import { commandInput, commandHandler, loadTerminal, Outputs, Prefix, showTermin
     .div-terminal {
         position: inherit;
         background-color: var(--background);
-        border: 2px var(--blue-border) solid;
+        border: 2px var(--blue) solid;
         border-radius: 8px;
         width: 80%;
         height: 80%;

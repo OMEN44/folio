@@ -17,6 +17,8 @@ export const loadTerminal = (route: string) => {
     prefix.value[2] = route;
 };
 
+export const loadCommand = (commands: CommandType | Array<CommandType>) => {};
+
 export const commandHandler = (e: KeyboardEvent) => {
     if (e.key === "Enter" && commandInput.value?.value) {
         e.preventDefault();
