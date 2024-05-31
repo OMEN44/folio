@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+      "experimentalDecorators": true,
+      "rootDir": "src",
+      "outDir": "dist",
+      "esModuleInterop": true
+    },
+    "include": [
+      "src/server/**/*",
+      "src/shared/**/*"
+    ]
+  }
