@@ -1,9 +1,9 @@
 :root {
     --background: #1A1A1B;
-    --blue-border: #7DFDFE;
+    --blue: #7DFDFE;
     --blue-alt: #22AFCA;
-    --blue-background: #7dfefe8c;
-    --orange-border: #FF831F;
+    --blue-background: #7dfefe27;
+    --orange: #FF831F;
     --text: rgb(208, 208, 208);
 }
 
@@ -19,7 +19,7 @@ h2 {
 
 .button-fancy {
     cursor: pointer;
-	border: 2px var(--blue-border) solid;
+	border: 2px var(--blue) solid;
 	padding: 10px 15px;
 	border-radius: 4px;
 	background-color: var(--background);
@@ -28,6 +28,6 @@ h2 {
 }
 
 .button-fancy:hover {
-	color: var(--blue-border);
-    box-shadow: 0 0 20px 0 var(--blue-border);
+	color: var(--blue);
+    box-shadow: 0 0 20px 0 var(--blue);
 }
