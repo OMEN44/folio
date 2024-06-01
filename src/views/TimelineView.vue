@@ -4,10 +4,19 @@ import { faSearch, faFilter, faAdd } from "@fortawesome/free-solid-svg-icons";
 import { ref } from "vue";
 import TimelineEvent from "../components/TimelineEvent.vue";
 
+const yearRef = ref<HTMLParagraphElement | null>();
 const year = ref<number>(new Date().getFullYear());
 
 const changeYear = (e: Event) => {
-    console.log(e);
+    const percent =
+        (e.target as HTMLDivElement).scrollTop /
+        ((e.target as HTMLDivElement).scrollHeight -
+            ((e.target as HTMLDivElement).parentElement as HTMLDivElement)
+                .scrollHeight);
+
+    yearRef.value!.style.top = `calc((100% - 75px) * ${percent})`;
+    // This one is funny:
+    //yearRef.value!.style.left = `calc((100% - 75px) * ${percent} * ${percent} * ${percent})`;
 };
 </script>
 
@@ -22,7 +31,7 @@ const changeYear = (e: Event) => {
             </div>
         </div>
         <div class="div-timeline">
-            <p class="year" v-text="year"></p>
+            <p class="year" v-text="year" ref="yearRef"></p>
             <div class="div-events" @scroll="changeYear">
                 <timeline-event v-for="i in 30" />
             </div>
@@ -72,7 +81,6 @@ const changeYear = (e: Event) => {
         flex: 1;
         margin: 10px 10px 25px 40px;
         position: relative;
-        padding-left: 20px;
 
         @media (max-width: 600px) {
             border: none;
@@ -91,6 +99,7 @@ const changeYear = (e: Event) => {
             width: 100%;
             overflow-y: scroll;
             scrollbar-width: none;
+            padding: 0 5% 0 calc(5% + 40px);
 
             &::-webkit-scrollbar {
                 display: none;
@@ -105,7 +114,9 @@ const changeYear = (e: Event) => {
             left: 0;
             top: 0%;
             background-color: var(--blue-background);
-            padding: 15px 2px;
+            padding: 0 2px;
+            height: 75px;
+            text-align: center;
             border-radius: 0 6px 6px 0;
         }
 
