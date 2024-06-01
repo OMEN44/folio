@@ -3,20 +3,32 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faSearch, faFilter, faAdd } from "@fortawesome/free-solid-svg-icons";
 import { ref } from "vue";
 import TimelineEvent from "../components/TimelineEvent.vue";
+import { TimelineData, updateTimeline, year } from "../scripts/timeline";
+import { Timeline } from "../shared/Timeline";
+
+updateTimeline();
 
 const yearRef = ref<HTMLParagraphElement | null>();
-const year = ref<number>(new Date().getFullYear());
 
 const changeYear = (e: Event) => {
-    const percent =
+    let percent =
         (e.target as HTMLDivElement).scrollTop /
         ((e.target as HTMLDivElement).scrollHeight -
             ((e.target as HTMLDivElement).parentElement as HTMLDivElement)
                 .scrollHeight);
 
+    if (percent > 1) percent = 1;
+
     yearRef.value!.style.top = `calc((100% - 75px) * ${percent})`;
     // This one is funny:
     //yearRef.value!.style.left = `calc((100% - 75px) * ${percent} * ${percent} * ${percent})`;
+
+    year.value =
+        TimelineData.value[
+            Math.round(
+                (100 * percent) / (100 / (TimelineData.value.length - 1))
+            )
+        ].date.getFullYear();
 };
 </script>
 
@@ -33,7 +45,10 @@ const changeYear = (e: Event) => {
         <div class="div-timeline">
             <p class="year" v-text="year" ref="yearRef"></p>
             <div class="div-events" @scroll="changeYear">
-                <timeline-event v-for="i in 30" />
+                <timeline-event
+                    v-for="event in TimelineData"
+                    :event-data="(event as Timeline)"
+                />
             </div>
         </div>
     </div>

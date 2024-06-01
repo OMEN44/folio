@@ -1,27 +1,33 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Timeline } from "../shared/Timeline";
+
+const props = defineProps<{ eventData: Timeline }>();
+console.log(props.eventData.image);
 </script>
 
 <template>
     <div class="div-event-container">
         <div class="div-header">
-            <h2>Title</h2>
-            <kbd>Date</kbd>
+            <h2>{{ eventData.title }}</h2>
+            <kbd>
+                {{
+                    eventData.date.toLocaleString("default", { month: "long" })
+                }}
+                {{ eventData.date.getFullYear() }}
+            </kbd>
         </div>
         <div class="div-body">
             <p>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Consequuntur ipsam ipsa sunt enim sequi facere deleniti eum,
-                mollitia autem, quae delectus aliquam quaerat quo obcaecati
-                nobis reprehenderit voluptas! Repellendus, impedit.
+                {{ eventData.content }}
             </p>
-            <img src="../../public/vite.svg" alt="" />
+            <img :src="eventData.image?.path" alt="" />
         </div>
         <div class="div-footer">
             <font-awesome-icon class="option-icon" :icon="faEdit" />
             <font-awesome-icon class="option-icon" :icon="faTrash" />
-            <span class="tag" v-for="i in 8">tag</span>
+            <span class="tag" v-for="tag in eventData.tags">{{ tag }}</span>
         </div>
     </div>
 </template>
@@ -36,6 +42,14 @@ import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
         display: flex;
         flex-direction: row;
         position: relative;
+
+        @media (max-width: 500px) {
+            flex-direction: column;
+
+            h2 {
+                font-size: ;
+            }
+        }
 
         kbd {
             margin-top: auto;
