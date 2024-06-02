@@ -17,8 +17,6 @@ export const loadTerminal = (route: string) => {
     prefix.value[2] = route;
 };
 
-export const loadCommand = (commands: CommandType | Array<CommandType>) => {};
-
 export const commandHandler = (e: KeyboardEvent) => {
     if (e.key === "Enter" && commandInput.value?.value) {
         e.preventDefault();
@@ -40,6 +38,22 @@ export const commandHandler = (e: KeyboardEvent) => {
                 fetchCommand(args).then((res) => {
                     outputs.value.push([null, res]);
                 });
+                break;
+            case "evil":
+                document.body.style.setProperty("--blue", "#FF831F");
+                document.body.style.setProperty("--blue-alt", "#b95300");
+                document.body.style.setProperty(
+                    "--blue-background",
+                    "#FF831F27"
+                );
+                break;
+            case "good":
+                document.body.style.setProperty("--blue", "#7DFDFE");
+                document.body.style.setProperty("--blue-alt", "#22AFCA");
+                document.body.style.setProperty(
+                    "--blue-background",
+                    "#7DFDFE27"
+                );
                 break;
             case "advice":
                 outputs.value.push([null, "..."]);
