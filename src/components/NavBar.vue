@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faBars, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import { setOverlayContent } from "../scripts/overlay";
 </script>
 
 <template>
@@ -21,6 +22,10 @@ import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
             <font-awesome-icon :icon="faGithub" />
             <font-awesome-icon :icon="faLinkedin" />
             <font-awesome-icon :icon="faEnvelope" />
+            <font-awesome-icon
+                @click="setOverlayContent('account')"
+                :icon="faUser"
+            />
         </div>
     </div>
 </template>

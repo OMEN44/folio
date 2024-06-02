@@ -1,24 +1,28 @@
 <script setup lang="ts">
 import NavBar from "./components/NavBar.vue";
+import Overlay from "./components/Overlay.vue";
 import Terminal from "./components/Terminal.vue";
+import { closeOverlay, ShowOverlay } from "./scripts/overlay";
 import { commandInput, showTerminal } from "./scripts/terminal";
 
 window.addEventListener("keydown", (e: KeyboardEvent) => {
     switch (e.key) {
         case "T":
-            if (e.altKey && e.shiftKey) {
+            if (e.altKey && e.shiftKey && !ShowOverlay.value) {
                 showTerminal.value = true;
                 commandInput.value?.focus();
             }
             break;
         case "Escape":
             showTerminal.value = false;
+            closeOverlay();
             break;
     }
 });
 </script>
 
 <template>
+    <Overlay />
     <Terminal />
     <nav-bar />
     <div class="div-view-container">

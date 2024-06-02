@@ -3,8 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Timeline } from "../shared/Timeline";
 
-const props = defineProps<{ eventData: Timeline }>();
-console.log(props.eventData.image);
+defineProps<{ eventData: Timeline }>();
 </script>
 
 <template>
