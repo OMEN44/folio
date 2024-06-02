@@ -79,15 +79,6 @@ const changeYear = (e: Event) => {
             display: flex;
             flex-direction: row;
             height: fit-content;
-
-            .option-icon {
-                background-color: var(--blue-background);
-                border-radius: 4px;
-                width: 30px;
-                height: 30px;
-                padding: 5px;
-                margin-right: 10px;
-            }
         }
     }
 

@@ -25,8 +25,8 @@ console.log(props.eventData.image);
             <img :src="eventData.image?.path" alt="" />
         </div>
         <div class="div-footer">
-            <font-awesome-icon class="option-icon" :icon="faEdit" />
-            <font-awesome-icon class="option-icon" :icon="faTrash" />
+            <font-awesome-icon class="option-icon-small" :icon="faEdit" />
+            <font-awesome-icon class="option-icon-small" :icon="faTrash" />
             <span class="tag" v-for="tag in eventData.tags">{{ tag }}</span>
         </div>
     </div>
@@ -116,19 +116,12 @@ console.log(props.eventData.image);
         flex-direction: row;
         flex-wrap: wrap;
 
-        span,
-        .option-icon {
+        span {
             background-color: var(--blue-background);
             border-radius: 4px;
             margin: 5px;
             padding: 3px 7px;
             text-align: center;
-        }
-
-        .option-icon {
-            height: 17px;
-            width: 17px;
-            padding: 8px;
         }
     }
 }

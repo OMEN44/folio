@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import TextBox from "../components/TextBox.vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { Spotlight } from "../shared/Spotlight";
 
 defineProps<{ data: Spotlight }>();
@@ -7,33 +8,90 @@ defineProps<{ data: Spotlight }>();
 </script>
 
 <template>
-    <div class="div-spotlight">
-        <text-box :title="data.timeline!.title">
-            <div class="div-content">
-                {{ data.timeline?.content }}
-                <img :src="data.timeline?.image?.path" />
-            </div>
-        </text-box>
+    <div class="div-spotlight" :class="{ divider: data.priority }">
+        <div class="image-border" v-if="data.timeline?.image">
+            <img :src="data.timeline?.image.path" />
+        </div>
+        <div class="div-content">
+            <h2>
+                {{ data.timeline?.title }}
+                <font-awesome-icon class="option-icon-small" :icon="faLink" />
+            </h2>
+            <p v-text="data.timeline?.content" />
+        </div>
     </div>
 </template>
 
 <style scoped lang="scss">
 .div-spotlight {
-    margin: 40px 30px;
+    margin: 40px auto;
+    width: 80%;
+    display: flex;
+    flex-direction: row;
 
-    .div-content {
-        display: flex;
-        flex-direction: row;
+    @media (max-width: 700px) {
+        flex-direction: column-reverse;
+    }
 
-        p {
-            font-size: 25px;
+    .image-border {
+        border: 2px var(--blue) solid;
+        border-radius: 10px;
+        height: fit-content;
+        width: fit-content;
+        margin: auto 60px auto 10px;
+
+        @media (max-width: 700px) {
+            margin: 20px auto 0 auto;
         }
 
         img {
-            max-width: 200px;
+            max-width: 300px;
+            min-width: 100px;
             height: 100%;
-            margin: 10px;
+            border: 10px var(--background) solid;
+            border-radius: 15px;
         }
+    }
+
+    .div-content {
+        p {
+            font-size: 22px;
+        }
+
+        h2 {
+            font-weight: 500;
+        }
+
+        .option-icon-small {
+            margin: 10px 0 0 5px;
+        }
+    }
+}
+
+.divider {
+    border-top: 2px var(--blue) solid;
+    padding-top: 40px;
+    position: relative;
+
+    &::after,
+    &::before {
+        content: "";
+        position: absolute;
+        background-color: var(--blue);
+        width: 20px;
+        height: 7px;
+    }
+
+    &::before {
+        top: -2px;
+        left: -5px;
+        border-radius: 5px 0 5px 5px;
+    }
+
+    &::after {
+        top: -7px;
+        right: -5px;
+        border-radius: 5px 5px 5px 0;
     }
 }
 </style>

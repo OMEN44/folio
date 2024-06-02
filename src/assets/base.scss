@@ -31,3 +31,28 @@ h2 {
 	color: var(--blue);
     box-shadow: 0 0 20px 0 var(--blue);
 }
+
+.option-icon, .option-icon-small {
+    background-color: var(--blue-background);
+    border-radius: 4px;
+    margin: 5px;
+    cursor: pointer;
+    transition: transform 0.5s ease-out;
+}
+
+.option-icon {
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+}
+
+.option-icon-small {
+    height: 20px;
+    width: 20px;
+    padding: 6px;
+}
+
+.option-icon:hover, .option-icon-small:hover {
+    transform: translateY(-5px);
+}
+

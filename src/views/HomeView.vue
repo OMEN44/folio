@@ -17,10 +17,7 @@ const goToAbout = () => {
 remult
     .repo(Spotlight)
     .find({ include: { timeline: { include: { image: true } } } })
-    .then((res) => {
-        spotlightData.value = res;
-        console.log(spotlightData.value);
-    });
+    .then((res) => (spotlightData.value = res));
 </script>
 
 <template>
