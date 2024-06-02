@@ -43,23 +43,28 @@ console.log(props.eventData.image);
         flex-direction: row;
         position: relative;
 
-        @media (max-width: 500px) {
+        @media (max-width: 700px) {
             flex-direction: column;
-
-            h2 {
-                font-size: ;
-            }
+            margin-bottom: 5px;
         }
 
         kbd {
             margin-top: auto;
             font-size: 20px;
             padding: 5px 5px 5px 15px;
+
+            @media (max-width: 500px) {
+                padding: 0 5px 5px 0;
+            }
         }
 
         h2 {
             font-weight: bold;
             font-size: 35px;
+
+            @media (max-width: 500px) {
+                font-size: 27px;
+            }
         }
 
         &::before,
@@ -88,9 +93,21 @@ console.log(props.eventData.image);
         flex-direction: row;
         padding: 10px;
         font-size: 20px;
+        align-items: center;
+
+        img {
+            max-width: 300px;
+            height: 100%;
+            margin: 10px;
+
+            @media (max-width: 700px) {
+                margin: 15px 0;
+            }
+        }
 
         @media (max-width: 700px) {
             flex-direction: column;
+            font-size: 16px;
         }
     }
 

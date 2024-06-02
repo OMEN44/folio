@@ -10,7 +10,9 @@ export const year = ref<number>(new Date().getFullYear());
 export const TimelineData = readonly(timelineData);
 
 export const updateTimeline = async () => {
-    const rawTimelineData: Timeline[] = await remult.repo(Timeline).find();
+    const rawTimelineData: Timeline[] = await remult
+        .repo(Timeline)
+        .find({ include: { image: true, note: true } });
 
     // filter and sort results
     rawTimelineData.sort((a, b) =>

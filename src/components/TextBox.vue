@@ -36,6 +36,7 @@ defineProps<{
         border: 2px var(--blue) solid;
         border-radius: 5px;
         padding: 10px;
+        font-size: 20px;
     }
 }
 

@@ -2,6 +2,10 @@
 import { ref } from "vue";
 import CardSpotlight from "../components/CardSpotlight.vue";
 import { showTerminal } from "../scripts/terminal/terminal";
+import { Spotlight } from "../shared/Spotlight";
+import { remult } from "remult";
+
+const spotlightData = ref<Spotlight[]>([]);
 
 const goToAbout = () => {
     const aboutDiv: HTMLDivElement = document.getElementsByClassName(
@@ -10,13 +14,13 @@ const goToAbout = () => {
     aboutDiv.scrollIntoView({ behavior: "smooth" });
 };
 
-const loc = ref<boolean>(true);
-
-window.addEventListener("keyup", (e) => {
-    if (e.key == "r") {
-        loc.value = !loc.value;
-    }
-});
+remult
+    .repo(Spotlight)
+    .find({ include: { timeline: { include: { image: true } } } })
+    .then((res) => {
+        spotlightData.value = res;
+        console.log(spotlightData.value);
+    });
 </script>
 
 <template>
@@ -68,8 +72,7 @@ window.addEventListener("keyup", (e) => {
         <h1>Spotlight Projects</h1>
     </div>
 
-    <!-- replace ranged loop with number of spotlights from database -->
-    <card-spotlight v-for="n in 3" :priority="n" />
+    <card-spotlight v-for="spotlight in spotlightData" :data="spotlight" />
 </template>
 
 <style scoped lang="scss">
