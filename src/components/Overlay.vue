@@ -1,16 +1,13 @@
 <script setup lang="ts">
 import { closeOverlay, OverlayContent, ShowOverlay } from "../scripts/overlay";
-import OverlayAccount from "./OverlayAccount.vue";
+import OverlayAccount from "./account/Login.vue";
 </script>
 
 <template>
     <div class="overlay-container" v-if="ShowOverlay" @click="closeOverlay()">
         <div class="div-overlay-border">
-            <div
-                class="div-overlay-content"
-                @click="(e) => e.stopPropagation()"
-            >
-                <overlay-account v-if="OverlayContent === 'account'" />
+            <div class="div-overlay-content" @click="(e) => e.stopPropagation()">
+                <overlay-account v-if="OverlayContent === 'login'" />
             </div>
         </div>
     </div>

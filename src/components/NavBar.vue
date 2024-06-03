@@ -12,9 +12,7 @@ import { setOverlayContent } from "../scripts/overlay";
         </div>
         <div class="page-links">
             <router-link class="link" to="/home"><p>Home</p></router-link>
-            <router-link class="link" to="/timeline"
-                ><p>Timeline</p></router-link
-            >
+            <router-link class="link" to="/timeline"><p>Timeline</p></router-link>
             <router-link class="link" to="/notes"><p>Notes</p></router-link>
             <p>Other</p>
         </div>
@@ -22,10 +20,7 @@ import { setOverlayContent } from "../scripts/overlay";
             <font-awesome-icon :icon="faGithub" />
             <font-awesome-icon :icon="faLinkedin" />
             <font-awesome-icon :icon="faEnvelope" />
-            <font-awesome-icon
-                @click="setOverlayContent('account')"
-                :icon="faUser"
-            />
+            <font-awesome-icon @click="setOverlayContent('login')" :icon="faUser" />
         </div>
     </div>
 </template>
@@ -113,7 +108,7 @@ import { setOverlayContent } from "../scripts/overlay";
         }
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 1000px) {
         flex-direction: column;
         width: 0;
         transition-delay: 0s;

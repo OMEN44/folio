@@ -17,4 +17,5 @@ export const api = remultExpress({
     }),
     admin: true,
     entities: [Account, Image, Note, NoteFolder, Spotlight, Timeline],
+    getUser: (req) => req.session!["user"],
 });
