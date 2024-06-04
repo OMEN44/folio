@@ -1,5 +1,5 @@
 import { Entity, Fields, Relations } from "remult";
-import { Account } from "./Acount";
+import { Account } from "./Account";
 
 @Entity("noteFolder", {
     allowApiCrud: true,

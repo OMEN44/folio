@@ -1,56 +1,31 @@
 <script setup lang="ts">
+import { cdCommand } from "../scripts/commands/cdCommand";
+import { prefixToString } from "../scripts/commands/Command";
 import {
     commandInput,
     commandHandler,
     loadTerminal,
     Outputs,
-    Prefix,
+    prefix,
     showTerminal,
+    loadCommands,
 } from "../scripts/terminal";
+
+loadCommands([cdCommand]);
 </script>
 
 <template>
-    <div
-        class="div-terminal-container"
-        v-if="showTerminal"
-        @click="showTerminal = false"
-    >
+    <div class="div-terminal-container" v-if="showTerminal" @click="showTerminal = false">
         <div class="div-terminal-border">
-            <div
-                class="div-terminal"
-                @click="
-                    (e) => {
-                        commandInput?.focus();
-                        e.stopPropagation();
-                    }
-                "
-            >
+            <div class="div-terminal" @click.stop="commandInput?.focus()">
                 <p class="output" v-for="output in Outputs">
-                    <span v-if="output[0]"
-                        ><span class="dark-blue" v-text="Prefix[0]" />:<span
-                            class="blue"
-                            v-text="output[0]"
-                        />$</span
-                    >
-                    {{ output[1] }}
+                    <!-- <span v-if="output[0]"><span class="dark-blue" v-text="Prefix[0]" />:<span class="blue" v-text="output[0]" />$</span> -->
+                    <span v-if="output.prefix">{{ prefixToString(output.prefix) }}</span
+                    >{{ output.value }}
                 </p>
                 <div class="div-input" @keydown="commandHandler">
-                    <p>
-                        <span
-                            v-for="(term, index) in Prefix"
-                            :class="{
-                                'dark-blue': index === 0,
-                                blue: index == 2,
-                            }"
-                            v-text="term"
-                        />
-                    </p>
-                    <input
-                        autofocus
-                        type="text"
-                        ref="commandInput"
-                        @focus="loadTerminal($route.fullPath)"
-                    />
+                    <p v-html="prefixToString(prefix)"></p>
+                    <input autofocus type="text" ref="commandInput" @focus="loadTerminal($route.fullPath)" />
                 </div>
             </div>
         </div>

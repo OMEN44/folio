@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import CardSpotlight from "../components/CardSpotlight.vue";
-import { showTerminal } from "../scripts/terminal/terminal";
+import { showTerminal } from "../scripts/terminal";
 import { Spotlight } from "../shared/Spotlight";
 import { remult } from "remult";
 
 const spotlightData = ref<Spotlight[]>([]);
 
 const goToAbout = () => {
-    const aboutDiv: HTMLDivElement = document.getElementsByClassName(
-        "div-about"
-    )[0] as HTMLDivElement;
+    const aboutDiv: HTMLDivElement = document.getElementsByClassName("div-about")[0] as HTMLDivElement;
     aboutDiv.scrollIntoView({ behavior: "smooth" });
 };
 
@@ -39,26 +37,21 @@ remult
             <div class="div-left">
                 <h2>A bit about me</h2>
                 <p>
-                    I have been interested in robotics for as long as I can
-                    remember, this passion has sparked many projects and taken
-                    me to where I am today. I created this website with the goal
-                    of sharing my journey through this fascinating world of
-                    technology with anyone who shares my passion. If you're
-                    curious about developing new skills, looking for a new
-                    project idea or just someone who enjoys a good code snippet,
-                    you're in the right place!
+                    I have been interested in robotics for as long as I can remember, this passion has sparked many
+                    projects and taken me to where I am today. I created this website with the goal of sharing my
+                    journey through this fascinating world of technology with anyone who shares my passion. If you're
+                    curious about developing new skills, looking for a new project idea or just someone who enjoys a
+                    good code snippet, you're in the right place!
                 </p>
             </div>
             <div class="divider"></div>
             <div class="div-right">
                 <h2>Reach out</h2>
                 <p>
-                    As both part of my studies and as a hobby I am always
-                    working on a new project or improving an old one. I am
-                    always looking for new opportunites to put my skills to use
-                    or answer questions you may have about one of the projects I
-                    showcase on this website, so feel free to send me a message
-                    with the button below!
+                    As both part of my studies and as a hobby I am always working on a new project or improving an old
+                    one. I am always looking for new opportunites to put my skills to use or answer questions you may
+                    have about one of the projects I showcase on this website, so feel free to send me a message with
+                    the button below!
                 </p>
                 <button class="button-fancy">Contact me!</button>
             </div>

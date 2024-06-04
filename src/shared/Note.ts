@@ -1,29 +1,29 @@
 import { Entity, Fields, Relations } from "remult";
-import { Account } from "./Acount";
+import { Account } from "./Account";
 import { NoteFolder } from "./NoteFolder";
 
-@Entity('note', {
-    allowApiCrud: true
+@Entity("note", {
+    allowApiCrud: true,
 })
 export class Note {
     @Fields.cuid()
-    id = ""
+    id = "";
 
     @Fields.boolean()
-    public = false
+    public = false;
 
     @Fields.string()
-    title = ""
+    title = "";
 
     @Fields.string()
-    content = ""
+    content = "";
 
     @Fields.date()
-    lastEdit = new Date()
+    lastEdit = new Date();
 
     @Relations.toOne(() => Account)
-    author?: Account
+    author?: Account;
 
     @Relations.toOne(() => NoteFolder)
-    parentFolder?: NoteFolder
+    parentFolder?: NoteFolder;
 }

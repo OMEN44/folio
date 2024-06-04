@@ -1,146 +1,146 @@
 import { nextTick, readonly, ref } from "vue";
-import router from "../plugins/router";
-import { remult } from "remult";
-import { Account } from "../shared/Acount";
+import { CommandOutputType, CommandType, PrefixType } from "./commands/Command";
 
 // (directy of command, text output) first element should be null for command outputs.
-const outputs = ref<Array<[string | null, string]>>([]);
-const prefix = ref<Array<string>>(["<username>@huon.dev", ":", "/", "$ "]);
+const outputs = ref<Array<CommandOutputType>>([]);
+const commandLabels = ref<Array<string>>([]);
+const commandList = ref<Array<CommandType>>([]);
+// View command history
+let oldCommandInput: string | undefined = undefined;
+let historyIndex: number = outputs.value.length;
 
 export const showTerminal = ref<boolean>(false);
 export const commandInput = ref<HTMLInputElement | null>();
+export const prefix = ref<PrefixType>({ username: "username", directory: "/", admin: false });
 
 export const Outputs = readonly(outputs);
-export const Prefix = readonly(prefix);
 
 export const loadTerminal = (route: string) => {
-    prefix.value[2] = route;
+    prefix.value.directory = route;
+};
+
+export const loadCommands = (commands: CommandType[]) => {
+    commandLabels.value = [];
+    commandList.value = [];
+    commands.forEach((command) => {
+        if (commandLabels.value.includes(command.label))
+            console.error(`Skipping duplicate of command: ${command.label}`);
+        else {
+            commandLabels.value.push(command.label);
+            commandList.value.push(command);
+        }
+    });
 };
 
 export const commandHandler = (e: KeyboardEvent) => {
     if (e.key === "Enter" && commandInput.value?.value) {
         e.preventDefault();
-        outputs.value?.push([prefix.value[2], commandInput.value?.value]);
-        const args = commandInput.value?.value.split(" ");
-        switch (args[0]) {
-            case "exit":
-                showTerminal.value = false;
-                break;
-            case "cd":
-                cdCommand(args);
-                break;
-            case "account":
-                createAccountCommand(args).then((response) => {
-                    outputs.value.push([null, response!]);
-                });
-                break;
-            case "fetch":
-                fetchCommand(args).then((res) => {
-                    outputs.value.push([null, res]);
-                });
-                break;
-            case "evil":
-                document.body.style.setProperty("--blue", "#FF831F");
-                document.body.style.setProperty("--blue-alt", "#b95300");
-                document.body.style.setProperty(
-                    "--blue-background",
-                    "#FF831F27"
-                );
-                break;
-            case "good":
-                document.body.style.setProperty("--blue", "#7DFDFE");
-                document.body.style.setProperty("--blue-alt", "#22AFCA");
-                document.body.style.setProperty(
-                    "--blue-background",
-                    "#7DFDFE27"
-                );
-                break;
-            case "advice":
-                outputs.value.push([null, "..."]);
-                const interval = setInterval(() => {
-                    if (outputs.value[outputs.value.length - 1][1] === "...") {
-                        outputs.value[outputs.value.length - 1][1] = "....";
-                        return;
-                    }
-                    outputs.value[outputs.value.length - 1][1] = "...";
-                }, 300); //
-                adviceCommand().then((res) => {
-                    clearInterval(interval);
-                    outputs.value[outputs.value.length - 1] = [null, res];
-                });
-                break;
-            default:
-                outputs.value?.push([null, `'${args[0]}': Command not found`]);
-        }
-        commandInput.value.value = "";
 
+        // prepare command and args
+        const args: Array<string> = commandInput.value.value.split(" ");
+        const commandIndex = commandLabels.value.indexOf(args[0]);
+
+        // Push executed command to history
+        pushStringOutput(prefix.value.directory, commandInput.value.value);
+
+        // execute command
+        if (commandIndex !== -1) {
+            const output: CommandOutputType | undefined = commandList.value[commandIndex].onCommand(args);
+            if (output !== undefined) outputs.value.push(output);
+        } else {
+            outputs.value?.push({ value: `'${args[0]}': Command not found` });
+        }
+
+        // move histy index to end again
+        historyIndex = outputs.value.length;
+
+        //prepare for next command
+        commandInput.value.value = "";
         nextTick(() => {
             commandInput.value?.scrollIntoView();
         });
+    } else if (e.key === "ArrowUp" && outputs.value.length > 0 && commandInput.value) {
+        // If the index can be moved up once it should be to prevent the historyindex getting stuck
+        if (historyIndex > 0) historyIndex--;
+        // decrement the history index while in bounds and check if that output has a prefix
+        for (let i = historyIndex; i >= 0; i--) {
+            if (outputs.value[i].prefix !== undefined) {
+                historyIndex = i;
+                break;
+            }
+        }
+        commandInput.value.value = outputs.value[historyIndex].value;
+    } else if (e.key === "ArrowDown" && outputs.value.length > 0 && commandInput.value) {
+        // same logic as above but with moving up
+        if (historyIndex < outputs.value.length - 1 && outputs.value[1 + historyIndex].prefix !== undefined)
+            historyIndex++;
+        for (let i = historyIndex; i < outputs.value.length; i++) {
+            if (outputs.value[i].prefix !== undefined) {
+                historyIndex = i;
+                break;
+            }
+        }
+        commandInput.value.value = outputs.value[historyIndex].value;
     }
 };
 
-const cdCommand = (args: Array<string>) => {
-    if (args.length === 1) return;
-    if (["timeline", "home", "notes"].includes(args[1])) {
-        router.push({ name: args[1] });
-        prefix.value[2] = `/${args[1]}`;
-    } else {
-        outputs.value?.push([
-            null,
-            `cd: No such file or directory '${args[1]}'`,
-        ]);
-    }
+export const pushStringOutput = (directory: string, outputValue: string) => {
+    outputs.value?.push({
+        prefix: { username: prefix.value.username, directory: directory, admin: prefix.value.admin },
+        value: outputValue,
+    });
 };
 
-const createAccountCommand = async (args: Array<string>) => {
-    switch (args[1]) {
-        case "create":
-            if (args.length !== 5)
-                return "create arguments: [username] [email] [password]";
-            await remult.repo(Account).insert({
-                username: args[2],
-                email: args[3],
-                password: args[4],
-            });
-            return "Account created!";
-        default:
-            let output = "name:\t\temail:\n";
-            (await remult.repo(Account).find()).forEach((account) => {
-                output = output + `${account.username}\t\t${account.email}\n`;
-            });
-            output =
-                output +
-                `\nTotal number of users: ${remult.repo(Account).count()}`;
-            return output;
-    }
-};
+// const createAccountCommand = async (args: Array<string>) => {
+//     switch (args[1]) {
+//         case "create":
+//             if (args.length !== 5) return "create arguments: [username] [email] [password]";
+//             await remult
+//                 .repo(Account)
+//                 .insert({
+//                     username: args[2],
+//                     email: args[3],
+//                     password: args[4],
+//                 })
+//                 .catch((error) => {
+//                     console.log(error);
+//                 });
+//             return "Account created!";
+//         default:
+//             let output = "name:\t\temail:\n";
+//             (await remult.repo(Account).find()).forEach((account) => {
+//                 output = output + `${account.username}\t\t${account.email}\n`;
+//             });
+//             output = output + `\nTotal number of users: ${remult.repo(Account).count()}`;
+//             return output;
+//     }
+// };
 
-const fetchCommand = async (args: Array<string>) => {
-    args.shift();
-    if (args.length === 0) {
-        return "Please provide a url";
-    }
+// const fetchCommand = async (args: Array<string>) => {
+//     args.shift();
+//     if (args.length === 0) {
+//         return "Please provide a url";
+//     }
 
-    try {
-        const opts = {
-            method: "GET",
-            body: JSON.stringify(args[2]),
-        };
-        const response = await fetch(args[0], opts);
-        const data = await response.text();
-        return data;
-    } catch (error) {
-        return error as string;
-    }
-};
+//     try {
+//         const opts = {
+//             method: "GET",
+//             body: JSON.stringify(args[2]),
+//         };
+//         const response = await fetch(args[0], opts);
+//         const data = await response.text();
+//         return data;
+//     } catch (error) {
+//         return error as string;
+//     }
+// };
 
-const adviceCommand = async () => {
-    try {
-        const response = await fetch("https://api.adviceslip.com/advice");
-        const data = await response.json();
-        return data.slip.advice;
-    } catch (error) {
-        return error as string;
-    }
-};
+// const adviceCommand = async () => {
+//     try {
+//         const response = await fetch("https://api.adviceslip.com/advice");
+//         const data = await response.json();
+//         return data.slip.advice;
+//     } catch (error) {
+//         return error as string;
+//     }
+// };
