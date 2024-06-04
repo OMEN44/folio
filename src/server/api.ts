@@ -1,6 +1,6 @@
 import { remultExpress } from "remult/remult-express";
 import { createKnexDataProvider } from "remult/remult-knex";
-import { Account } from "../shared/Acount";
+import { Account } from "../shared/Account";
 import { Image } from "../shared/Image";
 import { Note } from "../shared/Note";
 import { NoteFolder } from "../shared/NoteFolder";

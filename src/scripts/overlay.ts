@@ -1,7 +1,7 @@
 import { readonly, ref } from "vue";
 
-const showOverlay = ref<boolean>(true);
-const overlayContent = ref<string>("login");
+const showOverlay = ref<boolean>(false);
+const overlayContent = ref<string>("");
 
 export const ShowOverlay = readonly(showOverlay);
 export const OverlayContent = readonly(overlayContent);
