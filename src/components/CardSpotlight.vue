@@ -39,6 +39,8 @@ defineProps<{ data: Spotlight }>();
         height: fit-content;
         width: fit-content;
         margin: auto 60px auto 10px;
+        padding: 10px;
+        background-color: var(--blue-background);
 
         @media (max-width: 700px) {
             margin: 20px auto 0 auto;
@@ -48,7 +50,6 @@ defineProps<{ data: Spotlight }>();
             max-width: 300px;
             min-width: 100px;
             height: 100%;
-            border: 10px var(--background) solid;
             border-radius: 15px;
         }
     }

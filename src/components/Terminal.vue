@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { cdCommand } from "../scripts/commands/cdCommand";
-import { prefixToString } from "../scripts/commands/Command";
+import { formatString, outputToHTML, prefixToString } from "../scripts/commands/Command";
+import { testCommand } from "../scripts/commands/testCommand";
 import {
     commandInput,
     commandHandler,
@@ -11,20 +12,16 @@ import {
     loadCommands,
 } from "../scripts/terminal";
 
-loadCommands([cdCommand]);
+loadCommands([cdCommand, testCommand]);
 </script>
 
 <template>
     <div class="div-terminal-container" v-if="showTerminal" @click="showTerminal = false">
         <div class="div-terminal-border">
             <div class="div-terminal" @click.stop="commandInput?.focus()">
-                <p class="output" v-for="output in Outputs">
-                    <!-- <span v-if="output[0]"><span class="dark-blue" v-text="Prefix[0]" />:<span class="blue" v-text="output[0]" />$</span> -->
-                    <span v-if="output.prefix">{{ prefixToString(output.prefix) }}</span
-                    >{{ output.value }}
-                </p>
+                <p class="output" v-for="output in Outputs" v-html="outputToHTML(output)"></p>
                 <div class="div-input" @keydown="commandHandler">
-                    <p v-html="prefixToString(prefix)"></p>
+                    <p v-html="formatString(prefixToString(prefix))"></p>
                     <input autofocus type="text" ref="commandInput" @focus="loadTerminal($route.fullPath)" />
                 </div>
             </div>
@@ -33,14 +30,6 @@ loadCommands([cdCommand]);
 </template>
 
 <style scoped lang="scss">
-.blue {
-    color: var(--blue-alt);
-}
-
-.dark-blue {
-    color: var(--blue);
-}
-
 .div-terminal-container {
     background-color: rgba(0, 0, 0, 0.3);
     position: fixed;
@@ -111,6 +100,8 @@ loadCommands([cdCommand]);
                     border: none;
                     margin-left: 9px;
                     width: 100%;
+                    padding: 1px 2px;
+                    border-radius: 0;
 
                     @media (max-width: 700px) {
                         font-size: 16px;

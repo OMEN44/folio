@@ -72,7 +72,11 @@ export const commandHandler = (e: KeyboardEvent) => {
         commandInput.value.value = outputs.value[historyIndex].value;
     } else if (e.key === "ArrowDown" && outputs.value.length > 0 && commandInput.value) {
         // same logic as above but with moving up
-        if (historyIndex < outputs.value.length - 1 && outputs.value[1 + historyIndex].prefix !== undefined)
+        if (
+            historyIndex < outputs.value.length - 1 &&
+            // make sure it doesn't default to an output
+            !(outputs.value[1 + historyIndex].prefix === undefined && historyIndex + 2 === outputs.value.length)
+        )
             historyIndex++;
         for (let i = historyIndex; i < outputs.value.length; i++) {
             if (outputs.value[i].prefix !== undefined) {
@@ -80,8 +84,13 @@ export const commandHandler = (e: KeyboardEvent) => {
                 break;
             }
         }
+        // if (historyIndex === outputs.value.length - 1) {
+        //     commandInput.value.value = "";
+        // } else {
         commandInput.value.value = outputs.value[historyIndex].value;
+        // }
     }
+    console.log(historyIndex);
 };
 
 export const pushStringOutput = (directory: string, outputValue: string) => {

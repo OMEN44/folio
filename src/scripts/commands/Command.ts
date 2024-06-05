@@ -7,21 +7,34 @@ export const pingCommand: CommandType = {
     },
 };
 
+const validClasses: string[] = [
+    "primary",
+    "secondary",
+    "bold",
+    "italics",
+    "red",
+    "orange",
+    "yellow",
+    "green",
+    "blue",
+    "purple",
+    "pink",
+];
+
 export const formatString = (raw: string): string => {
-    let tokenLocations: Array<[number, number]> = [];
-
-    Array.from(raw).forEach((character, index) => {
-        let inToken: boolean = false;
-        if (inToken === false && character === "!" && raw[index + 1] === "[") {
-            inToken = true;
-            tokenLocations.push([index, -1]);
-        }
-        if (inToken === true && character === "]") {
-            inToken = false;
-        }
+    const regex: RegExp = /\!\[(.*?)\]\[(.*?)\]/g;
+    const formattedText: string = raw.replace(regex, (_match, classes: string, content: string) => {
+        const classList: string = classes
+            .split(",")
+            .map((c: string) => {
+                if (validClasses.includes(c.trim())) return c.trim();
+                else return "";
+            })
+            .join(" ");
+        return `<span class='${classList}'>${content}</span>`;
     });
-
-    return "";
+    //console.log(formattedText);
+    return formattedText;
 };
 
 export interface PrefixType {
@@ -45,12 +58,17 @@ export interface CommandOutputType {
 
 export const outputToHTML = (output: CommandOutputType): string => {
     let outputHTML: string = "";
+    let outputValue: string = output.value.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
     if (output.prefix) {
         outputHTML = `${prefixToString(output.prefix)}`;
+    } else {
+        outputValue = outputValue.split("\\n").join("<br/>");
     }
 
-    return outputHTML;
+    outputHTML = `${outputHTML}${outputValue}`;
+
+    return formatString(outputHTML);
 };
 
 export interface CommandType {
