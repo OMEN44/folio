@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { cdCommand } from "../scripts/commands/cdCommand";
+import { adviceCommand } from "../scripts/commands/adviceCommand";
+import { cdCommand, exitCommand, lsCommand, testCommand, themeCommand } from "../scripts/commands/systemCommands";
 import { formatString, outputToHTML, prefixToString } from "../scripts/commands/Command";
-import { testCommand } from "../scripts/commands/testCommand";
 import {
     commandInput,
     commandHandler,
@@ -12,7 +12,7 @@ import {
     loadCommands,
 } from "../scripts/terminal";
 
-loadCommands([cdCommand, testCommand]);
+loadCommands([cdCommand, testCommand, adviceCommand, exitCommand, lsCommand, themeCommand]);
 </script>
 
 <template>

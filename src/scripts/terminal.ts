@@ -6,7 +6,7 @@ const outputs = ref<Array<CommandOutputType>>([]);
 const commandLabels = ref<Array<string>>([]);
 const commandList = ref<Array<CommandType>>([]);
 // View command history
-let oldCommandInput: string | undefined = undefined;
+let commandHistory: string[] = [""];
 let historyIndex: number = outputs.value.length;
 
 export const showTerminal = ref<boolean>(false);
@@ -33,6 +33,8 @@ export const loadCommands = (commands: CommandType[]) => {
 };
 
 export const commandHandler = (e: KeyboardEvent) => {
+    if (historyIndex === commandHistory.length - 1)
+        commandHistory[commandHistory.length - 1] = commandInput.value!.value;
     if (e.key === "Enter" && commandInput.value?.value) {
         e.preventDefault();
 
@@ -45,52 +47,52 @@ export const commandHandler = (e: KeyboardEvent) => {
 
         // execute command
         if (commandIndex !== -1) {
-            const output: CommandOutputType | undefined = commandList.value[commandIndex].onCommand(args);
-            if (output !== undefined) outputs.value.push(output);
+            const output = commandList.value[commandIndex].onCommand(args);
+            if (output !== undefined) {
+                if (typeof (output as Promise<any>).then === "function") {
+                    const spinner = ["/", "-", "\\", "|"];
+                    let spinnerIndex = 1;
+                    const outputIndex = outputs.value.push({ value: spinner[0] }) - 1;
+                    const interval = setInterval(() => {
+                        outputs.value[outputIndex] = { value: spinner[spinnerIndex % 4] };
+                        spinnerIndex++;
+                        // check if spinner index has gone to far
+                    }, 100);
+                    (output as Promise<CommandOutputType>).then((result) => {
+                        clearInterval(interval);
+                        outputs.value[outputIndex] = result;
+                        nextTick(() => {
+                            commandInput.value?.scrollIntoView();
+                        });
+                    });
+                } else outputs.value.push(output as CommandOutputType);
+            }
         } else {
             outputs.value?.push({ value: `'${args[0]}': Command not found` });
         }
 
-        // move histy index to end again
-        historyIndex = outputs.value.length;
+        //update the command history
+        commandHistory[commandHistory.length - 1] = commandInput.value.value;
+        commandHistory.push("");
+        // move histoy index to end again
+        historyIndex = commandHistory.length - 1;
 
         //prepare for next command
         commandInput.value.value = "";
         nextTick(() => {
             commandInput.value?.scrollIntoView();
         });
-    } else if (e.key === "ArrowUp" && outputs.value.length > 0 && commandInput.value) {
-        // If the index can be moved up once it should be to prevent the historyindex getting stuck
-        if (historyIndex > 0) historyIndex--;
-        // decrement the history index while in bounds and check if that output has a prefix
-        for (let i = historyIndex; i >= 0; i--) {
-            if (outputs.value[i].prefix !== undefined) {
-                historyIndex = i;
-                break;
-            }
+    } else if (e.key === "ArrowUp") {
+        if (historyIndex > 0) {
+            historyIndex--;
         }
-        commandInput.value.value = outputs.value[historyIndex].value;
-    } else if (e.key === "ArrowDown" && outputs.value.length > 0 && commandInput.value) {
-        // same logic as above but with moving up
-        if (
-            historyIndex < outputs.value.length - 1 &&
-            // make sure it doesn't default to an output
-            !(outputs.value[1 + historyIndex].prefix === undefined && historyIndex + 2 === outputs.value.length)
-        )
+        commandInput.value!.value = commandHistory[historyIndex];
+    } else if (e.key === "ArrowDown") {
+        if (historyIndex < commandHistory.length - 1) {
             historyIndex++;
-        for (let i = historyIndex; i < outputs.value.length; i++) {
-            if (outputs.value[i].prefix !== undefined) {
-                historyIndex = i;
-                break;
-            }
         }
-        // if (historyIndex === outputs.value.length - 1) {
-        //     commandInput.value.value = "";
-        // } else {
-        commandInput.value.value = outputs.value[historyIndex].value;
-        // }
+        commandInput.value!.value = commandHistory[historyIndex];
     }
-    console.log(historyIndex);
 };
 
 export const pushStringOutput = (directory: string, outputValue: string) => {
@@ -99,57 +101,3 @@ export const pushStringOutput = (directory: string, outputValue: string) => {
         value: outputValue,
     });
 };
-
-// const createAccountCommand = async (args: Array<string>) => {
-//     switch (args[1]) {
-//         case "create":
-//             if (args.length !== 5) return "create arguments: [username] [email] [password]";
-//             await remult
-//                 .repo(Account)
-//                 .insert({
-//                     username: args[2],
-//                     email: args[3],
-//                     password: args[4],
-//                 })
-//                 .catch((error) => {
-//                     console.log(error);
-//                 });
-//             return "Account created!";
-//         default:
-//             let output = "name:\t\temail:\n";
-//             (await remult.repo(Account).find()).forEach((account) => {
-//                 output = output + `${account.username}\t\t${account.email}\n`;
-//             });
-//             output = output + `\nTotal number of users: ${remult.repo(Account).count()}`;
-//             return output;
-//     }
-// };
-
-// const fetchCommand = async (args: Array<string>) => {
-//     args.shift();
-//     if (args.length === 0) {
-//         return "Please provide a url";
-//     }
-
-//     try {
-//         const opts = {
-//             method: "GET",
-//             body: JSON.stringify(args[2]),
-//         };
-//         const response = await fetch(args[0], opts);
-//         const data = await response.text();
-//         return data;
-//     } catch (error) {
-//         return error as string;
-//     }
-// };
-
-// const adviceCommand = async () => {
-//     try {
-//         const response = await fetch("https://api.adviceslip.com/advice");
-//         const data = await response.json();
-//         return data.slip.advice;
-//     } catch (error) {
-//         return error as string;
-//     }
-// };

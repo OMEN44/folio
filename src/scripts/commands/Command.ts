@@ -1,12 +1,3 @@
-export const pingCommand: CommandType = {
-    label: "ping",
-    onCommand: (args): CommandOutputType => {
-        return {
-            value: "test",
-        };
-    },
-};
-
 const validClasses: string[] = [
     "primary",
     "secondary",
@@ -58,12 +49,18 @@ export interface CommandOutputType {
 
 export const outputToHTML = (output: CommandOutputType): string => {
     let outputHTML: string = "";
-    let outputValue: string = output.value.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    let outputValue: string = output.value
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/;/g, "&#59;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
 
     if (output.prefix) {
         outputHTML = `${prefixToString(output.prefix)}`;
     } else {
-        outputValue = outputValue.split("\\n").join("<br/>");
+        outputValue = outputValue.split("\n").join("<br/>");
+        outputValue = outputValue.split("\t").join("&emsp;&emsp;");
     }
 
     outputHTML = `${outputHTML}${outputValue}`;
@@ -73,5 +70,5 @@ export const outputToHTML = (output: CommandOutputType): string => {
 
 export interface CommandType {
     label: string;
-    onCommand(args: Array<string>): CommandOutputType | undefined;
+    onCommand(args: Array<string>): CommandOutputType | Promise<any> | undefined;
 }
