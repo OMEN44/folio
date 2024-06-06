@@ -1,6 +1,29 @@
 import router from "../../plugins/router";
 import { CommandType } from "./Command";
 import { prefix, showTerminal } from "../terminal";
+import { remult } from "remult";
+import { Spotlight } from "../../shared/Spotlight";
+
+export const spotlightCommand: CommandType = {
+    label: "spotlight",
+    onCommand: async (args: Array<string>) => {
+        // check permissions
+        if (args.length === 1) {
+            const spotlightProjects: Spotlight[] = await remult.repo(Spotlight).find({ include: { timeline: true } });
+            let output = "![bold][Current events under the spotlight:]";
+            spotlightProjects.forEach((project) => {
+                output = `${output}\n${project.priority}. ${project.timeline?.title} ![italics][(id: ${project.timeline?.id})]`;
+            });
+            return { value: output };
+        }
+        if (["timeline", "home", "notes"].includes(args[1])) {
+            router.push({ name: args[1] });
+            prefix.value.directory = `/${args[1]}`;
+        } else {
+            return { value: `cd: No such file or directory '${args[1]}'` };
+        }
+    },
+};
 
 export const cdCommand: CommandType = {
     label: "cd",

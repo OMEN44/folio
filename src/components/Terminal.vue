@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { adviceCommand } from "../scripts/commands/adviceCommand";
-import { cdCommand, exitCommand, lsCommand, testCommand, themeCommand } from "../scripts/commands/systemCommands";
+import {
+    cdCommand,
+    exitCommand,
+    lsCommand,
+    spotlightCommand,
+    testCommand,
+    themeCommand,
+} from "../scripts/commands/systemCommands";
 import { formatString, outputToHTML, prefixToString } from "../scripts/commands/Command";
 import {
     commandInput,
@@ -12,14 +19,15 @@ import {
     loadCommands,
 } from "../scripts/terminal";
 
-loadCommands([cdCommand, testCommand, adviceCommand, exitCommand, lsCommand, themeCommand]);
+loadCommands([cdCommand, testCommand, adviceCommand, exitCommand, lsCommand, themeCommand, spotlightCommand]);
 </script>
 
 <template>
     <div class="div-terminal-container" v-if="showTerminal" @click="showTerminal = false">
         <div class="div-terminal-border">
             <div class="div-terminal" @click.stop="commandInput?.focus()">
-                <p class="output" v-for="output in Outputs" v-html="outputToHTML(output)"></p>
+                <!-- -->
+                <p class="output" v-for="output in Outputs" v-html="outputToHTML(output)" @click.stop></p>
                 <div class="div-input" @keydown="commandHandler">
                     <p v-html="formatString(prefixToString(prefix))"></p>
                     <input autofocus type="text" ref="commandInput" @focus="loadTerminal($route.fullPath)" />
