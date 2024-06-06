@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { ErrorMessage, formIndex, login, loginDetails, logout, register } from "../../scripts/login";
+import { ErrorMessage, formIndex, login, loginDetails, logout, register } from "../scripts/login";
 import { remult } from "remult";
-import getAxios from "../../plugins/axios";
+import getAxios from "../plugins/axios";
 
 onMounted(async () => {
     console.log(remult.user);
