@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { closeOverlay, OverlayContent, ShowOverlay } from "../scripts/overlay";
-import OverlayAccount from "./account/Login.vue";
+import OverlayAccount from "./Login.vue";
 </script>
 
 <template>
