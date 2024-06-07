@@ -15,6 +15,12 @@ cd client
 npm i
 ```
 
-### Run client
+### Run client and server
+
+#### Client
 
 `npm run dev`
+
+#### Server
+
+`npm run server`

@@ -30,7 +30,14 @@ loadCommands([cdCommand, testCommand, adviceCommand, exitCommand, lsCommand, the
                 <p class="output" v-for="output in Outputs" v-html="outputToHTML(output)" @click.stop></p>
                 <div class="div-input" @keydown="commandHandler">
                     <p v-html="formatString(prefixToString(prefix))"></p>
-                    <input autofocus type="text" ref="commandInput" @focus="loadTerminal($route.fullPath)" />
+                    <input
+                        autofocus
+                        autocorrect="off"
+                        spellcheck="false"
+                        autocapitalize="off"
+                        type="text"
+                        ref="commandInput"
+                        @focus="loadTerminal($route.fullPath)" />
                 </div>
             </div>
         </div>
@@ -80,6 +87,7 @@ loadCommands([cdCommand, testCommand, adviceCommand, exitCommand, lsCommand, the
             border-radius: 8px;
             height: 100%;
             width: 100%;
+            cursor: text;
 
             @media (max-width: 700px) {
                 margin: 10px 0 0 10px;
@@ -90,6 +98,10 @@ loadCommands([cdCommand, testCommand, adviceCommand, exitCommand, lsCommand, the
 
             &::-webkit-scrollbar {
                 display: none;
+            }
+
+            .output {
+                width: fit-content;
             }
 
             .div-input {
