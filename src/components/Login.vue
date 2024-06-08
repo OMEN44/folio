@@ -2,17 +2,8 @@
 import { onMounted } from "vue";
 import { ErrorMessage, formIndex, login, loginDetails, logout, register } from "../scripts/login";
 import { remult } from "remult";
-import getAxios from "../plugins/axios";
 
 onMounted(async () => {
-    console.log(remult.user);
-    remult.user = await getAxios()
-        .get("user")
-        .then((response) => {
-            console.log(response);
-            return response.data;
-        });
-
     formIndex.value = remult.authenticated() ? 2 : 0;
 });
 </script>

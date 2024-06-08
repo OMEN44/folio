@@ -1,8 +1,6 @@
 import axios from "axios";
-import { useCookies } from "vue3-cookies";
-const { cookies } = useCookies();
 
-const BASE_URL = import.meta.env.VITE_API_DEV === "true" ? "http://localhost:3000" : "https://huon.dev";
+const BASE_URL = "";
 
 const axiosInstance = axios.create({
     baseURL: `${BASE_URL}/api/`,
@@ -10,7 +8,6 @@ const axiosInstance = axios.create({
 });
 
 const getAxios = () => {
-    axiosInstance.defaults.headers.Authorization = `Bearer ${cookies.get("authToken")}`;
     return axiosInstance;
 };
 

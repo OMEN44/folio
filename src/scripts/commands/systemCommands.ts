@@ -46,6 +46,17 @@ export const exitCommand: CommandType = {
     },
 };
 
+export const whoamiCommand: CommandType = {
+    label: "whoami",
+    onCommand: () => {
+        if (!remult.authenticated()) return { value: "Error: unknown user" };
+        else
+            return {
+                value: `Logged in as ![bold][${remult.user?.name}]\n![italics][Access level: ${remult.user?.roles}]`,
+            };
+    },
+};
+
 export const lsCommand: CommandType = {
     label: "ls",
     onCommand: () => {
@@ -82,23 +93,10 @@ export const themeCommand: CommandType = {
 export const testCommand: CommandType = {
     label: "test",
     onCommand: () => {
-        const validClasses: string[] = [
-            "primary",
-            "secondary",
-            "bold",
-            "italics",
-            "red",
-            "orange",
-            "yellow",
-            "green",
-            "blue",
-            "purple",
-            "pink",
-        ];
-        let output = "";
-        for (let style in validClasses) {
-            output = `${output} ![${validClasses[style]}][${validClasses[style]}] `;
-        }
-        return { value: output };
+        return {
+            value: `User Auth:\t\t${remult.authenticated()}\nUser Info:\t\t{ id: ${remult.user?.id}, name: ${
+                remult.user?.name
+            }, roles: ${remult.user?.roles} }`,
+        };
     },
 };

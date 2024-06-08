@@ -2,19 +2,11 @@ import express from "express";
 import { api } from "./api";
 import cookieSession from "cookie-session";
 import bodyParser from "body-parser";
-import cors from "cors";
 import { remult, UserInfo } from "remult";
 import { Account } from "../shared/Account";
 
 const app = express();
 app.use(bodyParser.json());
-app.use(
-    cors({
-        origin: ["http://localhost:5173", "https://localhost:5173"],
-        credentials: true,
-        exposedHeaders: ["set-cookie"],
-    })
-);
 app.use(
     cookieSession({
         keys: ["spicy secret ;)", "spicy secret ;)"],
@@ -54,7 +46,6 @@ app.post("/api/logout", (req, res) => {
 });
 
 app.get("/api/user", (req, res) => {
-    console.log(req.session);
     res.json(req.session!["user"]);
 });
 

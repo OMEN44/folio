@@ -7,6 +7,7 @@ import {
     spotlightCommand,
     testCommand,
     themeCommand,
+    whoamiCommand,
 } from "../scripts/commands/systemCommands";
 import { formatString, outputToHTML, prefixToString } from "../scripts/commands/Command";
 import {
@@ -19,7 +20,16 @@ import {
     loadCommands,
 } from "../scripts/terminal";
 
-loadCommands([cdCommand, testCommand, adviceCommand, exitCommand, lsCommand, themeCommand, spotlightCommand]);
+loadCommands([
+    cdCommand,
+    testCommand,
+    adviceCommand,
+    exitCommand,
+    lsCommand,
+    themeCommand,
+    spotlightCommand,
+    whoamiCommand,
+]);
 </script>
 
 <template>
