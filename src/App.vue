@@ -5,7 +5,7 @@ import Overlay from "./components/Overlay.vue";
 import Terminal from "./components/Terminal.vue";
 import getAxios from "./plugins/axios";
 import { closeOverlay, ShowOverlay } from "./scripts/overlay";
-import { commandInput, showTerminal } from "./scripts/terminal";
+import { commandInput, prefix, showTerminal } from "./scripts/terminal";
 import { remult } from "remult";
 
 window.addEventListener("keydown", (e: KeyboardEvent) => {
@@ -24,12 +24,15 @@ window.addEventListener("keydown", (e: KeyboardEvent) => {
 });
 
 onMounted(async () => {
-    console.log(remult.user);
     remult.user = await getAxios()
         .get("user")
         .then((response) => {
             return response.data;
         });
+
+    // update terminal prefix
+    prefix.value.admin = remult.authenticated() ? remult.user?.roles![0] === "0" : false;
+    prefix.value.username = remult.authenticated() ? remult.user?.name! : "guest";
 });
 </script>
 

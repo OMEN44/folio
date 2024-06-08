@@ -33,7 +33,7 @@ onMounted(async () => {
             </div>
         </div>
         <div class="div-logout" v-if="formIndex === 2">
-            <h2>You are logged in as: <span>User</span></h2>
+            <h2>You are logged in as: {{ remult.user?.name }}</h2>
             <span v-html="ErrorMessage"></span>
             <div class="div-buttons">
                 <button class="button-border" type="submit" @click.prevent="logout">Log out</button>

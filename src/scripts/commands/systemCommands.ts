@@ -3,6 +3,7 @@ import { CommandType } from "./Command";
 import { prefix, showTerminal } from "../terminal";
 import { remult } from "remult";
 import { Spotlight } from "../../shared/Spotlight";
+import { logout } from "../login";
 
 export const spotlightCommand: CommandType = {
     label: "spotlight",
@@ -57,6 +58,19 @@ export const whoamiCommand: CommandType = {
     },
 };
 
+export const logoutCommand: CommandType = {
+    label: "logout",
+    onCommand: () => {
+        if (!remult.authenticated()) return { value: "Error: unknown user" };
+        else {
+            logout();
+            return {
+                value: `Bye ${remult.user?.name}.`,
+            };
+        }
+    },
+};
+
 export const lsCommand: CommandType = {
     label: "ls",
     onCommand: () => {
@@ -93,10 +107,11 @@ export const themeCommand: CommandType = {
 export const testCommand: CommandType = {
     label: "test",
     onCommand: () => {
+        console.log(remult.user!.roles);
         return {
             value: `User Auth:\t\t${remult.authenticated()}\nUser Info:\t\t{ id: ${remult.user?.id}, name: ${
                 remult.user?.name
-            }, roles: ${remult.user?.roles} }`,
+            }, isAdmin: ${(remult.user!.roles as string[])[0] === "0"} }`,
         };
     },
 };

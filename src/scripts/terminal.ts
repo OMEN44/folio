@@ -1,5 +1,6 @@
 import { nextTick, readonly, ref } from "vue";
 import { CommandOutputType, CommandType, PrefixType } from "./commands/Command";
+import { remult } from "remult";
 
 // (directy of command, text output) first element should be null for command outputs.
 const outputs = ref<Array<CommandOutputType>>([]);
@@ -11,7 +12,11 @@ let historyIndex: number = outputs.value.length;
 
 export const showTerminal = ref<boolean>(false);
 export const commandInput = ref<HTMLInputElement | null>();
-export const prefix = ref<PrefixType>({ username: "username", directory: "/", admin: false });
+export const prefix = ref<PrefixType>({
+    username: "username",
+    directory: "/",
+    admin: false,
+});
 
 export const Outputs = readonly(outputs);
 

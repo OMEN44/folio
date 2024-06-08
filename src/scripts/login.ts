@@ -1,6 +1,7 @@
 import { readonly, ref } from "vue";
 import getAxios from "../plugins/axios";
 import { remult } from "remult";
+import { prefix } from "./terminal";
 
 const errorMessage = ref<string | null>(null);
 
@@ -23,8 +24,12 @@ export const login = async () => {
     getAxios()
         .post("/login", { username: loginDetails.value.username, password: loginDetails.value.password })
         .then((response) => {
-            console.log(response.data);
             remult.user = response.data;
+
+            prefix.value.admin = remult.user?.roles![0] === "0";
+            prefix.value.username = remult.user?.name!;
+            errorMessage.value = "";
+            formIndex.value = 2;
         })
         .catch((error) => {
             errorMessage.value = error.response.data;
@@ -41,4 +46,7 @@ export const logout = async () => {
             errorMessage.value = "Signed out successfully";
             formIndex.value = 0;
         });
+
+    prefix.value.admin = false;
+    prefix.value.username = "guest";
 };

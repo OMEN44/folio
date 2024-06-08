@@ -3,6 +3,7 @@ import { adviceCommand } from "../scripts/commands/adviceCommand";
 import {
     cdCommand,
     exitCommand,
+    logoutCommand,
     lsCommand,
     spotlightCommand,
     testCommand,
@@ -29,6 +30,7 @@ loadCommands([
     themeCommand,
     spotlightCommand,
     whoamiCommand,
+    logoutCommand,
 ]);
 </script>
 
