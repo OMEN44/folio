@@ -9,14 +9,14 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="div-account">
+    <form class="div-account" @submit.prevent>
         <div class="div-login" v-if="formIndex === 0">
             <h2>Welcome user</h2>
             <span v-html="ErrorMessage"></span>
-            <input v-model="loginDetails.username" type="text" placeholder="Username" />
+            <input autofocus v-model="loginDetails.username" type="text" placeholder="Username" />
             <input v-model="loginDetails.password" type="password" placeholder="Password" />
             <div class="div-buttons">
-                <button class="button-border" type="submit" @click.prevent="login">Submit</button>
+                <button class="button-border" type="submit" @click="login">Submit</button>
                 <button class="button-border" type="button" @click="formIndex = 1">Register</button>
             </div>
         </div>
@@ -28,7 +28,7 @@ onMounted(async () => {
             <input v-model="loginDetails.password" type="password" placeholder="Password" />
             <input v-model="loginDetails.confirmPassword" type="password" placeholder="Confirm Password" />
             <div class="div-buttons">
-                <button class="button-border" type="submit" @click.prevent="register">Submit</button>
+                <button class="button-border" type="submit" @submit.prevent="register">Submit</button>
                 <button class="button-border" type="button" @click="formIndex = 0">Cancel</button>
             </div>
         </div>
@@ -39,7 +39,7 @@ onMounted(async () => {
                 <button class="button-border" type="submit" @click.prevent="logout">Log out</button>
             </div>
         </div>
-    </div>
+    </form>
 </template>
 
 <style scoped lang="scss">

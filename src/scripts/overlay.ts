@@ -11,5 +11,4 @@ export const closeOverlay = () => (showOverlay.value = false);
 export const setOverlayContent = (content: string) => {
     showOverlay.value = true;
     overlayContent.value = content;
-    console.log(OverlayContent.value);
 };

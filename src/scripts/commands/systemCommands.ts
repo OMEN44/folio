@@ -4,24 +4,34 @@ import { prefix, showTerminal } from "../terminal";
 import { remult } from "remult";
 import { Spotlight } from "../../shared/Spotlight";
 import { logout } from "../login";
+import { Timeline } from "../../shared/Timeline";
 
 export const spotlightCommand: CommandType = {
     label: "spotlight",
+    admin: true,
     onCommand: async (args: Array<string>) => {
         // check permissions
-        if (args.length === 1) {
+        if (args.length <= 2 || !(Number(args[1]) >= 0)) {
             const spotlightProjects: Spotlight[] = await remult.repo(Spotlight).find({ include: { timeline: true } });
             let output = "![bold][Current events under the spotlight:]";
             spotlightProjects.forEach((project) => {
                 output = `${output}\n${project.priority}. ${project.timeline?.title} ![italics][(id: ${project.timeline?.id})]`;
             });
-            return { value: output };
-        }
-        if (["timeline", "home", "notes"].includes(args[1])) {
-            router.push({ name: args[1] });
-            prefix.value.directory = `/${args[1]}`;
+            return { value: `${output}\n\nTo change spotlight: spotlight [position] [name | id]` };
         } else {
-            return { value: `cd: No such file or directory '${args[1]}'` };
+            let timelineEvent = await remult.repo(Timeline).findOne({ where: { id: args[2] } });
+            if (!timelineEvent) {
+                const title = args.splice(2, args.length - 2);
+                timelineEvent = await remult.repo(Timeline).findOne({ where: { title: title.join(" ") } });
+            }
+            if (timelineEvent) {
+                await remult.repo(Spotlight).delete(Number(args[1]));
+                await remult.repo(Spotlight).insert({ priority: Number(args[1]), timeline: timelineEvent });
+            } else {
+                return { value: `No timeline event found.\nCommand usage: spotlight [position] [name | id]` };
+            }
+
+            return undefined;
         }
     },
 };
@@ -106,8 +116,8 @@ export const themeCommand: CommandType = {
 
 export const testCommand: CommandType = {
     label: "test",
+    admin: true,
     onCommand: () => {
-        console.log(remult.user!.roles);
         return {
             value: `User Auth:\t\t${remult.authenticated()}\nUser Info:\t\t{ id: ${remult.user?.id}, name: ${
                 remult.user?.name

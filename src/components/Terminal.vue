@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { adviceCommand } from "../scripts/commands/adviceCommand";
+import { adviceCommand, jokeCommand } from "../scripts/commands/adviceCommand";
 import {
     cdCommand,
     exitCommand,
@@ -31,6 +31,7 @@ loadCommands([
     spotlightCommand,
     whoamiCommand,
     logoutCommand,
+    jokeCommand,
 ]);
 </script>
 

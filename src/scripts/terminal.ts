@@ -1,6 +1,5 @@
 import { nextTick, readonly, ref } from "vue";
 import { CommandOutputType, CommandType, PrefixType } from "./commands/Command";
-import { remult } from "remult";
 
 // (directy of command, text output) first element should be null for command outputs.
 const outputs = ref<Array<CommandOutputType>>([]);
@@ -52,25 +51,32 @@ export const commandHandler = (e: KeyboardEvent) => {
 
         // execute command
         if (commandIndex !== -1) {
-            const output = commandList.value[commandIndex].onCommand(args);
-            if (output !== undefined) {
-                if (typeof (output as Promise<any>).then === "function") {
-                    const spinner = ["/", "-", "\\", "|"];
-                    let spinnerIndex = 1;
-                    const outputIndex = outputs.value.push({ value: spinner[0] }) - 1;
-                    const interval = setInterval(() => {
-                        outputs.value[outputIndex] = { value: spinner[spinnerIndex % 4] };
-                        spinnerIndex++;
-                        // check if spinner index has gone to far
-                    }, 100);
-                    (output as Promise<CommandOutputType>).then((result) => {
-                        clearInterval(interval);
-                        outputs.value[outputIndex] = result;
-                        nextTick(() => {
-                            commandInput.value?.scrollIntoView();
+            // check for permissions
+            if (commandList.value[commandIndex].admin && !prefix.value.admin) {
+                outputs.value.push({ value: `${args[0]}: Permission denied` });
+            } else {
+                const output = commandList.value[commandIndex].onCommand(args);
+                if (output !== undefined) {
+                    // if the command is async create a spinner and wait
+                    if (typeof (output as Promise<CommandOutputType>).then === "function") {
+                        const spinner = ["/", "-", "\\", "|"];
+                        let spinnerIndex = 1;
+                        const outputIndex = outputs.value.push({ value: spinner[0] }) - 1;
+                        const interval = setInterval(() => {
+                            outputs.value[outputIndex] = { value: spinner[spinnerIndex % 4] };
+                            spinnerIndex++;
+                            // check if spinner index has gone to far
+                        }, 100);
+                        (output as Promise<any>).then((result) => {
+                            clearInterval(interval);
+                            outputs.value[outputIndex] =
+                                result === undefined ? { value: `${args[0]}: Success` } : result;
+                            nextTick(() => {
+                                commandInput.value?.scrollIntoView();
+                            });
                         });
-                    });
-                } else outputs.value.push(output as CommandOutputType);
+                    } else outputs.value.push(output as CommandOutputType);
+                }
             }
         } else {
             outputs.value?.push({ value: `'${args[0]}': Command not found` });

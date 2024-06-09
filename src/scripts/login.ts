@@ -47,6 +47,8 @@ export const logout = async () => {
             formIndex.value = 0;
         });
 
+    loginDetails.value = { username: "", email: "", password: "", confirmPassword: "" };
+
     prefix.value.admin = false;
     prefix.value.username = "guest";
 };
