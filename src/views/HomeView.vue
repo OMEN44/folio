@@ -1,21 +1,14 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import CardSpotlight from "../components/CardSpotlight.vue";
+import { loadSpotlight, spotlightData } from "../scripts/spotlight";
 import { showTerminal } from "../scripts/terminal";
-import { Spotlight } from "../shared/Spotlight";
-import { remult } from "remult";
-
-const spotlightData = ref<Spotlight[]>([]);
 
 const goToAbout = () => {
     const aboutDiv: HTMLDivElement = document.getElementsByClassName("div-about")[0] as HTMLDivElement;
     aboutDiv.scrollIntoView({ behavior: "smooth" });
 };
 
-remult
-    .repo(Spotlight)
-    .find({ include: { timeline: { include: { image: true } } } })
-    .then((res) => (spotlightData.value = res));
+loadSpotlight();
 </script>
 
 <template>

@@ -5,6 +5,7 @@ import { remult } from "remult";
 import { Spotlight } from "../../shared/Spotlight";
 import { logout } from "../login";
 import { Timeline } from "../../shared/Timeline";
+import { loadSpotlight } from "../spotlight";
 
 export const spotlightCommand: CommandType = {
     label: "spotlight",
@@ -30,7 +31,7 @@ export const spotlightCommand: CommandType = {
             } else {
                 return { value: `No timeline event found.\nCommand usage: spotlight [position] [name | id]` };
             }
-
+            loadSpotlight();
             return undefined;
         }
     },
