@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { closeOverlay, OverlayContent, ShowOverlay } from "../scripts/overlay";
 import OverlayAccount from "./Login.vue";
+import TimelineFilter from "./TimelineFilter.vue";
+import TimelineForm from "./TimelineForm.vue";
+import TimelineSearch from "./TimelineSearch.vue";
 </script>
 
 <template>
@@ -8,6 +11,9 @@ import OverlayAccount from "./Login.vue";
         <div class="div-overlay-border">
             <div class="div-overlay-content" @click="(e) => e.stopPropagation()">
                 <overlay-account v-if="OverlayContent === 'login'" />
+                <TimelineSearch v-if="OverlayContent === 'timeline-search'" />
+                <TimelineFilter v-if="OverlayContent === 'timeline-filter'" />
+                <TimelineForm v-if="OverlayContent === 'timeline-form'" />
             </div>
         </div>
     </div>

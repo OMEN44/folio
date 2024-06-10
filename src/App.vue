@@ -7,6 +7,7 @@ import getAxios from "./plugins/axios";
 import { closeOverlay, ShowOverlay } from "./scripts/overlay";
 import { commandInput, prefix, showTerminal } from "./scripts/terminal";
 import { remult } from "remult";
+import { setPermissionLevel } from "./scripts/login";
 
 window.addEventListener("keydown", (e: KeyboardEvent) => {
     switch (e.key) {
@@ -33,6 +34,8 @@ onMounted(async () => {
     // update terminal prefix
     prefix.value.admin = remult.authenticated() ? remult.user?.roles![0] === "0" : false;
     prefix.value.username = remult.authenticated() ? remult.user?.name! : "guest";
+
+    setPermissionLevel();
 });
 </script>
 

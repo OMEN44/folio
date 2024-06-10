@@ -2,8 +2,10 @@ import { readonly, ref } from "vue";
 import getAxios from "../plugins/axios";
 import { remult } from "remult";
 import { prefix } from "./terminal";
+import { access } from "fs";
 
 const errorMessage = ref<string | null>(null);
+const accessLevel = ref<number>(3);
 
 export const formIndex = ref<number>(0);
 export const loginDetails = ref<{
@@ -14,6 +16,7 @@ export const loginDetails = ref<{
 }>({ username: "", email: "", password: "", confirmPassword: "" });
 
 export const ErrorMessage = readonly(errorMessage);
+export const AccessLevel = readonly(accessLevel);
 
 export const login = async () => {
     if (loginDetails.value.username === "" || loginDetails.value.password === "") {
@@ -30,6 +33,7 @@ export const login = async () => {
             prefix.value.username = remult.user?.name!;
             errorMessage.value = "";
             formIndex.value = 2;
+            setPermissionLevel();
         })
         .catch((error) => {
             errorMessage.value = error.response.data;
@@ -45,10 +49,16 @@ export const logout = async () => {
             remult.user = undefined;
             errorMessage.value = "Signed out successfully";
             formIndex.value = 0;
+            setPermissionLevel();
         });
 
     loginDetails.value = { username: "", email: "", password: "", confirmPassword: "" };
 
     prefix.value.admin = false;
     prefix.value.username = "guest";
+};
+
+export const setPermissionLevel = () => {
+    if (remult.authenticated()) accessLevel.value = Number(remult.user?.roles![0]);
+    else accessLevel.value = 3;
 };

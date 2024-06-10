@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faLink, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Timeline } from "../shared/Timeline";
+import { AccessLevel } from "../scripts/login";
 
 defineProps<{ eventData: Timeline }>();
 </script>
@@ -9,11 +10,14 @@ defineProps<{ eventData: Timeline }>();
 <template>
     <div class="div-event-container">
         <div class="div-header">
-            <h2>{{ eventData.title }}</h2>
+            <h2>
+                <font-awesome-icon
+                    v-if="eventData.note || eventData.url"
+                    class="option-icon-small"
+                    :icon="faLink" />{{ eventData.title }}
+            </h2>
             <kbd>
-                {{
-                    eventData.date.toLocaleString("default", { month: "long" })
-                }}
+                {{ eventData.date.toLocaleString("default", { month: "long" }) }}
                 {{ eventData.date.getFullYear() }}
             </kbd>
         </div>
@@ -21,11 +25,15 @@ defineProps<{ eventData: Timeline }>();
             <p>
                 {{ eventData.content }}
             </p>
-            <img :src="eventData.image?.path" alt="" />
+            <img v-if="eventData.image" :src="eventData.image?.path" alt="" />
         </div>
         <div class="div-footer">
-            <font-awesome-icon class="option-icon-small" :icon="faEdit" />
-            <font-awesome-icon class="option-icon-small" :icon="faTrash" />
+            <font-awesome-icon v-if="AccessLevel === 0" class="option-icon-small" :icon="faEdit" />
+            <font-awesome-icon
+                v-if="AccessLevel === 0"
+                class="option-icon-small"
+                :icon="faTrash"
+                @click="deleteTimelineEvent(eventData.id)" />
             <span class="tag" v-for="tag in eventData.tags">{{ tag }}</span>
         </div>
     </div>
@@ -47,13 +55,18 @@ defineProps<{ eventData: Timeline }>();
             margin-bottom: 5px;
         }
 
+        .option-icon-small {
+            margin: auto 10px auto -10px;
+        }
+
         kbd {
-            margin-top: auto;
+            margin: auto 0 0 auto;
             font-size: 20px;
             padding: 5px 5px 5px 15px;
 
             @media (max-width: 500px) {
                 padding: 0 5px 5px 0;
+                margin: auto 0 0 0;
             }
         }
 
@@ -101,6 +114,7 @@ defineProps<{ eventData: Timeline }>();
 
             @media (max-width: 700px) {
                 margin: 15px 0;
+                max-width: 100%;
             }
         }
 

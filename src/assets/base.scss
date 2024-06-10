@@ -69,6 +69,21 @@ input:focus {
     border-bottom-color: var(--blue);
 }
 
+.button-normal {
+    cursor: pointer;
+    border: 2px solid var(--blue-background);
+    background-color: var(--background);
+    border-radius: 4px;
+    color: var(--text);
+    margin: 5px;
+    padding: 5px 10px;
+    transition: all 0.5s;
+}
+
+.button-normal:hover {
+    transform: translateY(-5px);
+    background-color: var(--blue-background);
+}
 
 
 .primary {

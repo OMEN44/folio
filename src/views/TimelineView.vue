@@ -3,8 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faSearch, faFilter, faAdd } from "@fortawesome/free-solid-svg-icons";
 import { ref } from "vue";
 import TimelineEvent from "../components/TimelineEvent.vue";
-import { TimelineData, updateTimeline, year } from "../scripts/timeline";
+import { TimelineData, updateTimeline, year } from "../scripts/timeline/timeline";
 import { Timeline } from "../shared/Timeline";
+import { AccessLevel } from "../scripts/login";
+import { setOverlayContent } from "../scripts/overlay";
 
 updateTimeline();
 
@@ -14,8 +16,7 @@ const changeYear = (e: Event) => {
     let percent =
         (e.target as HTMLDivElement).scrollTop /
         ((e.target as HTMLDivElement).scrollHeight -
-            ((e.target as HTMLDivElement).parentElement as HTMLDivElement)
-                .scrollHeight);
+            ((e.target as HTMLDivElement).parentElement as HTMLDivElement).scrollHeight);
 
     if (percent > 1) percent = 1;
 
@@ -24,11 +25,7 @@ const changeYear = (e: Event) => {
     //yearRef.value!.style.left = `calc((100% - 75px) * ${percent} * ${percent} * ${percent})`;
 
     year.value =
-        TimelineData.value[
-            Math.round(
-                (100 * percent) / (100 / (TimelineData.value.length - 1))
-            )
-        ].date.getFullYear();
+        TimelineData.value[Math.round((100 * percent) / (100 / (TimelineData.value.length - 1)))].date.getFullYear();
 };
 </script>
 
@@ -39,16 +36,17 @@ const changeYear = (e: Event) => {
             <div class="div-options">
                 <font-awesome-icon class="option-icon" :icon="faSearch" />
                 <font-awesome-icon class="option-icon" :icon="faFilter" />
-                <font-awesome-icon class="option-icon" :icon="faAdd" />
+                <font-awesome-icon
+                    v-if="AccessLevel === 0"
+                    class="option-icon"
+                    :icon="faAdd"
+                    @click="setOverlayContent('timeline-form')" />
             </div>
         </div>
         <div class="div-timeline">
             <p class="year" v-text="year" ref="yearRef"></p>
             <div class="div-events" @scroll="changeYear">
-                <timeline-event
-                    v-for="event in TimelineData"
-                    :event-data="(event as Timeline)"
-                />
+                <timeline-event v-for="event in TimelineData" :event-data="(event as Timeline)" />
             </div>
         </div>
     </div>

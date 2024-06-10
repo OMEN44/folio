@@ -16,8 +16,8 @@ onMounted(async () => {
             <input autofocus v-model="loginDetails.username" type="text" placeholder="Username" />
             <input v-model="loginDetails.password" type="password" placeholder="Password" />
             <div class="div-buttons">
-                <button class="button-border" type="submit" @click="login">Submit</button>
-                <button class="button-border" type="button" @click="formIndex = 1">Register</button>
+                <button class="button-normal" type="submit" @click="login">Submit</button>
+                <button class="button-normal" type="button" @click="formIndex = 1">Register</button>
             </div>
         </div>
         <div class="div-register" v-if="formIndex === 1">
@@ -28,15 +28,15 @@ onMounted(async () => {
             <input v-model="loginDetails.password" type="password" placeholder="Password" />
             <input v-model="loginDetails.confirmPassword" type="password" placeholder="Confirm Password" />
             <div class="div-buttons">
-                <button class="button-border" type="submit" @submit.prevent="register">Submit</button>
-                <button class="button-border" type="button" @click="formIndex = 0">Cancel</button>
+                <button class="button-normal" type="submit" @submit.prevent="register">Submit</button>
+                <button class="button-normal" type="button" @click="formIndex = 0">Cancel</button>
             </div>
         </div>
         <div class="div-logout" v-if="formIndex === 2">
             <h2>You are logged in as: {{ remult.user?.name }}</h2>
             <span v-html="ErrorMessage"></span>
             <div class="div-buttons">
-                <button class="button-border" type="submit" @click.prevent="logout">Log out</button>
+                <button class="button-normal" type="submit" @click.prevent="logout">Log out</button>
             </div>
         </div>
     </form>
@@ -45,22 +45,6 @@ onMounted(async () => {
 <style scoped lang="scss">
 .div-account {
     padding: 10px;
-
-    button {
-        cursor: pointer;
-        border: 2px solid var(--blue);
-        background-color: var(--background);
-        border-radius: 4px;
-        color: var(--text);
-        margin: 5px;
-        padding: 5px 10px;
-        transition: all 0.5s;
-    }
-
-    button:hover {
-        transform: translateY(-5px);
-        background-color: var(--blue-background);
-    }
 
     div {
         display: flex;
