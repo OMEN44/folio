@@ -47,13 +47,13 @@ loadResources();
         </div>
         <template v-if="timelineEditor.usesNote">
             <select v-model="timelineEditor.noteId">
-                <option value="-1" class="option top">Select a note</option>
-                <option v-for="(note, index) in PublicNotes" class="option" :value="index">
+                <option value="-1">Select a note</option>
+                <option v-for="(note, index) in PublicNotes" :value="index">
                     {{ note.title }} - By {{ note.author!.username }}
                 </option>
             </select>
         </template>
-        <input type="text" v-model="timelineEditor.title" v-else />
+        <input type="text" class="input-selector" v-model="timelineEditor.title" v-else />
 
         <div class="div-selector">
             <p
@@ -75,7 +75,7 @@ loadResources();
                 </option>
             </select>
         </template>
-        <input type="file" @change="timelineEditor.image" v-else />
+        <input type="file" class="input-selector" @change="timelineEditor.image" v-else />
 
         <form class="div-tags" @submit.prevent>
             <p>Add tags</p>
@@ -165,22 +165,29 @@ form {
     .div-selector {
         display: flex;
         flex-direction: row;
-        margin: 5px 0 -2px 5px;
+        margin: 10px 0 10px 0;
+        // margin: 10px 0 -2px 0;
 
         .selected {
             background-color: var(--blue-background);
         }
 
         p {
-            margin-right: 7px;
-            background-color: color-mix(in srgb, var(--blue-background) 50%, var(--background) 50%);
-            border-radius: 4px 4px 0 0;
-            padding: 3px 7px;
+            margin-right: 15px;
+            background-color: color-mix(in srgb, var(--blue-background) 35%, var(--background) 65%);
+            border-radius: 4px;
+            // border-radius: 4px 4px 0 0;
+            padding: 5px 9px;
             text-align: center;
             cursor: pointer;
             width: fit-content;
         }
     }
+
+    // .input-selector,
+    // select {
+    //     border-top-left-radius: 0;
+    // }
 
     .div-tags {
         .div-tags-list {

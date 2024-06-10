@@ -3,8 +3,66 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faEdit, faLink, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Timeline } from "../shared/Timeline";
 import { AccessLevel } from "../scripts/login";
+import { closeOverlay, OverlayType, setOverlayContent } from "../scripts/overlay";
+import { remult } from "remult";
+import { updateTimeline } from "../scripts/timeline/timeline";
+import { timelineEditor } from "../scripts/timeline/editor";
 
-defineProps<{ eventData: Timeline }>();
+const props = defineProps<{ eventData: Timeline }>();
+
+const deleteOverlay: OverlayType = {
+    title: "Delete Timeline Event",
+    content: `Are you sure you want to delete: ${props.eventData.title}`,
+    buttons: [
+        {
+            name: "Yes",
+            primary: true,
+            action() {
+                remult
+                    .repo(Timeline)
+                    .delete(props.eventData.id)
+                    .then(() => {
+                        // Notification here
+                        updateTimeline();
+                        closeOverlay();
+                    });
+            },
+        },
+        {
+            name: "No",
+            primary: false,
+            action() {
+                closeOverlay();
+            },
+        },
+    ],
+};
+
+const editEvent = () => {
+    timelineEditor.value = {
+        title: props.eventData.title,
+        date: "",
+        content: props.eventData.content,
+        usesNote: true,
+        noteId: -1,
+        url: "",
+        existingImage: true,
+        image: -1,
+        tagInput: "",
+        tags: props.eventData.tags,
+    };
+
+    const eventDate = props.eventData.date;
+    timelineEditor.value.date = `${eventDate.getFullYear()}-${(
+        "0" +
+        (eventDate.getMonth() + 1)
+    ).slice(-2)}-${("0" + eventDate.getDate()).slice(-2)}`;
+    // implement the rest of the fields
+
+    console.log(timelineEditor.value.date);
+
+    setOverlayContent("timeline-form");
+};
 </script>
 
 <template>
@@ -28,12 +86,16 @@ defineProps<{ eventData: Timeline }>();
             <img v-if="eventData.image" :src="eventData.image?.path" alt="" />
         </div>
         <div class="div-footer">
-            <font-awesome-icon v-if="AccessLevel === 0" class="option-icon-small" :icon="faEdit" />
+            <font-awesome-icon
+                v-if="AccessLevel === 0"
+                class="option-icon-small"
+                :icon="faEdit"
+                @click="editEvent" />
             <font-awesome-icon
                 v-if="AccessLevel === 0"
                 class="option-icon-small"
                 :icon="faTrash"
-                @click="deleteTimelineEvent(eventData.id)" />
+                @click="setOverlayContent(deleteOverlay)" />
             <span class="tag" v-for="tag in eventData.tags">{{ tag }}</span>
         </div>
     </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { closeOverlay, OverlayContent, ShowOverlay } from "../scripts/overlay";
+import { closeOverlay, OverlayContent, OverlayType, ShowOverlay } from "../scripts/overlay";
 import OverlayAccount from "./Login.vue";
 import TimelineFilter from "./TimelineFilter.vue";
 import TimelineForm from "./TimelineForm.vue";
@@ -10,16 +10,51 @@ import TimelineSearch from "./TimelineSearch.vue";
     <div class="overlay-container" v-if="ShowOverlay" @click="closeOverlay()">
         <div class="div-overlay-border">
             <div class="div-overlay-content" @click="(e) => e.stopPropagation()">
-                <overlay-account v-if="OverlayContent === 'login'" />
-                <TimelineSearch v-if="OverlayContent === 'timeline-search'" />
-                <TimelineFilter v-if="OverlayContent === 'timeline-filter'" />
-                <TimelineForm v-if="OverlayContent === 'timeline-form'" />
+                <div v-if="OverlayContent === ''"></div>
+                <overlay-account v-else-if="OverlayContent === 'login'" />
+                <TimelineSearch v-else-if="OverlayContent === 'timeline-search'" />
+                <TimelineFilter v-else-if="OverlayContent === 'timeline-filter'" />
+                <TimelineForm v-else-if="OverlayContent === 'timeline-form'" />
+                <template v-else>
+                    <div class="div-overlay">
+                        <h2>{{ (OverlayContent as OverlayType).title }}</h2>
+                        <p>{{ (OverlayContent as OverlayType).content }}</p>
+                        <div class="div-actions">
+                            <button
+                                class="button-normal"
+                                v-for="button in (OverlayContent as OverlayType).buttons"
+                                :class="{ 'primary-action': button.primary }"
+                                @click="button.action">
+                                {{ button.name }}
+                            </button>
+                        </div>
+                    </div>
+                </template>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped lang="scss">
+.div-overlay {
+    padding: 5px;
+
+    @media (max-width: 600px) {
+        width: 80vw;
+
+        h2 {
+            font-size: 25px;
+        }
+    }
+
+    .div-actions {
+        margin-top: 10px;
+        .primary-action {
+            background-color: color-mix(in srgb, var(--blue-background) 50%, var(--background) 50%);
+        }
+    }
+}
+
 .overlay-container {
     background-color: rgba(0, 0, 0, 0.3);
     position: fixed;
