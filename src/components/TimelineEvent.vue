@@ -6,7 +6,7 @@ import { AccessLevel } from "../scripts/login";
 import { closeOverlay, OverlayType, setOverlayContent } from "../scripts/overlay";
 import { remult } from "remult";
 import { updateTimeline } from "../scripts/timeline/timeline";
-import { timelineEditor } from "../scripts/timeline/editor";
+import { Images, PublicNotes, setEditing, timelineEditor } from "../scripts/timeline/creator";
 
 const props = defineProps<{ eventData: Timeline }>();
 
@@ -39,6 +39,7 @@ const deleteOverlay: OverlayType = {
 };
 
 const editEvent = () => {
+    setEditing(props.eventData.id);
     timelineEditor.value = {
         title: props.eventData.title,
         date: "",
@@ -47,19 +48,29 @@ const editEvent = () => {
         noteId: -1,
         url: "",
         existingImage: true,
-        image: -1,
+        image: Images.value.findIndex((image) => image.path === props.eventData.image?.path),
         tagInput: "",
         tags: props.eventData.tags,
     };
+    console.log(props.eventData);
 
+    // set date for form
     const eventDate = props.eventData.date;
     timelineEditor.value.date = `${eventDate.getFullYear()}-${(
         "0" +
         (eventDate.getMonth() + 1)
     ).slice(-2)}-${("0" + eventDate.getDate()).slice(-2)}`;
-    // implement the rest of the fields
 
-    console.log(timelineEditor.value.date);
+    // link type
+    timelineEditor.value.usesNote = props.eventData.note?.id !== undefined;
+    if (timelineEditor.value.usesNote) {
+        timelineEditor.value.noteId = PublicNotes.value.findIndex(
+            // may be broken if the note changes publicity
+            (note) => note.id === props.eventData.note?.id
+        );
+    } else {
+        timelineEditor.value.url = props.eventData.url!;
+    }
 
     setOverlayContent("timeline-form");
 };

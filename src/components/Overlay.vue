@@ -1,9 +1,28 @@
 <script setup lang="ts">
-import { closeOverlay, OverlayContent, OverlayType, ShowOverlay } from "../scripts/overlay";
+import {
+    closeOverlay,
+    loadCloseEvents,
+    OverlayContent,
+    OverlayType,
+    ShowOverlay,
+} from "../scripts/overlay";
+import { clearInput, editing, setEditing } from "../scripts/timeline/creator";
 import OverlayAccount from "./Login.vue";
 import TimelineFilter from "./TimelineFilter.vue";
 import TimelineForm from "./TimelineForm.vue";
 import TimelineSearch from "./TimelineSearch.vue";
+
+loadCloseEvents([
+    {
+        label: "timeline-form",
+        action: () => {
+            if (editing !== "") {
+                setEditing("");
+                clearInput();
+            }
+        },
+    },
+]);
 </script>
 
 <template>

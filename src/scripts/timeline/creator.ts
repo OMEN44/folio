@@ -9,6 +9,7 @@ const notes = ref<Note[]>([]);
 const images = ref<Image[]>([]);
 const timelineEditorError = ref<string>("");
 
+export let editing: string = "";
 export const timelineEditor = ref<{
     // required:
     title: string;
@@ -83,29 +84,29 @@ export const insert = () => {
         console.error("IMAGE UPLOAD NOT IMPLEMENTED");
     }
 
-    remult
-        .repo(Timeline)
-        .insert(newTimelineEvent)
-        .then(() => {
-            updateTimeline();
-        })
-        .catch((error) => {
-            console.error(error);
-        });
+    if (editing === "") {
+        remult
+            .repo(Timeline)
+            .insert(newTimelineEvent)
+            .then(() => {
+                updateTimeline();
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    } else {
+        remult
+            .repo(Timeline)
+            .update(editing, newTimelineEvent)
+            .then(() => {
+                updateTimeline();
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
 
-    timelineEditorError.value = "";
-    timelineEditor.value = {
-        title: "",
-        date: "",
-        content: "",
-        usesNote: true,
-        noteId: -1,
-        url: "",
-        existingImage: true,
-        image: -1,
-        tagInput: "",
-        tags: [],
-    };
+    clearInput();
 };
 
 export const addTag = () => {
@@ -121,4 +122,24 @@ export const addTag = () => {
 export const removeTag = (tag: string) => {
     const elementIndex = timelineEditor.value.tags.indexOf(tag);
     timelineEditor.value.tags.splice(elementIndex, 1);
+};
+
+export const setEditing = (value: string) => {
+    editing = value;
+};
+
+export const clearInput = () => {
+    timelineEditorError.value = "";
+    timelineEditor.value = {
+        title: "",
+        date: "",
+        content: "",
+        usesNote: true,
+        noteId: -1,
+        url: "",
+        existingImage: true,
+        image: -1,
+        tagInput: "",
+        tags: [],
+    };
 };

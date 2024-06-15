@@ -9,7 +9,7 @@ import {
     removeTag,
     timelineEditor,
     TimelineEditorError,
-} from "../scripts/timeline/editor";
+} from "../scripts/timeline/creator";
 
 loadResources();
 </script>
@@ -53,7 +53,7 @@ loadResources();
                 </option>
             </select>
         </template>
-        <input type="text" class="input-selector" v-model="timelineEditor.title" v-else />
+        <input type="text" class="input-selector" v-model="timelineEditor.url" v-else />
 
         <div class="div-selector">
             <p
