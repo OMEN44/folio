@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faSearch, faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faAdd, faRemove } from "@fortawesome/free-solid-svg-icons";
 import { ref, watch } from "vue";
 import TimelineEvent from "../components/TimelineEvent.vue";
 import { TimelineData, updateTimeline, year } from "../scripts/timeline/timeline";
 import { Timeline } from "../shared/Timeline";
 import { AccessLevel } from "../scripts/login";
 import { setOverlayContent } from "../scripts/overlay";
-import { searchForm } from "../scripts/timeline/search";
+import { removeSearchTag, searchForm } from "../scripts/timeline/search";
 
 updateTimeline();
 
@@ -44,10 +44,14 @@ const changeYear = (e: Event) => {
                     class="option-icon"
                     :icon="faAdd"
                     @click="setOverlayContent('timeline-form')" />
-                <font-awesome-icon
-                    class="option-icon"
-                    :icon="faSearch"
-                    @click="setOverlayContent('timeline-search')" />
+                <div class="div-search" @click="setOverlayContent('timeline-search')">
+                    <font-awesome-icon :icon="faSearch" />
+                    <p v-if="searchForm.searchTags.length === 0">Search</p>
+                    <span v-for="tag in searchForm.searchTags" @click.stop="removeSearchTag(tag)">
+                        <p>{{ tag }}</p>
+                        <font-awesome-icon class="icon-remove" :icon="faRemove" />
+                    </span>
+                </div>
             </div>
         </div>
         <div class="div-timeline">
@@ -84,6 +88,48 @@ const changeYear = (e: Event) => {
             display: flex;
             flex-direction: row;
             height: fit-content;
+
+            .div-search {
+                padding: 0 5px;
+                background-color: var(--blue-background);
+                display: flex;
+                height: 40px;
+                margin: 5px;
+                border-radius: 4px;
+                cursor: pointer;
+
+                svg {
+                    width: 24px;
+                    height: 24px;
+                    padding: 8px 3px;
+                }
+
+                p {
+                    margin: auto 5px;
+                    font-size: 20px;
+                }
+
+                span {
+                    background-color: var(--blue-background);
+                    // padding: 5px;
+                    margin: 5px;
+                    border-radius: 4px;
+                    font-size: 18px;
+                    transition: transform 0.5s;
+                    display: flex;
+
+                    &:hover {
+                        transform: scale(1.05);
+                    }
+
+                    .icon-remove {
+                        width: 25px;
+                        height: 25px;
+                        margin: auto 2px auto auto;
+                        padding: 0;
+                    }
+                }
+            }
         }
     }
 
