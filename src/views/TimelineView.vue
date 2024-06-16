@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faSearch, faAdd } from "@fortawesome/free-solid-svg-icons";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import TimelineEvent from "../components/TimelineEvent.vue";
 import { TimelineData, updateTimeline, year } from "../scripts/timeline/timeline";
 import { Timeline } from "../shared/Timeline";
 import { AccessLevel } from "../scripts/login";
 import { setOverlayContent } from "../scripts/overlay";
+import { searchForm } from "../scripts/timeline/search";
 
 updateTimeline();
+
+watch(searchForm, () => updateTimeline(), { deep: true, immediate: true });
 
 const yearRef = ref<HTMLParagraphElement | null>();
 
@@ -37,14 +40,14 @@ const changeYear = (e: Event) => {
             <h1>Timeline</h1>
             <div class="div-options">
                 <font-awesome-icon
-                    class="option-icon"
-                    :icon="faSearch"
-                    @click="setOverlayContent('timeline-search')" />
-                <font-awesome-icon
                     v-if="AccessLevel === 0"
                     class="option-icon"
                     :icon="faAdd"
                     @click="setOverlayContent('timeline-form')" />
+                <font-awesome-icon
+                    class="option-icon"
+                    :icon="faSearch"
+                    @click="setOverlayContent('timeline-search')" />
             </div>
         </div>
         <div class="div-timeline">
