@@ -44,6 +44,7 @@ defineProps<{ data: Spotlight }>();
 
         @media (max-width: 700px) {
             margin: 20px auto 0 auto;
+            max-width: 100%;
         }
 
         img {
@@ -51,6 +52,10 @@ defineProps<{ data: Spotlight }>();
             min-width: 100px;
             height: 100%;
             border-radius: 15px;
+
+            @media (max-width: 700px) {
+                max-width: 100%;
+            }
         }
     }
 

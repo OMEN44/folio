@@ -101,6 +101,14 @@ form {
     max-width: 400px;
     width: 80vw;
 
+    @media (max-width: 800px) {
+        width: 80vw;
+
+        h2 {
+            font-size: 24px;
+        }
+    }
+
     .div-title-date {
         display: flex;
         flex-direction: row;
@@ -190,6 +198,18 @@ form {
     // }
 
     .div-tags {
+        .div-tag-input {
+            display: flex;
+            height: fit-content;
+
+            input {
+                flex: 1;
+                width: 50%;
+                height: 40px;
+                margin-top: 3px;
+            }
+        }
+
         .div-tags-list {
             display: flex;
             flex-wrap: wrap;

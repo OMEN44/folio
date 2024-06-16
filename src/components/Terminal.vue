@@ -40,7 +40,11 @@ loadCommands([
         <div class="div-terminal-border">
             <div class="div-terminal" @click.stop="commandInput?.focus()">
                 <!-- -->
-                <p class="output" v-for="output in Outputs" v-html="outputToHTML(output)" @click.stop></p>
+                <p
+                    class="output"
+                    v-for="output in Outputs"
+                    v-html="outputToHTML(output)"
+                    @click.stop></p>
                 <div class="div-input" @keydown="commandHandler">
                     <p v-html="formatString(prefixToString(prefix))"></p>
                     <input
@@ -89,6 +93,14 @@ loadCommands([
         background-color: var(--blue-background);
         padding: 10px;
 
+        @media (max-width: 700px) {
+            height: fit-content;
+            height: 50%;
+            width: 95%;
+            transform: translate(-50%);
+            top: 20px;
+        }
+
         .div-terminal {
             background-color: var(--background);
             font-family: ubuntu mono;
@@ -103,9 +115,6 @@ loadCommands([
             cursor: text;
 
             @media (max-width: 700px) {
-                margin: 10px 0 0 10px;
-                height: 60%;
-                width: calc(100vw - 20px);
                 font-size: 16px;
             }
 

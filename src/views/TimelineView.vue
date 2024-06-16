@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faSearch, faFilter, faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faAdd } from "@fortawesome/free-solid-svg-icons";
 import { ref } from "vue";
 import TimelineEvent from "../components/TimelineEvent.vue";
 import { TimelineData, updateTimeline, year } from "../scripts/timeline/timeline";
@@ -22,10 +22,12 @@ const changeYear = (e: Event) => {
 
     yearRef.value!.style.top = `calc((100% - 75px) * ${percent})`;
     // This one is funny:
-    //yearRef.value!.style.left = `calc((100% - 75px) * ${percent} * ${percent} * ${percent})`;
+    // yearRef.value!.style.left = `calc((100% - 75px) * ${percent} * ${percent} * ${percent})`;
 
     year.value =
-        TimelineData.value[Math.round((100 * percent) / (100 / (TimelineData.value.length - 1)))].date.getFullYear();
+        TimelineData.value[
+            Math.round((100 * percent) / (100 / (TimelineData.value.length - 1)))
+        ].date.getFullYear();
 };
 </script>
 
@@ -34,8 +36,10 @@ const changeYear = (e: Event) => {
         <div class="div-timeline-header">
             <h1>Timeline</h1>
             <div class="div-options">
-                <font-awesome-icon class="option-icon" :icon="faSearch" />
-                <font-awesome-icon class="option-icon" :icon="faFilter" />
+                <font-awesome-icon
+                    class="option-icon"
+                    :icon="faSearch"
+                    @click="setOverlayContent('timeline-search')" />
                 <font-awesome-icon
                     v-if="AccessLevel === 0"
                     class="option-icon"

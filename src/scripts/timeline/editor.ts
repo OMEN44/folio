@@ -8,6 +8,8 @@ export const goToLink = (currentEvent: Timeline) => {
     if (currentEvent.url) {
         window.open(currentEvent.url, "_blank")?.focus();
         return;
+    } else {
+        console.error("NOTES NOT IMPLEMENTED");
     }
 };
 

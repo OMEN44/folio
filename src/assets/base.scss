@@ -55,7 +55,7 @@ h2 {
     transform: translateY(-5px);
 }
 
-input {
+input[type=text], input[type=date], input[type=password]{
     background-color: var(--blue-background);
     border: none;
     color: var(--text);
@@ -65,7 +65,7 @@ input {
     transition: border 0.5s;
 }
 
-input:focus {
+input[type=text]:focus {
     border-bottom-color: var(--blue);
 }
 

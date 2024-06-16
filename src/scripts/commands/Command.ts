@@ -36,7 +36,9 @@ export interface PrefixType {
 
 export const prefixToString = (prefix: PrefixType): string => {
     //       primary is --blue          secondary is --blue-alt
-    return `![primary][${prefix.username}@huon.dev]:![secondary][${prefix.directory}]${prefix.admin ? "# " : "$ "}`;
+    return `![primary][${prefix.username}@huon.dev]:![secondary][${prefix.directory}]${
+        prefix.admin ? "# " : "$ "
+    }`;
 };
 
 // value should be rendered as:
