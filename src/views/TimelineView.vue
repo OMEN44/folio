@@ -93,10 +93,11 @@ const changeYear = (e: Event) => {
                 padding: 0 5px;
                 background-color: var(--blue-background);
                 display: flex;
-                height: 40px;
+                height: fit-content;
                 margin: 5px;
                 border-radius: 4px;
                 cursor: pointer;
+                flex-wrap: wrap;
 
                 svg {
                     width: 24px;

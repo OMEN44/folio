@@ -2,7 +2,6 @@ import { readonly, ref } from "vue";
 import getAxios from "../plugins/axios";
 import { remult } from "remult";
 import { prefix } from "./terminal";
-import { access } from "fs";
 
 const errorMessage = ref<string | null>(null);
 const accessLevel = ref<number>(3);
@@ -25,7 +24,10 @@ export const login = async () => {
     }
 
     getAxios()
-        .post("/login", { username: loginDetails.value.username, password: loginDetails.value.password })
+        .post("/login", {
+            username: loginDetails.value.username,
+            password: loginDetails.value.password,
+        })
         .then((response) => {
             remult.user = response.data;
 

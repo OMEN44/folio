@@ -4,6 +4,8 @@ import cookieSession from "cookie-session";
 import bodyParser from "body-parser";
 import { remult, UserInfo } from "remult";
 import { Account } from "../shared/Account";
+// import helmet from "helmet";
+// import compression from "compression";
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,10 +17,22 @@ app.use(
     })
 );
 app.use(api);
-// app.use(auth);
 
+// deployment stuff:
+// app.use(helmet());
+// app.use(compression());
+
+// const frontendFiles = process.cwd() + "/dist";
+// app.use(express.static(frontendFiles));
+// app.get("/*", (_, res) => {
+//     res.sendFile(frontendFiles + "/index.html");
+// });
+
+// login api
 app.post("/api/login", api.withRemult, async (req, res) => {
-    const users: Account[] = await remult.repo(Account).find({ where: { username: req.body.username } });
+    const users: Account[] = await remult
+        .repo(Account)
+        .find({ where: { username: req.body.username } });
 
     if (users.length !== 0) {
         let validPassword = false;
@@ -49,4 +63,4 @@ app.get("/api/user", (req, res) => {
     res.json(req.session!["user"]);
 });
 
-app.listen(3000, () => console.log("Listening at http://localhost:3000/api/"));
+app.listen(4000, () => console.log("Listening at http://localhost:4000/api/"));

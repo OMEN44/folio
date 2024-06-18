@@ -29,8 +29,8 @@ export const updateTimeline = async () => {
 
         for (let tag of searchForm.value.searchTags) {
             if (
-                !timelineEvent.content.includes(tag) &&
-                !timelineEvent.title.includes(tag) &&
+                !timelineEvent.content.toLocaleLowerCase().includes(tag.toLocaleLowerCase()) &&
+                !timelineEvent.title.toLocaleLowerCase().includes(tag.toLocaleLowerCase()) &&
                 !timelineEvent.tags.includes(tag)
             ) {
                 return false;
