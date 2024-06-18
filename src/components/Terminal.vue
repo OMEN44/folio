@@ -14,12 +14,12 @@ import { formatString, outputToHTML, prefixToString } from "../scripts/commands/
 import {
     commandInput,
     commandHandler,
-    loadTerminal,
     Outputs,
     prefix,
     showTerminal,
     loadCommands,
 } from "../scripts/terminal";
+import { onMounted } from "vue";
 
 loadCommands([
     cdCommand,
@@ -33,6 +33,10 @@ loadCommands([
     logoutCommand,
     jokeCommand,
 ]);
+
+onMounted(() => {
+    prefix.value.directory = window.location.pathname;
+});
 </script>
 
 <template>
@@ -53,8 +57,7 @@ loadCommands([
                         spellcheck="false"
                         autocapitalize="off"
                         type="text"
-                        ref="commandInput"
-                        @focus="loadTerminal($route.fullPath)" />
+                        ref="commandInput" />
                 </div>
             </div>
         </div>

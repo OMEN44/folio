@@ -19,10 +19,6 @@ export const prefix = ref<PrefixType>({
 
 export const Outputs = readonly(outputs);
 
-export const loadTerminal = (route: string) => {
-    prefix.value.directory = route;
-};
-
 export const loadCommands = (commands: CommandType[]) => {
     commandLabels.value = [];
     commandList.value = [];
@@ -108,7 +104,11 @@ export const commandHandler = (e: KeyboardEvent) => {
 
 export const pushStringOutput = (directory: string, outputValue: string) => {
     outputs.value?.push({
-        prefix: { username: prefix.value.username, directory: directory, admin: prefix.value.admin },
+        prefix: {
+            username: prefix.value.username,
+            directory: directory,
+            admin: prefix.value.admin,
+        },
         value: outputValue,
     });
 };

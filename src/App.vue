@@ -14,6 +14,7 @@ window.addEventListener("keydown", (e: KeyboardEvent) => {
         case "T":
             if (e.altKey && e.shiftKey && !ShowOverlay.value) {
                 showTerminal.value = true;
+                prefix.value.directory = window.location.pathname;
                 commandInput.value?.focus();
             }
             break;
