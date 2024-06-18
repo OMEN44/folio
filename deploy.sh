@@ -1,31 +1,29 @@
 #!/bin/sh
 
+echo REMINDER:
+echo "- set 'module' to commonjs"
+echo "- uncoment sections of the server index file"
+
 # Build project
-cd ~/Programs/WebApps/folio/client
-sed -i 's/VITE_API_DEV=true/VITE_API_DEV=false/' .env
-echo Switched .env file to production.
+cd ~/Programs/WebApps/folio
 npm run build
-echo Finished building project.
-
-# Setup folders for transfer
-cd ~/Desktop
-mkdir -p server
-rm -r server/*
-
+mkdir -p server_files
+rm -r server_files/*
 # Transfer files
-rsync -av ~/Programs/WebApps/folio/client/dist/ ~/Desktop/server/public
-rsync -av --exclude=node_modules --exclude=folio.sqlite --exclude=folio-backup.sqlite  ~/Programs/WebApps/folio/server/ ~/Desktop/server/
-echo Transfered files to ~/Desktop/server
+rsync -a dist server_files
+rsync -a ~/Programs/WebApps/folio/package.json ~/Programs/WebApps/folio/server_files
+rsync -a ~/Programs/WebApps/folio/*config* ~/Programs/WebApps/folio/server_files
+echo Web server files built in directory ~/Programs/WebApps/folio/server_files
 
-# Replace old files
-ssh omen@huon.dev -p 2024 'rm -r ~/server/public && rm -r ~/server/routes && rm ~/server/*.json && rm ~/server/*.js'
-cd ~/Desktop
-rsync -avzh -e "ssh -p 2024" server omen@huon.dev:/home/omen
-echo Replaced old files on server.
+case "$1" in
+    prod|production)
+        echo "Deployment"
+        ;;
+    *)
+        echo "Deploying to beta..."
+        rsync -azh -e "ssh -p 2024" --remove-source-files server_files omen@huon.dev:/home/omen/beta/temp
+        ssh omen@huon.dev -p 2024 './beta/remove_files.sh'
+    ;;
+esac
 
-# Set project back to dev mode
-cd ~/Programs/WebApps/folio/client
-sed -i 's/VITE_API_DEV=false/VITE_API_DEV=true/' .env
-
-echo Finished! Press Enter button to exit...
-read input
+echo Finished!

@@ -13,7 +13,9 @@ export const spotlightCommand: CommandType = {
     onCommand: async (args: Array<string>) => {
         // check permissions
         if (args.length <= 2 || !(Number(args[1]) >= 0)) {
-            const spotlightProjects: Spotlight[] = await remult.repo(Spotlight).find({ include: { timeline: true } });
+            const spotlightProjects: Spotlight[] = await remult
+                .repo(Spotlight)
+                .find({ include: { timeline: true } });
             let output = "![bold][Current events under the spotlight:]";
             spotlightProjects.forEach((project) => {
                 output = `${output}\n${project.priority}. ${project.timeline?.title} ![italics][(id: ${project.timeline?.id})]`;
@@ -23,13 +25,19 @@ export const spotlightCommand: CommandType = {
             let timelineEvent = await remult.repo(Timeline).findOne({ where: { id: args[2] } });
             if (!timelineEvent) {
                 const title = args.splice(2, args.length - 2);
-                timelineEvent = await remult.repo(Timeline).findOne({ where: { title: title.join(" ") } });
+                timelineEvent = await remult
+                    .repo(Timeline)
+                    .findOne({ where: { title: title.join(" ") } });
             }
             if (timelineEvent) {
                 await remult.repo(Spotlight).delete(Number(args[1]));
-                await remult.repo(Spotlight).insert({ priority: Number(args[1]), timeline: timelineEvent });
+                await remult
+                    .repo(Spotlight)
+                    .insert({ priority: Number(args[1]), timeline: timelineEvent });
             } else {
-                return { value: `No timeline event found.\nCommand usage: spotlight [position] [name | id]` };
+                return {
+                    value: `No timeline event found.\nCommand usage: spotlight [position] [name | id]`,
+                };
             }
             loadSpotlight();
             return undefined;
@@ -95,7 +103,8 @@ export const lsCommand: CommandType = {
 export const themeCommand: CommandType = {
     label: "theme",
     onCommand: (args: string[]) => {
-        if (args.length === 1) return { value: "![bold][Available themes are:]\n![blue][Good]\t![orange][Evil]" };
+        if (args.length === 1)
+            return { value: "![bold][Available themes are:]\n![blue][Good]\t![orange][Evil]" };
         else
             switch (args[1].toLowerCase()) {
                 case "good":
@@ -120,9 +129,7 @@ export const testCommand: CommandType = {
     admin: true,
     onCommand: () => {
         return {
-            value: `User Auth:\t\t${remult.authenticated()}\nUser Info:\t\t{ id: ${remult.user?.id}, name: ${
-                remult.user?.name
-            }, isAdmin: ${(remult.user!.roles as string[])[0] === "0"} }`,
+            value: `![bold, orange][NUT]`,
         };
     },
 };
