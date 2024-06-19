@@ -79,8 +79,8 @@ const changeYear = (e: Event) => {
             font-family: kode mono;
             font-size: 50px;
 
-            @media (max-width: 400px) {
-                margin-top: 62px;
+            @media (max-width: 600px) {
+                font-size: 40px;
             }
         }
 

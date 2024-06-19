@@ -78,7 +78,8 @@ loadCloseEvents([
     left: 0;
     top: 0;
     width: 100vw;
-    height: 100vh;
+    height: var(--view-height);
+    // height: 100vh;
     z-index: 5;
     backdrop-filter: blur(5px);
 
@@ -95,9 +96,11 @@ loadCloseEvents([
         .div-overlay-content {
             width: fit-content;
             height: fit-content;
+            max-height: calc(var(--view-height) - 60px);
             background-color: var(--background);
             border-radius: 8px;
             padding: 10px;
+            overflow-y: scroll;
         }
     }
 }

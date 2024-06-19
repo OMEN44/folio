@@ -71,7 +71,8 @@ onMounted(() => {
     left: 0;
     top: 0;
     width: 100vw;
-    height: 100vh;
+    height: var(--view-height);
+    // height: 100vh;
     z-index: 5;
     backdrop-filter: blur(5px);
 
@@ -97,8 +98,7 @@ onMounted(() => {
         padding: 10px;
 
         @media (max-width: 700px) {
-            height: fit-content;
-            height: 50%;
+            height: calc(95% - 20px);
             width: 95%;
             transform: translate(-50%);
             top: 20px;

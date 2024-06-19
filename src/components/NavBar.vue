@@ -34,7 +34,7 @@ import { setOverlayContent } from "../scripts/overlay";
     position: fixed;
     top: 0;
     right: 0;
-    transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in;
     transition-delay: 1.5s;
     width: 62px;
     height: fit-content;
@@ -129,7 +129,7 @@ import { setOverlayContent } from "../scripts/overlay";
             border-radius: 0 0 0 5px;
             background-color: var(--background);
             z-index: 4;
-            transition: right 0.5s ease-in-out;
+            transition: right 0.5s ease-in;
 
             &:hover {
                 right: calc(60% + 8px);

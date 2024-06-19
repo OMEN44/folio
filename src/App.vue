@@ -37,6 +37,15 @@ onMounted(async () => {
     prefix.value.username = remult.authenticated() ? remult.user?.name! : "guest";
 
     setPermissionLevel();
+
+    //adjust screen height
+
+    document.body.style.setProperty("--view-height", window.visualViewport?.height + "px");
+});
+
+window.visualViewport?.addEventListener("resize", (e: Event) => {
+    const target: VisualViewport = e.currentTarget! as VisualViewport;
+    document.body.style.setProperty("--view-height", target.height + "px");
 });
 </script>
 
@@ -60,7 +69,7 @@ onMounted(async () => {
     background-color: var(--background);
     border: solid 2px var(--blue);
     border-radius: 5px;
-    height: calc(100vh - 20px);
+    height: calc(var(--view-height) - 20px);
     overflow-x: hidden;
     overflow-y: scroll;
 

@@ -26,9 +26,14 @@ onMounted(async () => {
             <input v-model="loginDetails.username" type="text" placeholder="Username" />
             <input v-model="loginDetails.email" type="text" placeholder="Email" />
             <input v-model="loginDetails.password" type="password" placeholder="Password" />
-            <input v-model="loginDetails.confirmPassword" type="password" placeholder="Confirm Password" />
+            <input
+                v-model="loginDetails.confirmPassword"
+                type="password"
+                placeholder="Confirm Password" />
             <div class="div-buttons">
-                <button class="button-normal" type="submit" @submit.prevent="register">Submit</button>
+                <button class="button-normal" type="submit" @submit.prevent="register">
+                    Submit
+                </button>
                 <button class="button-normal" type="button" @click="formIndex = 0">Cancel</button>
             </div>
         </div>
@@ -45,6 +50,7 @@ onMounted(async () => {
 <style scoped lang="scss">
 .div-account {
     padding: 10px;
+    width: 80vw;
 
     div {
         display: flex;
