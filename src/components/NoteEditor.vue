@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { useEditor, EditorContent } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
+import Image from "@tiptap/extension-image";
 
 const editor = useEditor({
     content: "<p>I’m running Tiptap with Vue.js. 🎉</p>",
-    extensions: [StarterKit],
+    extensions: [StarterKit, Image],
 });
 </script>
 
 <template>
     <span class="left-decoration"></span>
     <div class="div-note-editor">
-        <editor-content :editor="editor" />
+        <editor-content class="editor" :editor="editor" />
     </div>
     <span class="right-decoration"></span>
 </template>

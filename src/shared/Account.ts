@@ -1,7 +1,7 @@
-import { Allow, Entity, Fields, Validators } from "remult";
+import { Entity, Fields, Validators } from "remult";
 
 @Entity("account", {
-    allowApiCrud: Allow.authenticated,
+    allowApiCrud: true,
     allowApiInsert: "0",
     allowApiUpdate: "0",
     allowApiDelete: "0",

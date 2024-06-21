@@ -20,6 +20,16 @@ h2 {
     position: relative;
 }
 
+//tiptap editor style fixes
+.tiptap {
+    height: 100%;
+    overflow-y: auto;
+
+    &:focus {
+        outline: none;
+    }
+}
+
 .button-fancy {
     cursor: pointer;
 	border: 2px var(--blue) solid;

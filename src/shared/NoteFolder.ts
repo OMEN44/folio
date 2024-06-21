@@ -9,11 +9,14 @@ export class NoteFolder {
     id = "";
 
     @Relations.toOne(() => Account)
-    account?: Account;
+    author?: Account;
 
     @Fields.string()
     title = "";
 
     @Fields.boolean()
     public = false;
+
+    @Relations.toOne(() => NoteFolder)
+    parent?: NoteFolder;
 }

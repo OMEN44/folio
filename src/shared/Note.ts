@@ -25,5 +25,5 @@ export class Note {
     author?: Account;
 
     @Relations.toOne(() => NoteFolder)
-    parentFolder?: NoteFolder;
+    parent?: NoteFolder;
 }
