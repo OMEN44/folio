@@ -1,18 +1,49 @@
 <script setup lang="ts">
-import { faCaretDown, faCaretUp, faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { ref, watch } from "vue";
+import { Note } from "../shared/Note";
+import { remult } from "remult";
+import { NoteFolder } from "../shared/NoteFolder";
+
+const notes = ref<Note[]>([]);
+const folders = ref<NoteFolder[]>([]);
+const selectedIndex = ref<number>(-1);
+
+watch(selectedIndex, () => {
+    (document.getElementsByClassName("div-menu")[0] as HTMLDivElement).style.setProperty(
+        "--slider",
+        `calc(40px * ${selectedIndex.value} + 5px * (${selectedIndex.value} + 1))`
+    );
+});
+
+selectedIndex.value = 0;
+
+remult
+    .repo(Note)
+    .find()
+    .then((res) => {
+        notes.value = res;
+    });
+
+remult
+    .repo(NoteFolder)
+    .find()
+    .then((res) => {
+        folders.value = res;
+    });
 </script>
 
 <template>
     <div class="div-menu">
-        <div class="div-note">
-            <div class="div-note-header">
-                <h3>Title</h3>
-                <kbd>By username</kbd>
-            </div>
-            <p>Last edited</p>
+        <div
+            v-for="(note, index) in notes"
+            :class="`div-note ${index == selectedIndex ? 'selected' : ''}`"
+            @click="selectedIndex = index">
+            <font-awesome-icon class="folder-option" :icon="note.public ? faLockOpen : faLock" />
+            <p>{{ note.title }}</p>
         </div>
-        <div class="div-folder">
+        <!-- <div class="div-folder">
             <div class="div-folder-header">
                 <font-awesome-icon class="folder-option" :icon="false ? faCaretUp : faCaretDown" />
                 <p>Title</p>
@@ -32,37 +63,47 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
                 <kbd>By username</kbd>
             </div>
             <p>Last edited</p>
-        </div>
+        </div> -->
     </div>
 </template>
 
 <style scoped lang="scss">
 .div-menu {
-    min-width: 300px;
-    width: 30%;
+    min-width: 150px;
+    position: relative;
+    --slider: 0;
+
+    &::after {
+        content: "";
+        position: absolute;
+        background-color: var(--blue);
+        width: 4px;
+        height: 40px;
+        top: var(--slider);
+        right: 0;
+        border-radius: 10px;
+        transition: top 1s;
+    }
+
+    .selected,
+    .div-note:hover {
+        background-color: var(--blue-background);
+    }
 
     .div-note {
-        height: fit-content;
-        border: 2px var(--blue) solid;
-        border-radius: 4px;
-        margin: 5px;
+        height: 40px;
+        padding: 5px 10px;
+        margin: 5px 0;
         display: flex;
-        flex-direction: column;
-        padding: 10px 15px;
         cursor: pointer;
+        border-radius: 5px;
 
-        .div-note-header {
-            display: flex;
-            flex-direction: row;
+        svg {
+            margin: auto 15px auto 0;
+        }
 
-            h3 {
-                margin: 0;
-                padding: 0;
-            }
-
-            kbd {
-                margin: auto 0 3px 10px;
-            }
+        p {
+            font-size: 20px;
         }
     }
 
