@@ -89,11 +89,8 @@ export const commandHandler = (e: KeyboardEvent) => {
         nextTick(() => {
             commandInput.value?.scrollIntoView();
             nextTick(() => {
-                const viewPort: VisualViewport | null = window.visualViewport;
-                outputs.value[0].value = `w: ${viewPort?.width} h: ${viewPort?.height} ol: ${viewPort?.offsetLeft} ot: ${viewPort?.offsetTop} pl: ${viewPort?.pageLeft} pt: ${viewPort?.pageTop}`;
+                console.log(window.visualViewport);
                 // window.offset = 0;
-                // const viewPort2: VisualViewport | null = window.visualViewport;
-                // outputs.value[1].value = `w: ${viewPort2?.width} h: ${viewPort2?.height} ol: ${viewPort2?.offsetLeft} ot: ${viewPort2?.offsetTop} pl: ${viewPort2?.pageLeft} pt: ${viewPort2?.pageTop}`;
             });
         });
     } else if (e.key === "ArrowUp") {

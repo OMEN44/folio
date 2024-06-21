@@ -55,6 +55,7 @@ defineProps<{ data: Spotlight }>();
 
             @media (max-width: 700px) {
                 max-width: 100%;
+                max-height: 100%;
             }
         }
     }

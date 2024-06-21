@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import CardSpotlight from "../components/CardSpotlight.vue";
 import { loadSpotlight, spotlightData } from "../scripts/spotlight";
 import { showTerminal } from "../scripts/terminal";
+import { faArrowTurnDown } from "@fortawesome/free-solid-svg-icons";
 
 const goToAbout = () => {
     const aboutDiv: HTMLDivElement = document.getElementsByClassName(
@@ -22,8 +24,9 @@ loadSpotlight();
             <span class="flashy" @click="showTerminal = true"></span>
         </h2>
         <div class="div-scroll-button" @click="goToAbout">
+            <FontAwesomeIcon class="left" :icon="faArrowTurnDown" />
             <span>See whats inside</span>
-            <p>⤵</p>
+            <FontAwesomeIcon :icon="faArrowTurnDown" />
         </div>
     </div>
 
@@ -72,10 +75,6 @@ loadSpotlight();
         position: relative;
         padding-bottom: 10px;
 
-        @media (max-width: 700px) {
-            margin-top: 50px;
-        }
-
         &::before {
             content: "";
             position: absolute;
@@ -103,8 +102,11 @@ loadSpotlight();
 .div-welcome {
     padding: 10%;
     height: calc(var(--view-height) - 24px);
-    // height: calc(100vh - 24px);
     position: relative;
+
+    @media (max-width: 600px) {
+        padding: 20px 10%;
+    }
 
     h1 {
         font-size: 80px;
@@ -126,10 +128,16 @@ loadSpotlight();
         transform: translateX(-50%);
         bottom: 20px;
         font-size: 20px;
+        width: 100%;
+        justify-content: center;
 
-        p {
-            font-size: 30px;
-            margin-top: 0px;
+        svg {
+            font-size: 20px;
+            margin: 10px 5px;
+        }
+
+        .left {
+            transform: scaleX(-1);
         }
     }
 
@@ -153,13 +161,12 @@ loadSpotlight();
     }
 
     @media (max-width: 700px) {
-        padding: 20% 10%;
+        padding: 5% 10%;
         margin: 20px 0;
         height: calc(var(--view-height) - 64px);
-        // height: calc(100vh - 64px);
 
         h1 {
-            font-size: 60px;
+            font-size: 40px;
             margin-left: 0;
             // margin-bottom: 80px;
         }

@@ -47,6 +47,15 @@ window.visualViewport?.addEventListener("resize", (e: Event) => {
     const target: VisualViewport = e.currentTarget! as VisualViewport;
     document.body.style.setProperty("--view-height", target.height + "px");
 });
+
+window.visualViewport?.addEventListener("scroll", (e: Event) => {
+    e.preventDefault();
+    // const target: VisualViewport = e.currentTarget! as VisualViewport;
+    console.log(e);
+    console.log(document.body.offsetTop);
+    console.log(document.body.offsetParent);
+    console.log("asd");
+});
 </script>
 
 <template>
