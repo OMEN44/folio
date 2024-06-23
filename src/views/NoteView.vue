@@ -9,6 +9,8 @@ import router from "../plugins/router";
 import { remult } from "remult";
 import { Note } from "../shared/Note";
 import NoteToolbar from "../components/note/NoteToolbar.vue";
+import { setOverlayContent } from "../scripts/overlay";
+import { AccessLevel } from "../scripts/login";
 
 onMounted(() => {
     nextTick(() => {
@@ -32,8 +34,10 @@ const selectNote = (id: string) => {
         .repo(Note)
         .findId(id, { include: { author: true, parent: true } })
         .then((note) => {
-            selectedNote.value = note;
-            editorContent.value = note.content;
+            if (note !== undefined) {
+                selectedNote.value = note;
+                editorContent.value = note.content;
+            }
         });
 };
 </script>
@@ -44,7 +48,11 @@ const selectNote = (id: string) => {
             <h1>Notes</h1>
             <div class="div-options">
                 <font-awesome-icon class="option-icon" :icon="faSearch" />
-                <font-awesome-icon class="option-icon" :icon="faAdd" />
+                <font-awesome-icon
+                    class="option-icon"
+                    :icon="faAdd"
+                    v-if="AccessLevel < 3"
+                    @click="setOverlayContent('note-form-create')" />
             </div>
         </div>
         <div class="div-note">

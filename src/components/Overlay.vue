@@ -8,6 +8,7 @@ import {
 } from "../scripts/overlay";
 import { clearInput, editing, setEditing } from "../scripts/timeline/creator";
 import OverlayAccount from "./Login.vue";
+import NoteCreateForm from "./note/NoteCreateForm.vue";
 import TimelineForm from "./TimelineForm.vue";
 import TimelineSearch from "./TimelineSearch.vue";
 
@@ -32,6 +33,7 @@ loadCloseEvents([
                 <overlay-account v-else-if="OverlayContent === 'login'" />
                 <TimelineSearch v-else-if="OverlayContent === 'timeline-search'" />
                 <TimelineForm v-else-if="OverlayContent === 'timeline-form'" />
+                <NoteCreateForm v-else-if="OverlayContent === 'note-form-create'" />
                 <template v-else>
                     <div class="div-overlay">
                         <h2>{{ (OverlayContent as OverlayType).title }}</h2>
