@@ -135,34 +135,8 @@ form {
         width: 100%;
     }
 
-    textarea,
-    select {
-        background-color: var(--blue-background);
-        border: none;
-        color: var(--text);
-        padding: 5px 10px;
-        border-radius: 4px;
-        transition: border 0.5s;
-        width: 100%;
-        resize: vertical;
-        max-height: 100px;
-    }
-
-    textarea {
-        margin-bottom: 10px;
-    }
-
-    select:focus {
-        outline: none;
-    }
-
     .div-buttons {
         margin: 10px 0 0 -5px;
-    }
-
-    // HOW TF DO YOU STYLE DROPDOWNS
-    select > option {
-        color: black;
     }
 
     .button-normal:hover {

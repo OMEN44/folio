@@ -120,31 +120,6 @@ import { addSearchTag, removeSearchTag, searchForm, searchInput } from "../scrip
             .div-filter-input {
                 display: flex;
 
-                input {
-                    appearance: none;
-                    height: 20px;
-                    width: 20px;
-                    margin: 5px;
-                    border: 2px var(--blue-background) solid;
-                    border-radius: 4px;
-                    position: relative;
-
-                    &:hover {
-                        border: 2px var(--blue) solid;
-                    }
-
-                    &:checked::after {
-                        content: "";
-                        background-color: var(--blue);
-                        width: 10px;
-                        height: 10px;
-                        position: absolute;
-                        top: 3px;
-                        left: 3px;
-                        border-radius: 50%;
-                    }
-                }
-
                 label {
                     margin: auto 2px;
                     word-wrap: normal;
