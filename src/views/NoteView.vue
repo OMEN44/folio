@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faSearch, faAdd } from "@fortawesome/free-solid-svg-icons";
-import NoteMenu from "../components/NoteMenu.vue";
-import NoteEditor from "../components/NoteEditor.vue";
+import NoteMenu from "../components/note/NoteMenu.vue";
+import NoteEditor from "../components/note/NoteEditor.vue";
 import { nextTick, onMounted, watch } from "vue";
 import { editorContent, loadNotes, selectedNote } from "../scripts/notes/notes";
 import router from "../plugins/router";
 import { remult } from "remult";
 import { Note } from "../shared/Note";
-import NoteToolbar from "../components/NoteToolbar.vue";
+import NoteToolbar from "../components/note/NoteToolbar.vue";
 
 onMounted(() => {
     nextTick(() => {

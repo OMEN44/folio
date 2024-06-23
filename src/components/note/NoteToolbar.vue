@@ -8,7 +8,7 @@ import {
     faUndo,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { saveNote } from "../scripts/notes/editorActions";
+import { saveNote } from "../../scripts/notes/editorActions";
 </script>
 
 <template>

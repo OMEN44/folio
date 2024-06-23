@@ -100,7 +100,7 @@ loadCloseEvents([
             background-color: var(--background);
             border-radius: 8px;
             padding: 10px;
-            overflow-y: scroll;
+            overflow-y: auto;
         }
     }
 }

@@ -50,7 +50,8 @@ onMounted(async () => {
 <style scoped lang="scss">
 .div-account {
     padding: 10px;
-    width: 80vw;
+    width: fit-content;
+    max-width: 80vw;
 
     div {
         display: flex;

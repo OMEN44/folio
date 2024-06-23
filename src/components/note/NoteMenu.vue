@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import NoteMenuFolder from "./note/NoteMenuFolder.vue";
+import NoteMenuFolder from "./../note/NoteMenuFolder.vue";
 </script>
 
 <template>

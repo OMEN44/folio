@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { Editor, EditorContent, HTMLContent } from "@tiptap/vue-3";
-import { selectedNote } from "../scripts/notes/notes";
+import { selectedNote } from "../../scripts/notes/notes";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
-import { nextTick, watch } from "vue";
+import { watch } from "vue";
 import { remult } from "remult";
+import { AccessLevel } from "../../scripts/login";
+import { onBeforeRouteLeave } from "vue-router";
 
 const props = defineProps<{ content?: string }>();
 const emits = defineEmits(["update:content"]);
@@ -19,12 +21,24 @@ let editor = new Editor({
 });
 
 watch(
+    () => AccessLevel.value,
+    () => {
+        editor!.setEditable(selectedNote.value?.author?.id === remult.user?.id);
+        if (!selectedNote.value?.public && AccessLevel.value >= 3) selectedNote.value = null;
+    }
+);
+
+watch(
     () => props.content,
     (value) => {
         if (editor!.getHTML() !== value) editor!.commands.setContent(value as HTMLContent, false);
         editor!.setEditable(selectedNote.value?.author?.id === remult.user?.id);
     }
 );
+
+onBeforeRouteLeave(() => {
+    selectedNote.value = null;
+});
 </script>
 
 <template>
