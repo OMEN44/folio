@@ -50,7 +50,8 @@ export const cdCommand: CommandType = {
     onCommand: (args: Array<string>) => {
         if (args.length === 1) return;
         if (["timeline", "home", "notes"].includes(args[1])) {
-            router.push({ name: args[1] });
+            if (args[1] === "notes") router.push({ name: args[1], params: { id: "" } });
+            else router.push({ name: args[1] });
             prefix.value.directory = `/${args[1]}`;
         } else {
             return { value: `cd: No such file or directory '${args[1]}'` };

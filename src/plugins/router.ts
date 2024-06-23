@@ -1,8 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import HomeView from "../views/HomeView.vue";
-import TimelineView from "../views/TimelineView.vue";
-import NoteView from "../views/NoteView.vue";
 import TestView from "../views/TestView.vue";
 
 export const router = createRouter({
@@ -11,7 +9,7 @@ export const router = createRouter({
         {
             path: "/timeline",
             name: "timeline",
-            component: TimelineView,
+            component: () => import("../views/TimelineView.vue"),
         },
         {
             path: "/home",
@@ -19,9 +17,9 @@ export const router = createRouter({
             component: HomeView,
         },
         {
-            path: "/notes",
+            path: "/notes/:id?",
             name: "notes",
-            component: NoteView,
+            component: () => import("../views/NoteView.vue"),
         },
         {
             path: "/test",

@@ -4,8 +4,11 @@ import cookieSession from "cookie-session";
 import bodyParser from "body-parser";
 import { remult, UserInfo } from "remult";
 import { Account } from "../shared/Account";
-// import helmet from "helmet";
-// import compression from "compression";
+import dotenv from "dotenv";
+import helmet from "helmet";
+import compression from "compression";
+
+dotenv.config();
 
 const app = express();
 app.use(bodyParser.json());
@@ -18,15 +21,25 @@ app.use(
 );
 app.use(api);
 
-// deployment stuff:
-// app.use(helmet());
-// app.use(compression());
+if (process.env.deployment === "true") {
+    // deployment stuff:
+    app.use(
+        helmet({
+            contentSecurityPolicy: {
+                directives: {
+                    defaultSrc: ["'self'", "icanhazdadjoke.com/", "api.adviceslip.com/advice"],
+                },
+            },
+        })
+    );
+    app.use(compression());
 
-// const frontendFiles = process.cwd() + "/dist";
-// app.use(express.static(frontendFiles));
-// app.get("/*", (_, res) => {
-//     res.sendFile(frontendFiles + "/index.html");
-// });
+    const frontendFiles = process.cwd() + "/dist";
+    app.use(express.static(frontendFiles));
+    app.get("/*", (_, res) => {
+        res.sendFile(frontendFiles + "/index.html");
+    });
+}
 
 // login api
 app.post("/api/login", api.withRemult, async (req, res) => {

@@ -1,11 +1,8 @@
 #!/bin/sh
 
-echo REMINDER:
-echo "- set 'module' to commonjs"
-echo "- uncoment sections of the server index file"
-
 # Build project
 cd ~/Programs/WebApps/folio
+echo "deployment=true" > .env
 npm run build
 mkdir -p server_files
 rm -r server_files/*
@@ -25,5 +22,7 @@ case "$1" in
         ssh omen@huon.dev -p 2024 './beta/remove_files.sh'
     ;;
 esac
+
+echo "deployment=false" > .env
 
 echo Finished!

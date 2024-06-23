@@ -1,18 +1,44 @@
 <script setup lang="ts">
-import { useEditor, EditorContent } from "@tiptap/vue-3";
+import { Editor, EditorContent, HTMLContent } from "@tiptap/vue-3";
+import { selectedNote } from "../scripts/notes/notes";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
+import { nextTick, watch } from "vue";
+import { remult } from "remult";
 
-const editor = useEditor({
-    content: "<p>I’m running Tiptap with Vue.js. 🎉</p>",
+const props = defineProps<{ content?: string }>();
+const emits = defineEmits(["update:content"]);
+
+let editor = new Editor({
     extensions: [StarterKit, Image],
+    content: props.content,
+    editable: false,
+    onUpdate: () => {
+        emits("update:content", editor!.getHTML());
+    },
 });
+
+watch(
+    () => props.content,
+    (value) => {
+        if (editor!.getHTML() !== value) editor!.commands.setContent(value as HTMLContent, false);
+        editor!.setEditable(selectedNote.value?.author?.id === remult.user?.id);
+    }
+);
 </script>
 
 <template>
     <span class="left-decoration"></span>
     <div class="div-note-editor">
-        <editor-content class="editor" :editor="editor" />
+        <template v-if="selectedNote !== null">
+            <div class="editor-container">
+                <h1>{{ selectedNote.title }}</h1>
+                <editor-content class="editor" :editor="editor" />
+            </div>
+        </template>
+        <template v-else>
+            <p>Select a note to edit.</p>
+        </template>
     </div>
     <span class="right-decoration"></span>
 </template>
@@ -24,23 +50,21 @@ const editor = useEditor({
     border: 2px var(--blue);
     border-style: none solid;
     flex: 1;
+
+    .editor-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        .editor {
+            flex: 1;
+            overflow-y: auto;
+        }
+    }
 }
 
 span {
     position: relative;
-}
-
-.textarea-output {
-    height: 100%;
-    width: 100%;
-    resize: none;
-    color: var(--text);
-    background-color: transparent;
-    border: none;
-}
-
-.textarea:focus {
-    outline: none;
 }
 
 .left-decoration::after,

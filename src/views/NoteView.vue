@@ -1,34 +1,41 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import {
-    faSearch,
-    faFilter,
-    faAdd,
-    faLock,
-    faLockOpen,
-    faSave,
-    faTrash,
-    faUndo,
-    faImage,
-} from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faAdd } from "@fortawesome/free-solid-svg-icons";
 import NoteMenu from "../components/NoteMenu.vue";
 import NoteEditor from "../components/NoteEditor.vue";
 import { nextTick, onMounted, watch } from "vue";
-import { loadNotes } from "../scripts/notes/notes";
-import { AccessLevel } from "../scripts/login";
+import { editorContent, loadNotes, selectedNote } from "../scripts/notes/notes";
+import router from "../plugins/router";
+import { remult } from "remult";
+import { Note } from "../shared/Note";
+import NoteToolbar from "../components/NoteToolbar.vue";
 
 onMounted(() => {
     nextTick(() => {
         loadNotes();
     });
+
+    if (router.currentRoute.value.params.id !== "") {
+        selectNote(router.currentRoute.value.params.id as string);
+    }
+
+    watch(
+        () => router.currentRoute.value.params.id,
+        (value) => {
+            selectNote(value as string);
+        }
+    );
 });
 
-// watch(
-//     () => AccessLevel.value,
-//     () => {
-//         loadNotes();
-//     }
-// );
+const selectNote = (id: string) => {
+    remult
+        .repo(Note)
+        .findId(id, { include: { author: true, parent: true } })
+        .then((note) => {
+            selectedNote.value = note;
+            editorContent.value = note.content;
+        });
+};
 </script>
 
 <template>
@@ -37,21 +44,16 @@ onMounted(() => {
             <h1>Notes</h1>
             <div class="div-options">
                 <font-awesome-icon class="option-icon" :icon="faSearch" />
-                <font-awesome-icon class="option-icon" :icon="faFilter" />
                 <font-awesome-icon class="option-icon" :icon="faAdd" />
             </div>
         </div>
         <div class="div-note">
             <div class="div-note-content">
                 <note-menu />
-                <note-editor />
-                <div class="div-note-toolbar">
-                    <font-awesome-icon class="option-icon" :icon="true ? faLock : faLockOpen" />
-                    <font-awesome-icon class="option-icon" :icon="faSave" />
-                    <font-awesome-icon class="option-icon" :icon="faTrash" />
-                    <font-awesome-icon class="option-icon" :icon="faUndo" />
-                    <font-awesome-icon class="option-icon" :icon="faImage" />
-                </div>
+                <note-editor
+                    :content="editorContent"
+                    @update:content="($event) => (editorContent = $event)" />
+                <NoteToolbar />
             </div>
         </div>
     </div>
@@ -88,9 +90,9 @@ onMounted(() => {
 
     .div-note {
         flex-direction: row;
-        margin: 10px 35px;
+        margin: 10px;
         flex: 1;
-        width: calc(100% - 70px);
+        width: calc(100% - 20px);
         position: relative;
 
         .div-note-content {
