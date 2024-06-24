@@ -7,6 +7,9 @@ import { watch } from "vue";
 import { remult } from "remult";
 import { AccessLevel } from "../../scripts/login";
 import { onBeforeRouteLeave } from "vue-router";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faAdd, faFolder } from "@fortawesome/free-solid-svg-icons";
+import { setOverlayContent } from "../../scripts/overlay";
 
 const props = defineProps<{ content?: string }>();
 const emits = defineEmits(["update:content"]);
@@ -51,7 +54,16 @@ onBeforeRouteLeave(() => {
             </div>
         </template>
         <template v-else>
-            <p>Select a note to edit.</p>
+            <div class="tips">
+                <div class="tip" @click="setOverlayContent('note-menu')">
+                    <FontAwesomeIcon :icon="faFolder" />
+                    <p>Find a note to edit</p>
+                </div>
+                <div class="tip" @click="setOverlayContent('note-form-create')">
+                    <FontAwesomeIcon :icon="faAdd" />
+                    <p>Create a new note</p>
+                </div>
+            </div>
         </template>
     </div>
     <span class="right-decoration"></span>
@@ -64,6 +76,24 @@ onBeforeRouteLeave(() => {
     border: 2px var(--blue);
     border-style: none solid;
     flex: 1;
+    position: relative;
+
+    h1 {
+        background-color: var(--blue-background);
+        padding: 5px 10px;
+        border-radius: 5px;
+        margin-bottom: 5px;
+    }
+
+    @media (max-width: 600px) {
+        border-style: none;
+        margin: 0;
+        padding: 0 5px;
+
+        h1 {
+            font-size: 26px;
+        }
+    }
 
     .editor-container {
         display: flex;
@@ -75,10 +105,38 @@ onBeforeRouteLeave(() => {
             overflow-y: auto;
         }
     }
+
+    .tips {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        .tip {
+            display: flex;
+            padding: 5px 10px;
+            margin: 10px 0;
+            background-color: var(--blue-background);
+            border-radius: 5px;
+            cursor: pointer;
+
+            p {
+                white-space: nowrap;
+            }
+
+            svg {
+                margin: auto 10px auto 0;
+            }
+        }
+    }
 }
 
 span {
     position: relative;
+
+    @media (max-width: 600px) {
+        display: none;
+    }
 }
 
 .left-decoration::after,

@@ -51,7 +51,10 @@ onMounted(async () => {
 .div-account {
     padding: 10px;
     width: fit-content;
-    max-width: 80vw;
+
+    @media (max-width: 600px) {
+        width: 80vw;
+    }
 
     div {
         display: flex;

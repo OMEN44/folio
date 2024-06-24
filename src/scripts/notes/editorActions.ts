@@ -10,7 +10,7 @@ import router from "../../plugins/router";
 const folders = ref<NoteFolder[]>([]);
 const errorMessage = ref<string>();
 
-export const creatForm = ref<{
+export const createForm = ref<{
     isNote: boolean;
     parentId: number;
     title: string;
@@ -33,26 +33,28 @@ export const loadFolders = () => {
 };
 
 export const create = () => {
-    if (creatForm.value.title !== "") {
+    if (createForm.value.title !== "") {
         let repo;
-        if (creatForm.value.isNote) {
+        if (createForm.value.isNote) {
             repo = remult.repo(Note);
         } else {
             repo = remult.repo(NoteFolder);
         }
-        repo.find({ where: { title: creatForm.value.title } }).then(async (res) => {
+        repo.find({ where: { title: createForm.value.title } }).then(async (res) => {
             if (res.length !== 0) {
                 errorMessage.value = `${
-                    creatForm.value.isNote ? "Note" : "Folder"
+                    createForm.value.isNote ? "Note" : "Folder"
                 } exists with this title`;
             } else {
                 const author: Account = await remult.repo(Account).findId(remult.user!.id);
                 repo.insert({
-                    title: creatForm.value.title,
-                    public: creatForm.value.isPublic,
-                    parent: folders.value[creatForm.value.parentId],
+                    title: createForm.value.title,
+                    public: createForm.value.isPublic,
+                    parent: folders.value[createForm.value.parentId],
                     author: author,
                 }).then(() => {
+                    createForm.value.title = "";
+                    closeOverlay();
                     loadNotes();
                 });
             }

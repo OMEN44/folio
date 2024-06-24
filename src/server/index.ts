@@ -28,6 +28,7 @@ if (process.env.deployment === "true") {
             contentSecurityPolicy: {
                 directives: {
                     defaultSrc: ["'self'", "icanhazdadjoke.com/", "api.adviceslip.com/advice"],
+                    "script-src-attr": ["'self'", "'unsafe-inline'"],
                 },
             },
         })

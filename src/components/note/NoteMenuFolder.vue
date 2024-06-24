@@ -96,6 +96,10 @@ watch(
     flex-direction: column;
     width: 300px;
 
+    @media (max-width: 800px) {
+        width: 75vw;
+    }
+
     p {
         font-size: 18px;
         text-overflow: ellipsis;
@@ -107,7 +111,7 @@ watch(
     .note {
         cursor: pointer;
         border-radius: 5px;
-        padding: 2px 0;
+        padding: 2px 5px 2px 0;
         margin: 3px 0;
         height: 32px;
 

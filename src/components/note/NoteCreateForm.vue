@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
     create,
-    creatForm,
+    createForm,
     ErrorMessage,
     Folders,
     loadFolders,
@@ -16,15 +16,17 @@ loadFolders();
         <h2>Create new note or folder</h2>
         <strong v-text="ErrorMessage"></strong>
         <div class="div-selector">
-            <p :class="{ selected: creatForm.isNote }" @click="creatForm.isNote = true">Note</p>
-            <p :class="{ selected: !creatForm.isNote }" @click="creatForm.isNote = false">Folder</p>
+            <p :class="{ selected: createForm.isNote }" @click="createForm.isNote = true">Note</p>
+            <p :class="{ selected: !createForm.isNote }" @click="createForm.isNote = false">
+                Folder
+            </p>
             <div class="checkbox">
-                <input type="checkbox" id="checkbox" v-model="creatForm.isPublic" />
+                <input type="checkbox" id="checkbox" v-model="createForm.isPublic" />
                 <label for="checkbox">Public</label>
             </div>
         </div>
 
-        <select v-model="creatForm.parentId">
+        <select v-model="createForm.parentId">
             <option value="-1">No parent folder</option>
             <option v-for="(folder, index) in Folders" :value="index">
                 {{ folder.title }}
@@ -33,8 +35,8 @@ loadFolders();
 
         <input
             type="text"
-            v-model="creatForm.title"
-            :placeholder="`${creatForm.isNote ? 'Note' : 'Folder'} title`" />
+            v-model="createForm.title"
+            :placeholder="`${createForm.isNote ? 'Note' : 'Folder'} title`" />
 
         <div class="div-buttons">
             <button class="button-normal" type="submit" @click="create">Submit</button>
