@@ -2,7 +2,7 @@
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faSearch, faAdd, faRemove } from "@fortawesome/free-solid-svg-icons";
 import { ref, watch } from "vue";
-import TimelineEvent from "../components/TimelineEvent.vue";
+import TimelineEvent from "../components/timeline/TimelineEvent.vue";
 import { TimelineData, updateTimeline, year } from "../scripts/timeline/timeline";
 import { Timeline } from "../shared/Timeline";
 import { AccessLevel } from "../scripts/login";

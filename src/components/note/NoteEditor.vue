@@ -57,9 +57,12 @@ onBeforeRouteLeave(() => {
             <div class="tips">
                 <div class="tip" @click="setOverlayContent('note-menu')">
                     <FontAwesomeIcon :icon="faFolder" />
-                    <p>Find a note to edit</p>
+                    <p>Browse notes</p>
                 </div>
-                <div class="tip" @click="setOverlayContent('note-form-create')">
+                <div
+                    class="tip"
+                    @click="setOverlayContent('note-form-create')"
+                    v-if="AccessLevel < 3">
                     <FontAwesomeIcon :icon="faAdd" />
                     <p>Create a new note</p>
                 </div>

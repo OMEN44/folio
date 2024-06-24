@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faRemove } from "@fortawesome/free-solid-svg-icons";
-import { addSearchTag, removeSearchTag, searchForm, searchInput } from "../scripts/timeline/search";
+import {
+    addSearchTag,
+    removeSearchTag,
+    searchForm,
+    searchInput,
+} from "../../scripts/timeline/search";
 </script>
 
 <template>
