@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faEdit, faLink, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Timeline } from "../shared/Timeline";
-import { AccessLevel } from "../scripts/login";
-import { deleteEvent, editEvent, goToLink } from "../scripts/timeline/editor";
-import { searchForm } from "../scripts/timeline/search";
+import { Timeline } from "../../shared/Timeline";
+import { AccessLevel } from "../../scripts/login";
+import { deleteEvent, editEvent, goToLink } from "../../scripts/timeline/editor";
+import { searchForm } from "../../scripts/timeline/search";
 
 defineProps<{ eventData: Timeline }>();
 </script>

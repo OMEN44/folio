@@ -11,8 +11,8 @@ import OverlayAccount from "./Login.vue";
 import NoteCreateForm from "./note/NoteCreateForm.vue";
 import NoteMenu from "./note/NoteMenu.vue";
 import NoteToolbar from "./note/NoteToolbar.vue";
-import TimelineForm from "./TimelineForm.vue";
-import TimelineSearch from "./TimelineSearch.vue";
+import TimelineForm from "./timeline/TimelineForm.vue";
+import TimelineSearch from "./timeline/TimelineSearch.vue";
 
 loadCloseEvents([
     {

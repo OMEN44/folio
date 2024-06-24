@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { closeOverlay } from "../scripts/overlay";
+import { closeOverlay } from "../../scripts/overlay";
 import {
     addTag,
     Images,
@@ -9,7 +9,7 @@ import {
     removeTag,
     timelineEditor,
     TimelineEditorError,
-} from "../scripts/timeline/creator";
+} from "../../scripts/timeline/creator";
 
 loadResources();
 </script>
