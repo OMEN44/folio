@@ -8,6 +8,7 @@ import { closeOverlay, ShowOverlay } from "./scripts/overlay";
 import { commandInput, prefix, showTerminal } from "./scripts/terminal";
 import { remult } from "remult";
 import { setPermissionLevel } from "./scripts/login";
+import NotificationOverlay from "./components/NotificationOverlay.vue";
 
 window.addEventListener("keydown", (e: KeyboardEvent) => {
     switch (e.key) {
@@ -59,6 +60,7 @@ window.visualViewport?.addEventListener("scroll", (e: Event) => {
 </script>
 
 <template>
+    <NotificationOverlay />
     <Overlay />
     <Terminal />
     <nav-bar />
