@@ -4,6 +4,7 @@ import { Timeline } from "../../shared/Timeline";
 import { Note } from "../../shared/Note";
 import { Image } from "../../shared/Image";
 import { updateTimeline } from "./timeline";
+import { addNotification } from "../notification";
 
 const notes = ref<Note[]>([]);
 const images = ref<Image[]>([]);
@@ -89,6 +90,7 @@ export const insert = () => {
             .repo(Timeline)
             .insert(newTimelineEvent)
             .then(() => {
+                addNotification(`Created timeline event: ${newTimelineEvent.title}`);
                 updateTimeline();
             })
             .catch((error) => {
@@ -99,6 +101,7 @@ export const insert = () => {
             .repo(Timeline)
             .update(editing, newTimelineEvent)
             .then(() => {
+                addNotification(`Edited timeline event: ${newTimelineEvent.title}`);
                 updateTimeline();
             })
             .catch((error) => {

@@ -3,6 +3,7 @@ import { Timeline } from "../../shared/Timeline";
 import { closeOverlay, setOverlayContent } from "../overlay";
 import { updateTimeline } from "./timeline";
 import { Images, PublicNotes, setEditing, timelineEditor } from "./creator";
+import { addNotification } from "../notification";
 
 export const goToLink = (currentEvent: Timeline) => {
     if (currentEvent.url) {
@@ -26,7 +27,7 @@ export const deleteEvent = (currentEvent: Timeline) => {
                         .repo(Timeline)
                         .delete(currentEvent.id)
                         .then(() => {
-                            // Notification here
+                            addNotification(`Delete timeline event: ${currentEvent.title}`);
                             updateTimeline();
                             closeOverlay();
                         });

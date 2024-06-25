@@ -6,6 +6,7 @@ import { NoteFolder } from "../../shared/NoteFolder";
 import { Account } from "../../shared/Account";
 import { closeOverlay, setOverlayContent } from "../overlay";
 import router from "../../plugins/router";
+import { addNotification } from "../notification";
 
 const folders = ref<NoteFolder[]>([]);
 const errorMessage = ref<string>();
@@ -53,6 +54,11 @@ export const create = () => {
                     parent: folders.value[createForm.value.parentId],
                     author: author,
                 }).then(() => {
+                    addNotification(
+                        `Created ${createForm.value.isNote ? "note" : "folder"}: ${
+                            createForm.value.title
+                        }`
+                    );
                     createForm.value.title = "";
                     closeOverlay();
                     loadNotes();
@@ -65,6 +71,7 @@ export const create = () => {
 export const saveNote = async () => {
     if (selectedNote.value) {
         await remult.repo(Note).update(selectedNote.value?.id, { content: editorContent.value });
+        addNotification(`Changes saved`);
     }
 };
 
@@ -82,7 +89,7 @@ export const deleteNote = () => {
                             .repo(Note)
                             .delete(selectedNote.value!.id)
                             .then(() => {
-                                // Notification here
+                                addNotification(`Deleted note: ${selectedNote.value?.title}`);
                                 selectedNote.value = null;
                                 loadNotes();
                                 closeOverlay();

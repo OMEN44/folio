@@ -1,22 +1,5 @@
 <script setup lang="ts">
-import { addNotification, Notifications, removeNotification } from "../scripts/notification";
-
-window.addEventListener("keyup", (e) => {
-    if (e.key === "r") {
-        addNotification("test");
-    }
-    if (e.key === "e") {
-        console.log(Notifications.value);
-    }
-});
-
-addNotification("This is a test");
-setTimeout(() => {
-    addNotification("This is another test");
-}, 3000);
-setTimeout(() => {
-    addNotification("Phone is ringing");
-}, 6000);
+import { Notifications, removeNotification } from "../scripts/notification";
 </script>
 
 <template>

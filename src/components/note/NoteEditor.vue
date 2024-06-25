@@ -82,9 +82,10 @@ onBeforeRouteLeave(() => {
     position: relative;
 
     h1 {
-        background-color: var(--blue-background);
-        padding: 5px 10px;
-        border-radius: 5px;
+        // background-color: var(--blue-background);
+        // padding: 5px 10px;
+        // border-radius: 5px;
+        text-decoration: underline var(--blue-background) 5px;
         margin-bottom: 5px;
     }
 
