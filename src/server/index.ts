@@ -28,7 +28,7 @@ if (process.env.deployment === "true") {
             contentSecurityPolicy: {
                 directives: {
                     defaultSrc: ["'self'", "icanhazdadjoke.com/", "api.adviceslip.com/advice"],
-                    "script-src-attr": ["'self'", "'unsafe-inline'"],
+                    "script-src-attr": ["'self'"],
                 },
             },
         })
@@ -73,7 +73,7 @@ app.post("/api/logout", (req, res) => {
     res.json("Signed out successfully");
 });
 
-app.get("/api/user", (req, res) => {
+app.post("/api/user", (req, res) => {
     res.json(req.session!["user"]);
 });
 

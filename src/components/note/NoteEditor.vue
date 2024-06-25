@@ -3,6 +3,7 @@ import { Editor, EditorContent, HTMLContent } from "@tiptap/vue-3";
 import { selectedNote } from "../../scripts/notes/notes";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
+import CharacterCount from "@tiptap/extension-character-count";
 import { watch } from "vue";
 import { remult } from "remult";
 import { AccessLevel } from "../../scripts/login";
@@ -10,16 +11,19 @@ import { onBeforeRouteLeave } from "vue-router";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faAdd, faFolder } from "@fortawesome/free-solid-svg-icons";
 import { setOverlayContent } from "../../scripts/overlay";
+import { wordCount } from "../../scripts/notes/noteOptions";
+import { saveNote } from "../../scripts/notes/editorActions";
 
 const props = defineProps<{ content?: string }>();
 const emits = defineEmits(["update:content"]);
 
 let editor = new Editor({
-    extensions: [StarterKit, Image],
+    extensions: [StarterKit, Image, CharacterCount],
     content: props.content,
     editable: false,
     onUpdate: () => {
         emits("update:content", editor!.getHTML());
+        wordCount.value = editor.storage.characterCount.words();
     },
 });
 
@@ -46,7 +50,13 @@ onBeforeRouteLeave(() => {
 
 <template>
     <span class="left-decoration"></span>
-    <div class="div-note-editor">
+    <div
+        class="div-note-editor"
+        @keydown.ctrl.prevent="
+            (e) => {
+                if (e.key === 's') saveNote();
+            }
+        ">
         <template v-if="selectedNote !== null">
             <div class="editor-container">
                 <h1>{{ selectedNote.title }}</h1>

@@ -28,7 +28,7 @@ window.addEventListener("keydown", (e: KeyboardEvent) => {
 
 onMounted(async () => {
     remult.user = await getAxios()
-        .get("user")
+        .post("user")
         .then((response) => {
             return response.data;
         });

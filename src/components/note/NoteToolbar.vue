@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { deleteNote, saveNote, togglePublicity } from "../../scripts/notes/editorActions";
 import { editorContent, selectedNote } from "../../scripts/notes/notes";
 import { addNotification } from "../../scripts/notification";
-import { editNoteTitle, noteDetails } from "../../scripts/notes/noteOptions";
+import { editNoteTitle, noteDetails, wordCount } from "../../scripts/notes/noteOptions";
 
 const print = () => {
     var printContents = editorContent.value!;
@@ -77,7 +77,9 @@ const copyLink = () => {
                 </tr>
                 <tr>
                     <td>Word count:</td>
-                    <td v-if="editorContent">{{ editorContent.split(" ").length }}</td>
+                    <td v-if="editorContent">
+                        {{ wordCount }}
+                    </td>
                 </tr>
                 <tr>
                     <td>Last edit:</td>

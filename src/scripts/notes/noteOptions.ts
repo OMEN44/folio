@@ -9,6 +9,8 @@ export const noteDetails = ref<{ title: string; author: number; parent: number }
     parent: 0,
 });
 
+export const wordCount = ref<number>(0);
+
 export const editNoteTitle = () => {
     if (noteDetails.value.title !== "") {
         remult
