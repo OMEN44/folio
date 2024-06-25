@@ -72,6 +72,7 @@ export const saveNote = async () => {
     if (selectedNote.value) {
         await remult.repo(Note).update(selectedNote.value?.id, { content: editorContent.value });
         addNotification(`Changes saved`);
+        loadNotes(true);
     }
 };
 
@@ -107,4 +108,18 @@ export const deleteNote = () => {
             ],
         });
     }
+};
+
+export const togglePublicity = (targetId?: string) => {
+    const noteId: string = targetId ? targetId : selectedNote.value!.id;
+
+    remult
+        .repo(Note)
+        .findId(noteId)
+        .then((res) => {
+            remult
+                .repo(Note)
+                .update(noteId, { public: !res.public })
+                .then(() => loadNotes(targetId === undefined));
+        });
 };

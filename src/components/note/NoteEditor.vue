@@ -104,6 +104,19 @@ onBeforeRouteLeave(() => {
         flex-direction: column;
         height: 100%;
 
+        @media print {
+            body {
+                visibility: hidden;
+            }
+
+            .editor {
+                visibility: visible;
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
+
         .editor {
             flex: 1;
             overflow-y: auto;

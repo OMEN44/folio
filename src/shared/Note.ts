@@ -18,8 +18,11 @@ export class Note {
     @Fields.string()
     content = "";
 
-    @Fields.date()
+    @Fields.updatedAt()
     lastEdit = new Date();
+
+    @Fields.createdAt()
+    createdAt = new Date();
 
     @Relations.toOne(() => Account)
     author?: Account;

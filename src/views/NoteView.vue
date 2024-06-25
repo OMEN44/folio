@@ -4,10 +4,8 @@ import { faSearch, faAdd, faFolder, faEllipsis } from "@fortawesome/free-solid-s
 import NoteMenu from "../components/note/NoteMenu.vue";
 import NoteEditor from "../components/note/NoteEditor.vue";
 import { nextTick, onMounted, watch } from "vue";
-import { editorContent, loadNotes, selectedNote } from "../scripts/notes/notes";
+import { editorContent, loadNotes, selectNote } from "../scripts/notes/notes";
 import router from "../plugins/router";
-import { remult } from "remult";
-import { Note } from "../shared/Note";
 import NoteToolbar from "../components/note/NoteToolbar.vue";
 import { setOverlayContent } from "../scripts/overlay";
 import { AccessLevel } from "../scripts/login";
@@ -28,18 +26,6 @@ onMounted(() => {
         }
     );
 });
-
-const selectNote = (id: string) => {
-    remult
-        .repo(Note)
-        .findId(id, { include: { author: true, parent: true } })
-        .then((note) => {
-            if (note !== undefined) {
-                selectedNote.value = note;
-                editorContent.value = note.content;
-            }
-        });
-};
 </script>
 
 <template>
@@ -140,12 +126,6 @@ const selectNote = (id: string) => {
             top: 0;
             bottom: 0;
             width: 100%;
-
-            .div-note-toolbar {
-                display: flex;
-                flex-direction: column;
-                width: fit-content;
-            }
         }
     }
 }
