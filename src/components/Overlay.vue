@@ -9,6 +9,7 @@ import {
 import { clearInput, editing, setEditing } from "../scripts/timeline/creator";
 import OverlayAccount from "./Login.vue";
 import NoteCreateForm from "./note/NoteCreateForm.vue";
+import NoteFolderForm from "./note/NoteFolderForm.vue";
 import NoteMenu from "./note/NoteMenu.vue";
 import NoteToolbar from "./note/NoteToolbar.vue";
 import TimelineForm from "./timeline/TimelineForm.vue";
@@ -38,6 +39,7 @@ loadCloseEvents([
                 <NoteCreateForm v-else-if="OverlayContent === 'note-form-create'" />
                 <NoteMenu v-else-if="OverlayContent === 'note-menu'" />
                 <NoteToolbar v-else-if="OverlayContent === 'note-tools'" />
+                <NoteFolderForm v-else-if="OverlayContent === 'note-form-folder'" />
                 <template v-else>
                     <div class="div-overlay">
                         <h2>{{ (OverlayContent as OverlayType).title }}</h2>

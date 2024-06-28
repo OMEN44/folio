@@ -10,9 +10,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { deleteNote, saveNote, togglePublicity } from "../../scripts/notes/editorActions";
-import { editorContent, selectedNote } from "../../scripts/notes/notes";
 import { addNotification } from "../../scripts/notification";
-import { editNoteTitle, noteDetails, wordCount } from "../../scripts/notes/noteOptions";
+import {
+    editNoteTitle,
+    FolderList,
+    noteEditor,
+    UserList,
+    wordCount,
+} from "../../scripts/notes/noteOptions";
+import { AccessLevel } from "../../scripts/login";
+import { remult } from "remult";
+import { editorContent, selectedNote } from "../../scripts/notes/notes";
 
 const print = () => {
     var printContents = editorContent.value!;
@@ -29,47 +37,66 @@ const copyLink = () => {
     navigator.clipboard.writeText(window.location.toString());
     addNotification("Copied link to clipboard");
 };
+
+const hasAccess = (): boolean =>
+    AccessLevel.value < 3 && selectedNote.value?.author?.id === remult.user?.id;
 </script>
 
 <template>
-    <div class="div-note-toolbar">
-        <div class="tools">
-            <font-awesome-icon class="option-icon" :icon="faSave" @click="saveNote" />
-            <font-awesome-icon class="option-icon" :icon="faTrash" @click="deleteNote" />
-            <font-awesome-icon
-                class="option-icon"
-                :icon="selectedNote?.public ? faLockOpen : faLock"
-                @click="togglePublicity()" />
-            <font-awesome-icon class="option-icon" :icon="faImage" />
-            <font-awesome-icon class="option-icon" :icon="faPrint" @click="print" />
-            <font-awesome-icon class="option-icon" :icon="faShare" @click="copyLink" />
-        </div>
-        <form @submit.prevent v-if="selectedNote !== null">
-            <label for="title">Edit title</label>
-            <div class="inline-submit">
-                <span
-                    ><input
-                        id="title"
-                        type="text"
-                        :placeholder="selectedNote.title"
-                        v-model="noteDetails.title"
-                /></span>
-                <button class="button-normal" type="submit" @click="editNoteTitle">Go</button>
+    <template v-if="selectedNote !== null">
+        <div class="div-note-toolbar">
+            <div class="tools">
+                <font-awesome-icon
+                    class="option-icon"
+                    v-if="hasAccess()"
+                    :icon="faSave"
+                    @click="saveNote" />
+                <font-awesome-icon
+                    class="option-icon"
+                    v-if="hasAccess()"
+                    :icon="faTrash"
+                    @click="deleteNote" />
+                <font-awesome-icon
+                    class="option-icon"
+                    :icon="selectedNote?.public ? faLockOpen : faLock"
+                    v-if="hasAccess()"
+                    @click="togglePublicity()" />
+                <font-awesome-icon class="option-icon" :icon="faImage" v-if="hasAccess()" />
+                <font-awesome-icon class="option-icon" :icon="faPrint" @click="print" />
+                <font-awesome-icon class="option-icon" :icon="faShare" @click="copyLink" />
             </div>
+            <form @submit.prevent v-if="hasAccess()">
+                <label for="title">Edit title</label>
+                <div class="inline-submit">
+                    <span
+                        ><input
+                            id="title"
+                            type="text"
+                            :placeholder="selectedNote.title"
+                            v-model="noteEditor.title"
+                    /></span>
+                    <button class="button-normal" type="submit" @click="editNoteTitle">Go</button>
+                </div>
 
-            <label for="author">Change author</label>
-            <span>
-                <select id="author">
-                    <option value="1">{{ selectedNote.author?.username }}</option>
-                </select>
-            </span>
+                <label for="author">Change author</label>
+                <span>
+                    <select id="author" v-model="noteEditor.author">
+                        <option v-for="(user, index) in UserList" :value="index">
+                            {{ user.username }}
+                        </option>
+                    </select>
+                </span>
 
-            <label for="parent">Change parent folder</label>
-            <span>
-                <select id="parent">
-                    <option value="1">{{ selectedNote.parent?.title }}</option>
-                </select>
-            </span>
+                <label for="parent">Change parent folder</label>
+                <span>
+                    <select id="parent" v-model="noteEditor.parent">
+                        <option value="-1">Root folder</option>
+                        <option v-for="(user, index) in FolderList" :value="index">
+                            {{ user.title }}
+                        </option>
+                    </select>
+                </span>
+            </form>
 
             <table>
                 <tr>
@@ -90,8 +117,9 @@ const copyLink = () => {
                     <td>{{ selectedNote.createdAt?.toDateString() }}</td>
                 </tr>
             </table>
-        </form>
-    </div>
+        </div>
+    </template>
+    <p v-else style="margin: 10px; opacity: 0.7">Select a note to access editor tool bar</p>
 </template>
 
 <style scoped lang="scss">
@@ -109,6 +137,18 @@ const copyLink = () => {
         flex-wrap: wrap;
     }
 
+    table {
+        margin: 10px 5px 5px 5px;
+        border-radius: 5px;
+        padding: 5px;
+        background-color: var(--blue-background);
+
+        th {
+            text-align: left;
+            font-size: 20px;
+        }
+    }
+
     form {
         display: flex;
         flex-direction: column;
@@ -118,18 +158,6 @@ const copyLink = () => {
         label {
             font-size: 18px;
             margin-top: 5px;
-        }
-
-        table {
-            margin-top: 10px;
-            border-radius: 5px;
-            padding: 5px;
-            background-color: var(--blue-background);
-
-            th {
-                text-align: left;
-                font-size: 20px;
-            }
         }
 
         // make inputs full length

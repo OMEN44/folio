@@ -10,6 +10,8 @@ import NoteToolbar from "../components/note/NoteToolbar.vue";
 import { setOverlayContent } from "../scripts/overlay";
 import { AccessLevel } from "../scripts/login";
 import { saveNote } from "../scripts/notes/editorActions";
+import { loadElementEditor } from "../scripts/notes/noteOptions";
+import { Note } from "../shared/Note";
 
 onMounted(() => {
     nextTick(() => {
@@ -24,6 +26,7 @@ onMounted(() => {
         () => router.currentRoute.value.params.id,
         (value) => {
             selectNote(value as string);
+            loadElementEditor(true, selectedNote.value as Note);
         }
     );
 });

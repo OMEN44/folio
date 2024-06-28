@@ -65,6 +65,7 @@ onBeforeRouteLeave(() => {
         </template>
         <template v-else>
             <div class="tips">
+                <h2>No note is open</h2>
                 <div class="tip" @click="setOverlayContent('note-menu')">
                     <FontAwesomeIcon :icon="faFolder" />
                     <p>Browse notes</p>
@@ -139,10 +140,14 @@ onBeforeRouteLeave(() => {
         left: 50%;
         transform: translate(-50%, -50%);
 
+        h2 {
+            font-size: 20px;
+        }
+
         .tip {
             display: flex;
             padding: 5px 10px;
-            margin: 10px 0;
+            margin: 10px auto;
             background-color: var(--blue-background);
             border-radius: 5px;
             cursor: pointer;

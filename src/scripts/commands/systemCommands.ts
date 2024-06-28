@@ -6,6 +6,7 @@ import { Spotlight } from "../../shared/Spotlight";
 import { logout } from "../login";
 import { Timeline } from "../../shared/Timeline";
 import { loadSpotlight } from "../spotlight";
+import { Account } from "../../shared/Account";
 
 export const spotlightCommand: CommandType = {
     label: "spotlight",
@@ -42,6 +43,21 @@ export const spotlightCommand: CommandType = {
             loadSpotlight();
             return undefined;
         }
+    },
+};
+
+export const editPermCommand: CommandType = {
+    label: "editperm",
+    admin: true,
+    onCommand: async (args: Array<string>) => {
+        args.shift();
+        if (args.length !== 2) return { value: `Usage: editperm [username] [permission level]` };
+        if (![0, 1, 2, 3].includes(Number(args[1])))
+            return { value: `editperm: invalid permission level '${args[1]}'` };
+
+        const user = await remult.repo(Account).findOne({ where: { username: args[0] } });
+        if (user === undefined) return { value: `editperm: invalid username '${args[0]}'` };
+        remult.repo(Account).update(user.id, { access: Number(args[1]) });
     },
 };
 

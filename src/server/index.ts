@@ -7,6 +7,7 @@ import { Account } from "../shared/Account";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import compression from "compression";
+import argon2 from "argon2";
 
 dotenv.config();
 
@@ -48,24 +49,47 @@ app.post("/api/login", api.withRemult, async (req, res) => {
         .repo(Account)
         .find({ where: { username: req.body.username } });
 
-    if (users.length !== 0) {
-        let validPassword = false;
-        users.forEach((user) => {
-            if (user.password === req.body.password) {
-                req.session!["user"] = {
-                    id: user.id,
-                    name: user.username,
-                    roles: [user.access.toString()],
-                } as UserInfo;
-                res.json(req.session!["user"]);
-                validPassword = true;
-                return;
-            }
-        });
-        if (!validPassword) res.status(401).json("Invalid username or password");
+    if (users.length === 1) {
+        if (await argon2.verify(users[0].password, req.body.username + req.body.password)) {
+            req.session!["user"] = {
+                id: users[0].id,
+                name: users[0].username,
+                roles: [users[0].access.toString()],
+            } as UserInfo;
+            res.json(req.session!["user"]);
+        } else res.status(401).json("Invalid username or password");
     } else {
         res.status(404).json("Account not found");
     }
+});
+
+app.post("/api/register", api.withRemult, async (req, res) => {
+    const { username, password, email } = req.body;
+    remult
+        .repo(Account)
+        .find({ where: { username: username } })
+        .then(async (response) => {
+            if (response.length !== 0) {
+                res.status(409).json("Username exists");
+            } else {
+                remult
+                    .repo(Account)
+                    .insert({
+                        username: username,
+                        email: email,
+                        password: await argon2.hash(username + password),
+                        access: 3,
+                    })
+                    .then((account) => {
+                        req.session!["user"] = {
+                            id: account.id,
+                            name: account.username,
+                            roles: [account.access.toString()],
+                        } as UserInfo;
+                        res.json(req.session!["user"]);
+                    });
+            }
+        });
 });
 
 app.post("/api/logout", (req, res) => {

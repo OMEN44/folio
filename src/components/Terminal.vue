@@ -2,6 +2,7 @@
 import { adviceCommand, jokeCommand } from "../scripts/commands/adviceCommand";
 import {
     cdCommand,
+    editPermCommand,
     exitCommand,
     logoutCommand,
     lsCommand,
@@ -32,6 +33,7 @@ loadCommands([
     whoamiCommand,
     logoutCommand,
     jokeCommand,
+    editPermCommand,
 ]);
 
 onMounted(() => {
@@ -43,7 +45,6 @@ onMounted(() => {
     <div class="div-terminal-container" v-if="showTerminal" @click="showTerminal = false">
         <div class="div-terminal-border">
             <div class="div-terminal" @click.stop="commandInput?.focus()">
-                <!-- -->
                 <p
                     class="output"
                     v-for="output in Outputs"

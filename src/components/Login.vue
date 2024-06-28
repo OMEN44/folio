@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { ErrorMessage, formIndex, login, loginDetails, logout, register } from "../scripts/login";
+import { errorMessage, formIndex, login, loginDetails, logout, register } from "../scripts/login";
 import { remult } from "remult";
 
 onMounted(async () => {
@@ -12,7 +12,7 @@ onMounted(async () => {
     <form class="div-account" @submit.prevent>
         <div class="div-login" v-if="formIndex === 0">
             <h2>Welcome user</h2>
-            <span v-html="ErrorMessage"></span>
+            <span v-html="errorMessage"></span>
             <input autofocus v-model="loginDetails.username" type="text" placeholder="Username" />
             <input v-model="loginDetails.password" type="password" placeholder="Password" />
             <div class="div-buttons">
@@ -22,7 +22,7 @@ onMounted(async () => {
         </div>
         <div class="div-register" v-if="formIndex === 1">
             <h2>Welcome new user</h2>
-            <span v-html="ErrorMessage"></span>
+            <span v-html="errorMessage"></span>
             <input v-model="loginDetails.username" type="text" placeholder="Username" />
             <input v-model="loginDetails.email" type="text" placeholder="Email" />
             <input v-model="loginDetails.password" type="password" placeholder="Password" />
@@ -31,15 +31,13 @@ onMounted(async () => {
                 type="password"
                 placeholder="Confirm Password" />
             <div class="div-buttons">
-                <button class="button-normal" type="submit" @submit.prevent="register">
-                    Submit
-                </button>
+                <button class="button-normal" type="submit" @click="register">Submit</button>
                 <button class="button-normal" type="button" @click="formIndex = 0">Cancel</button>
             </div>
         </div>
         <div class="div-logout" v-if="formIndex === 2">
             <h2>You are logged in as: {{ remult.user?.name }}</h2>
-            <span v-html="ErrorMessage"></span>
+            <span v-html="errorMessage"></span>
             <div class="div-buttons">
                 <button class="button-normal" type="submit" @click.prevent="logout">Log out</button>
             </div>

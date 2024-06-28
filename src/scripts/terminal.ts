@@ -66,7 +66,7 @@ export const commandHandler = (e: KeyboardEvent) => {
                         (output as Promise<any>).then((result) => {
                             clearInterval(interval);
                             outputs.value[outputIndex] =
-                                result === undefined ? { value: `${args[0]}: Success` } : result;
+                                result === undefined ? { value: "" } : result;
                             nextTick(() => {
                                 commandInput.value?.scrollIntoView();
                             });
@@ -87,11 +87,8 @@ export const commandHandler = (e: KeyboardEvent) => {
         //prepare for next command
         commandInput.value.value = "";
         nextTick(() => {
-            commandInput.value?.scrollIntoView();
-            nextTick(() => {
-                console.log(window.visualViewport);
-                // window.offset = 0;
-            });
+            const terminal = document.getElementsByClassName("div-terminal")[0];
+            terminal.scrollTop = terminal.scrollHeight;
         });
     } else if (e.key === "ArrowUp") {
         if (historyIndex > 0) {

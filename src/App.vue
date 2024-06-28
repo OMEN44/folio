@@ -9,6 +9,7 @@ import { commandInput, prefix, showTerminal } from "./scripts/terminal";
 import { remult } from "remult";
 import { setPermissionLevel } from "./scripts/login";
 import NotificationOverlay from "./components/NotificationOverlay.vue";
+import { nextTick } from "vue";
 
 window.addEventListener("keydown", (e: KeyboardEvent) => {
     switch (e.key) {
@@ -56,6 +57,10 @@ window.visualViewport?.addEventListener("scroll", (e: Event) => {
     console.log(document.body.offsetTop);
     console.log(document.body.offsetParent);
     console.log("asd");
+    document.body.scrollTo({ top: 0 });
+    nextTick(() => {
+        document.body.scrollTo({ top: 0 });
+    });
 });
 </script>
 

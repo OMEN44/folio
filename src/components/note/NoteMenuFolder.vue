@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { faCaretDown, faCaretUp, faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
+import {
+    faCaretDown,
+    faCaretUp,
+    faEllipsis,
+    faLock,
+    faLockOpen,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { onMounted, ref, watch } from "vue";
 import { Note } from "../../shared/Note";
@@ -7,6 +13,7 @@ import { NoteFolder } from "../../shared/NoteFolder";
 import { MenuContent, selectedNote } from "../../scripts/notes/notes";
 import { AccessLevel } from "../../scripts/login";
 import router from "../../plugins/router";
+import { setOverlayContent } from "../../scripts/overlay";
 
 const props = defineProps<{ thisFolder?: NoteFolder; depth?: number }>();
 const children = ref<Array<{ isNote: boolean; element: Note | NoteFolder }>>([]);
@@ -48,6 +55,11 @@ watch(
             <div class="spacer" v-if="depth" v-for="_ in depth - 1" />
             <FontAwesomeIcon class="caret" :icon="folderOpen ? faCaretDown : faCaretUp" />
             <p>{{ thisFolder?.title }}</p>
+            <FontAwesomeIcon
+                class="ellipsis"
+                :icon="faEllipsis"
+                v-if="AccessLevel < 3"
+                @click.stop="setOverlayContent('note-form-folder')" />
         </div>
         <div v-if="folderOpen" class="folder-content" :class="{ root: rootFolder }">
             <div v-for="element in children">
@@ -126,6 +138,10 @@ watch(
 
         .caret {
             margin: auto 10px auto 5px;
+        }
+
+        .ellipsis {
+            margin: auto 10px auto auto;
         }
     }
 
