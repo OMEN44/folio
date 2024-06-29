@@ -15,10 +15,11 @@ export const searchForm = ref<{
     hasImage: false,
 });
 
-export const addSearchTag = () => {
-    if (![""].concat(searchForm.value.searchTags).includes(searchInput.value)) {
-        searchForm.value.searchTags.push(searchInput.value);
-        searchInput.value = "";
+export const addSearchTag = (tag?: string) => {
+    const searchTag = tag ? tag : searchInput.value;
+    if (![""].concat(searchForm.value.searchTags).includes(searchTag)) {
+        searchForm.value.searchTags.push(searchTag);
+        if (!tag) searchInput.value = "";
     }
 };
 

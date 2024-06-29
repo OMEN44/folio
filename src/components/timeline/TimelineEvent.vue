@@ -4,7 +4,7 @@ import { faEdit, faLink, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Timeline } from "../../shared/Timeline";
 import { AccessLevel } from "../../scripts/login";
 import { deleteEvent, editEvent, goToLink } from "../../scripts/timeline/editor";
-import { searchForm } from "../../scripts/timeline/search";
+import { addSearchTag } from "../../scripts/timeline/search";
 
 defineProps<{ eventData: Timeline }>();
 </script>
@@ -41,12 +41,9 @@ defineProps<{ eventData: Timeline }>();
                 class="option-icon-small"
                 :icon="faTrash"
                 @click="deleteEvent(eventData)" />
-            <span
-                class="tag"
-                v-for="tag in eventData.tags"
-                @click="searchForm.searchTags.push(tag)"
-                >{{ tag }}</span
-            >
+            <span class="tag" v-for="tag in eventData.tags" @click="addSearchTag(tag)">{{
+                tag
+            }}</span>
         </div>
     </div>
 </template>
