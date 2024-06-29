@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 import {
     closeOverlay,
     loadCloseEvents,
@@ -14,6 +15,7 @@ import NoteMenu from "./note/NoteMenu.vue";
 import NoteToolbar from "./note/NoteToolbar.vue";
 import TimelineForm from "./timeline/TimelineForm.vue";
 import TimelineSearch from "./timeline/TimelineSearch.vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 loadCloseEvents([
     {
@@ -32,6 +34,9 @@ loadCloseEvents([
     <div class="overlay-container" v-if="ShowOverlay" @click="closeOverlay()">
         <div class="div-overlay-border">
             <div class="div-overlay-content" @click="(e) => e.stopPropagation()">
+                <div class="cross">
+                    <FontAwesomeIcon :icon="faClose" @click="closeOverlay()" />
+                </div>
                 <div v-if="OverlayContent === ''"></div>
                 <overlay-account v-else-if="OverlayContent === 'login'" />
                 <TimelineSearch v-else-if="OverlayContent === 'timeline-search'" />
@@ -109,6 +114,20 @@ loadCloseEvents([
             border-radius: 8px;
             padding: 10px;
             overflow-y: auto;
+
+            .cross {
+                display: none;
+                justify-content: right;
+
+                svg {
+                    width: 20px;
+                    height: 20px;
+                }
+
+                @media (max-width: 600px) {
+                    display: flex;
+                }
+            }
         }
     }
 }

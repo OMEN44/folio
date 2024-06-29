@@ -131,6 +131,20 @@ onBeforeRouteLeave(() => {
         .editor {
             flex: 1;
             overflow-y: auto;
+            // made sure the editor is only taking up remaining space
+            width: calc(100vw - 600px - 40px - 4px - 84px);
+
+            @media (max-width: 800px) {
+                width: calc(100vw - 128px);
+            }
+
+            @media (max-width: 600px) {
+                width: calc(100vw - 44px);
+            }
+
+            .tiptap {
+                width: 100%;
+            }
         }
     }
 
