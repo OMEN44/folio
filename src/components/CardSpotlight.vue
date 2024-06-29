@@ -2,6 +2,7 @@
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { Spotlight } from "../shared/Spotlight";
+import { goToLink } from "../scripts/timeline/editor";
 
 defineProps<{ data: Spotlight }>();
 // Use priority value to get data for spotlight
@@ -15,7 +16,11 @@ defineProps<{ data: Spotlight }>();
         <div class="div-content">
             <h2>
                 {{ data.timeline?.title }}
-                <font-awesome-icon class="option-icon-small" :icon="faLink" />
+                <font-awesome-icon
+                    class="option-icon-small"
+                    :icon="faLink"
+                    v-if="data.timeline!.note || data.timeline!.url"
+                    @click="goToLink(data.timeline!)" />
             </h2>
             <p v-text="data.timeline?.content" />
         </div>
@@ -27,7 +32,7 @@ defineProps<{ data: Spotlight }>();
     margin: 40px auto;
     width: 80%;
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
 
     @media (max-width: 700px) {
         flex-direction: column-reverse;

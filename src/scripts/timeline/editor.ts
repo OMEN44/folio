@@ -4,13 +4,14 @@ import { closeOverlay, setOverlayContent } from "../overlay";
 import { updateTimeline } from "./timeline";
 import { Images, PublicNotes, setEditing, timelineEditor } from "./creator";
 import { addNotification } from "../notification";
+import router from "../../plugins/router";
 
 export const goToLink = (currentEvent: Timeline) => {
     if (currentEvent.url) {
         window.open(currentEvent.url, "_blank")?.focus();
         return;
     } else {
-        console.error("NOTES NOT IMPLEMENTED");
+        router.push({ name: "notes", params: { id: currentEvent.note?.id } });
     }
 };
 
