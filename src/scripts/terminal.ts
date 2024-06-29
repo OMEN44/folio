@@ -18,6 +18,7 @@ export const prefix = ref<PrefixType>({
 });
 
 export const Outputs = readonly(outputs);
+export const CommandLabels = readonly(commandLabels);
 
 export const loadCommands = (commands: CommandType[]) => {
     commandLabels.value = [];

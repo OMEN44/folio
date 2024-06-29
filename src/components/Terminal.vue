@@ -4,6 +4,7 @@ import {
     cdCommand,
     editPermCommand,
     exitCommand,
+    helpCommand,
     logoutCommand,
     lsCommand,
     spotlightCommand,
@@ -34,6 +35,7 @@ loadCommands([
     logoutCommand,
     jokeCommand,
     editPermCommand,
+    helpCommand,
 ]);
 
 onMounted(() => {

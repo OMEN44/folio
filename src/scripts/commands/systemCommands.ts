@@ -1,6 +1,6 @@
 import router from "../../plugins/router";
 import { CommandType } from "./Command";
-import { prefix, showTerminal } from "../terminal";
+import { CommandLabels, prefix, showTerminal } from "../terminal";
 import { remult } from "remult";
 import { Spotlight } from "../../shared/Spotlight";
 import { logout } from "../login";
@@ -121,7 +121,9 @@ export const themeCommand: CommandType = {
     label: "theme",
     onCommand: (args: string[]) => {
         if (args.length === 1)
-            return { value: "![bold][Available themes are:]\n![blue][Good]\t![orange][Evil]" };
+            return {
+                value: "![bold][Available themes are:]\n![blue][Good]\t![orange][Evil]\t![purple][Purple]",
+            };
         else
             switch (args[1].toLowerCase()) {
                 case "good":
@@ -133,6 +135,11 @@ export const themeCommand: CommandType = {
                     document.body.style.setProperty("--blue", "#FF831F");
                     document.body.style.setProperty("--blue-alt", "#b95300");
                     document.body.style.setProperty("--blue-background", "#FF831F27");
+                    break;
+                case "purple":
+                    document.body.style.setProperty("--blue", "#9632e5");
+                    document.body.style.setProperty("--blue-alt", "#b20fbb");
+                    document.body.style.setProperty("--blue-background", "#9632e527");
                     break;
                 default:
                     return { value: `theme: No theme found with name '${args[1]}'` };
@@ -147,6 +154,19 @@ export const testCommand: CommandType = {
     onCommand: () => {
         return {
             value: `![bold, orange][NUT]`,
+        };
+    },
+};
+
+export const helpCommand: CommandType = {
+    label: "help",
+    onCommand: () => {
+        let output: string = `Available commands:`;
+        CommandLabels.value.forEach((label) => {
+            output = output + "\n" + label;
+        });
+        return {
+            value: output,
         };
     },
 };
