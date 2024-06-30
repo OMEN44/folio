@@ -14,6 +14,7 @@ import { MenuContent, selectedNote } from "../../scripts/notes/notes";
 import { AccessLevel } from "../../scripts/login";
 import router from "../../plugins/router";
 import { setOverlayContent } from "../../scripts/overlay";
+import { selectedFolder } from "../../scripts/notes/folderEditor";
 
 const props = defineProps<{ thisFolder?: NoteFolder; depth?: number }>();
 const children = ref<Array<{ isNote: boolean; element: Note | NoteFolder }>>([]);
@@ -44,6 +45,11 @@ watch(
     () => MenuContent.value,
     () => loadFolder()
 );
+
+const editFolder = () => {
+    selectedFolder.value = props.thisFolder!;
+    setOverlayContent("note-form-folder");
+};
 </script>
 
 <template>
@@ -59,11 +65,11 @@ watch(
                 class="ellipsis"
                 :icon="faEllipsis"
                 v-if="AccessLevel < 3"
-                @click.stop="setOverlayContent('note-form-folder')" />
+                @click.stop="editFolder" />
         </div>
         <div v-if="folderOpen" class="folder-content" :class="{ root: rootFolder }">
             <div v-for="element in children">
-                <NoteMenuFolder
+                <NoteDirectoryObject
                     v-if="
                         !element.isNote &&
                         (element.element.public || (!element.element.public && AccessLevel < 3))

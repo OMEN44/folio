@@ -1,7 +1,13 @@
 <script setup lang="ts">
-import { folderEditor, FolderList, UserList } from "../../scripts/notes/noteOptions";
+import {
+    folderEditor,
+    FolderList,
+    loadElementEditor,
+    selectedFolder,
+    UserList,
+} from "../../scripts/notes/folderEditor";
 
-// loadElementEditor()
+loadElementEditor(false, selectedFolder.value!);
 </script>
 
 <template>

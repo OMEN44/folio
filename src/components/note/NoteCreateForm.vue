@@ -5,7 +5,7 @@ import {
     ErrorMessage,
     Folders,
     loadFolders,
-} from "../../scripts/notes/editorActions";
+} from "../../scripts/notes/toolbar";
 import { closeOverlay } from "../../scripts/overlay";
 
 loadFolders();

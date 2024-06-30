@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import NoteMenuFolder from "./../note/NoteMenuFolder.vue";
+import NoteDirectoryObject from "./NoteDirectoryObject.vue";
 </script>
 
 <template>
     <div class="div-menu">
-        <NoteMenuFolder />
+        <NoteDirectoryObject />
     </div>
 </template>
 

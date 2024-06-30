@@ -11,8 +11,8 @@ import { onBeforeRouteLeave } from "vue-router";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faAdd, faFolder } from "@fortawesome/free-solid-svg-icons";
 import { setOverlayContent } from "../../scripts/overlay";
-import { wordCount } from "../../scripts/notes/noteOptions";
-import { saveNote } from "../../scripts/notes/editorActions";
+import { wordCount } from "../../scripts/notes/folderEditor";
+import { saveNote } from "../../scripts/notes/toolbar";
 
 const props = defineProps<{ content?: string }>();
 const emits = defineEmits(["update:content"]);

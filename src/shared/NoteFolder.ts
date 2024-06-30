@@ -17,6 +17,6 @@ export class NoteFolder {
     @Fields.boolean()
     public = false;
 
-    @Relations.toOne(() => NoteFolder)
-    parent?: NoteFolder;
+    @Relations.toOne(() => NoteFolder, { allowNull: true })
+    parent?: NoteFolder | null;
 }

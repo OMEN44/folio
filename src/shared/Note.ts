@@ -27,6 +27,6 @@ export class Note {
     @Relations.toOne(() => Account)
     author?: Account;
 
-    @Relations.toOne(() => NoteFolder)
-    parent?: NoteFolder;
+    @Relations.toOne(() => NoteFolder, { allowNull: true })
+    parent?: NoteFolder | null;
 }

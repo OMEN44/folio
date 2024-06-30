@@ -9,13 +9,13 @@ import router from "../plugins/router";
 import NoteToolbar from "../components/note/NoteToolbar.vue";
 import { setOverlayContent } from "../scripts/overlay";
 import { AccessLevel } from "../scripts/login";
-import { saveNote } from "../scripts/notes/editorActions";
-import { loadElementEditor } from "../scripts/notes/noteOptions";
+import { saveNote } from "../scripts/notes/toolbar";
+import { loadElementEditor } from "../scripts/notes/folderEditor";
 import { Note } from "../shared/Note";
 
 onMounted(() => {
-    nextTick(() => {
-        loadNotes();
+    nextTick(async () => {
+        await loadNotes();
     });
 
     if (router.currentRoute.value.params.id !== "") {

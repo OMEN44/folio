@@ -9,18 +9,22 @@ import {
     faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { deleteNote, saveNote, togglePublicity } from "../../scripts/notes/editorActions";
+import { deleteNote, saveNote, togglePublicity } from "../../scripts/notes/toolbar";
 import { addNotification } from "../../scripts/notification";
 import {
-    editNoteTitle,
+    changeAuthor,
+    changeParentFolder,
+    editElementTitle,
     FolderList,
+    loadElementEditor,
     noteEditor,
     UserList,
     wordCount,
-} from "../../scripts/notes/noteOptions";
+} from "../../scripts/notes/folderEditor";
 import { AccessLevel } from "../../scripts/login";
 import { remult } from "remult";
 import { editorContent, selectedNote } from "../../scripts/notes/notes";
+import { watch } from "vue";
 
 const print = () => {
     var printContents = editorContent.value!;
@@ -40,6 +44,10 @@ const copyLink = () => {
 
 const hasAccess = (): boolean =>
     AccessLevel.value < 3 && selectedNote.value?.author?.id === remult.user?.id;
+
+watch(selectedNote, () => {
+    loadElementEditor(true, selectedNote.value!);
+});
 </script>
 
 <template>
@@ -75,12 +83,14 @@ const hasAccess = (): boolean =>
                             :placeholder="selectedNote.title"
                             v-model="noteEditor.title"
                     /></span>
-                    <button class="button-normal" type="submit" @click="editNoteTitle">Go</button>
+                    <button class="button-normal" type="submit" @click="editElementTitle(true)">
+                        Go
+                    </button>
                 </div>
 
                 <label for="author">Change author</label>
                 <span>
-                    <select id="author" v-model="noteEditor.author">
+                    <select id="author" v-model="noteEditor.author" @change="changeAuthor(true)">
                         <option v-for="(user, index) in UserList" :value="index">
                             {{ user.username }}
                         </option>
@@ -89,7 +99,10 @@ const hasAccess = (): boolean =>
 
                 <label for="parent">Change parent folder</label>
                 <span>
-                    <select id="parent" v-model="noteEditor.parent">
+                    <select
+                        id="parent"
+                        v-model="noteEditor.parent"
+                        @change="changeParentFolder(true)">
                         <option value="-1">Root folder</option>
                         <option v-for="(user, index) in FolderList" :value="index">
                             {{ user.title }}
@@ -101,6 +114,10 @@ const hasAccess = (): boolean =>
             <table>
                 <tr>
                     <th>Note Info</th>
+                </tr>
+                <tr>
+                    <td>Author:</td>
+                    <td>{{ selectedNote.author?.username }}</td>
                 </tr>
                 <tr>
                     <td>Word count:</td>
