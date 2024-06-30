@@ -15,6 +15,7 @@ import { AccessLevel } from "../../scripts/login";
 import router from "../../plugins/router";
 import { setOverlayContent } from "../../scripts/overlay";
 import { selectedFolder } from "../../scripts/notes/folderEditor";
+import { remult } from "remult";
 
 const props = defineProps<{ thisFolder?: NoteFolder; depth?: number }>();
 const children = ref<Array<{ isNote: boolean; element: Note | NoteFolder }>>([]);
@@ -64,7 +65,7 @@ const editFolder = () => {
             <FontAwesomeIcon
                 class="ellipsis"
                 :icon="faEllipsis"
-                v-if="AccessLevel < 3"
+                v-if="AccessLevel < 3 && remult.user?.id === thisFolder?.author?.id"
                 @click.stop="editFolder" />
         </div>
         <div v-if="folderOpen" class="folder-content" :class="{ root: rootFolder }">
@@ -147,6 +148,8 @@ const editFolder = () => {
         }
 
         .ellipsis {
+            height: 100%;
+            width: 15px;
             margin: auto 10px auto auto;
         }
     }

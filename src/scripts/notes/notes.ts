@@ -36,6 +36,7 @@ export const loadNotes = async (updateSelected?: boolean) => {
 };
 
 export const selectNote = (id: string) => {
+    if (id === undefined) return;
     remult
         .repo(Note)
         .findId(id, { include: { author: true, parent: true } })

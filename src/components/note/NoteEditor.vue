@@ -9,7 +9,7 @@ import { remult } from "remult";
 import { AccessLevel } from "../../scripts/login";
 import { onBeforeRouteLeave } from "vue-router";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faAdd, faFolder } from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faFileEdit, faFolder } from "@fortawesome/free-solid-svg-icons";
 import { setOverlayContent } from "../../scripts/overlay";
 import { wordCount } from "../../scripts/notes/folderEditor";
 import { saveNote } from "../../scripts/notes/toolbar";
@@ -65,6 +65,7 @@ onBeforeRouteLeave(() => {
         </template>
         <template v-else>
             <div class="tips">
+                <FontAwesomeIcon class="edit-icon" :icon="faFileEdit" />
                 <h2>No note is open</h2>
                 <div class="tip" @click="setOverlayContent('note-menu')">
                     <FontAwesomeIcon :icon="faFolder" />
@@ -93,9 +94,6 @@ onBeforeRouteLeave(() => {
     position: relative;
 
     h1 {
-        // background-color: var(--blue-background);
-        // padding: 5px 10px;
-        // border-radius: 5px;
         text-decoration: underline var(--blue-background) 5px;
         margin-bottom: 5px;
     }
@@ -154,8 +152,17 @@ onBeforeRouteLeave(() => {
         left: 50%;
         transform: translate(-50%, -50%);
 
+        .edit-icon {
+            width: 100%;
+            height: 75px;
+            opacity: 0.4;
+            margin-bottom: 10px;
+        }
+
         h2 {
             font-size: 20px;
+            text-align: center;
+            opacity: 0.4;
         }
 
         .tip {
