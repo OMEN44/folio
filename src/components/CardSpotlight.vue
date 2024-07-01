@@ -3,9 +3,15 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { Spotlight } from "../shared/Spotlight";
 import { goToLink } from "../scripts/timeline/editor";
+import { addSearchTag } from "../scripts/timeline/search";
+import router from "../plugins/router";
 
 defineProps<{ data: Spotlight }>();
-// Use priority value to get data for spotlight
+
+const searchForTag = (tag: string) => {
+    addSearchTag(tag);
+    router.push({ name: "timeline" });
+};
 </script>
 
 <template>
@@ -23,6 +29,15 @@ defineProps<{ data: Spotlight }>();
                     @click="goToLink(data.timeline!)" />
             </h2>
             <p v-text="data.timeline?.content" />
+            <div class="tags">
+                <span
+                    v-for="tag in data.timeline?.tags"
+                    :key="tag"
+                    class="tag"
+                    @click="searchForTag(tag)">
+                    {{ tag }}
+                </span>
+            </div>
         </div>
     </div>
 </template>
@@ -76,6 +91,26 @@ defineProps<{ data: Spotlight }>();
 
         .option-icon-small {
             margin: 10px 0 0 5px;
+        }
+
+        .tags {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+
+            .tag {
+                background-color: var(--blue-background);
+                border-radius: 4px;
+                margin: 5px;
+                padding: 3px 7px;
+                text-align: center;
+                cursor: pointer;
+                transition: transform 0.5s;
+
+                &:hover {
+                    transform: scale(1.05);
+                }
+            }
         }
     }
 }

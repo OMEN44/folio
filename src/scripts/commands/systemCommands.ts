@@ -12,8 +12,8 @@ export const spotlightCommand: CommandType = {
     label: "spotlight",
     admin: true,
     onCommand: async (args: Array<string>) => {
-        // check permissions
-        if (args.length <= 2 || !(Number(args[1]) >= 0)) {
+        // check if args are valid
+        if (args.length < 3 || !(Number(args[1]) >= 0)) {
             const spotlightProjects: Spotlight[] = await remult
                 .repo(Spotlight)
                 .find({ include: { timeline: true } });
@@ -23,18 +23,24 @@ export const spotlightCommand: CommandType = {
             });
             return { value: `${output}\n\nTo change spotlight: spotlight [position] [name | id]` };
         } else {
-            let timelineEvent = await remult.repo(Timeline).findOne({ where: { id: args[2] } });
+            // if args are valid, change spotlight
+            let timelineEvent = await remult.repo(Timeline).findId(args[2]);
             if (!timelineEvent) {
-                const title = args.splice(2, args.length - 2);
-                timelineEvent = await remult
-                    .repo(Timeline)
-                    .findOne({ where: { title: title.join(" ") } });
+                const title = args.splice(2, args.length - 2).join(" ");
+                timelineEvent = await remult.repo(Timeline).findOne({ where: { title: title } });
             }
             if (timelineEvent) {
-                await remult.repo(Spotlight).delete(Number(args[1]));
-                await remult
+                // add new spotlight
+                const spotlight = await remult
                     .repo(Spotlight)
-                    .insert({ priority: Number(args[1]), timeline: timelineEvent });
+                    .findId(args[1], { include: { timeline: true } });
+                if (spotlight) {
+                    remult.repo(Spotlight).update(args[1], { timeline: timelineEvent });
+                } else {
+                    remult
+                        .repo(Spotlight)
+                        .insert({ priority: Number(args[1]), timeline: timelineEvent });
+                }
             } else {
                 return {
                     value: `No timeline event found.\nCommand usage: spotlight [position] [name | id]`,
