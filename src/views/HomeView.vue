@@ -4,6 +4,7 @@ import CardSpotlight from "../components/CardSpotlight.vue";
 import { loadSpotlight, spotlightData } from "../scripts/spotlight";
 import { showTerminal } from "../scripts/terminal";
 import { faArrowTurnDown } from "@fortawesome/free-solid-svg-icons";
+import { setOverlayContent } from "../scripts/overlay";
 
 const goToAbout = () => {
     const aboutDiv: HTMLDivElement = document.getElementsByClassName(
@@ -53,7 +54,9 @@ loadSpotlight();
                     showcase on this website, so feel free to send me a message with the button
                     below!
                 </p>
-                <button class="button-fancy">Contact me!</button>
+                <button class="button-fancy" @click="setOverlayContent('contact')">
+                    Contact me!
+                </button>
             </div>
         </div>
     </div>

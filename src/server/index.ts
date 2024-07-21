@@ -22,26 +22,29 @@ app.use(
 );
 app.use(api);
 
-if (process.env.deployment === "true") {
-    // deployment stuff:
-    app.use(
-        helmet({
-            contentSecurityPolicy: {
-                directives: {
-                    defaultSrc: ["'self'", "icanhazdadjoke.com/", "api.adviceslip.com/advice"],
-                    "script-src-attr": ["'self'"],
-                },
+// deployment stuff:
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: [
+                    "'self'",
+                    "icanhazdadjoke.com/",
+                    "api.adviceslip.com/advice",
+                    "api.emailjs.com/",
+                ],
+                "script-src-attr": ["'self'"],
             },
-        })
-    );
-    app.use(compression());
+        },
+    })
+);
+app.use(compression());
 
-    const frontendFiles = process.cwd() + "/dist";
-    app.use(express.static(frontendFiles));
-    app.get("/*", (_, res) => {
-        res.sendFile(frontendFiles + "/index.html");
-    });
-}
+const frontendFiles = process.cwd() + "/dist";
+app.use(express.static(frontendFiles));
+app.get("/*", (_, res) => {
+    res.sendFile(frontendFiles + "/index.html");
+});
 
 // login api
 app.post("/api/login", api.withRemult, async (req, res) => {

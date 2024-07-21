@@ -14,12 +14,15 @@ import { setOverlayContent } from "../scripts/overlay";
             <router-link class="link" to="/home"><p>Home</p></router-link>
             <router-link class="link" to="/timeline"><p>Timeline</p></router-link>
             <router-link class="link" to="/notes"><p>Notes</p></router-link>
-            <p>Other</p>
         </div>
         <div class="external-links">
-            <font-awesome-icon :icon="faGithub" />
-            <font-awesome-icon :icon="faLinkedin" />
-            <font-awesome-icon :icon="faEnvelope" />
+            <a href="https://github.com/OMEN44" target="_blank">
+                <font-awesome-icon :icon="faGithub" />
+            </a>
+            <a href="https://www.linkedin.com/in/huon-swales-2aa04931a/" target="_blank">
+                <font-awesome-icon :icon="faLinkedin" />
+            </a>
+            <font-awesome-icon @click="setOverlayContent('contact')" :icon="faEnvelope" />
             <font-awesome-icon @click="setOverlayContent('login')" :icon="faUser" />
         </div>
     </div>
@@ -94,6 +97,11 @@ import { setOverlayContent } from "../scripts/overlay";
         margin: 10px 20px;
         display: flex;
         flex-direction: row;
+
+        a {
+            color: var(--text);
+            text-decoration: none;
+        }
 
         svg {
             cursor: pointer;
