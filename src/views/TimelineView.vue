@@ -88,6 +88,7 @@ const changeYear = (e: Event) => {
             display: flex;
             flex-direction: row;
             height: fit-content;
+            margin-left: -5px;
 
             .div-search {
                 padding: 0 5px;

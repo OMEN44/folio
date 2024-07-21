@@ -3,32 +3,17 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faSearch, faAdd, faFolder, faEllipsis, faSave } from "@fortawesome/free-solid-svg-icons";
 import NoteMenu from "../components/note/NoteMenu.vue";
 import NoteEditor from "../components/note/NoteEditor.vue";
-import { nextTick, onMounted, watch } from "vue";
-import { editorContent, loadNotes, selectedNote, selectNote } from "../scripts/notes/notes";
-import router from "../plugins/router";
+import { nextTick, onMounted } from "vue";
+import { editorContent, loadNotes, selectedNote } from "../scripts/notes/notes";
 import NoteToolbar from "../components/note/NoteToolbar.vue";
 import { setOverlayContent } from "../scripts/overlay";
 import { AccessLevel } from "../scripts/login";
 import { saveNote } from "../scripts/notes/toolbar";
-import { loadElementEditor } from "../scripts/notes/folderEditor";
-import { Note } from "../shared/Note";
 
 onMounted(() => {
     nextTick(async () => {
         await loadNotes();
     });
-
-    if (router.currentRoute.value.params.id !== "") {
-        selectNote(router.currentRoute.value.params.id as string);
-    }
-
-    watch(
-        () => router.currentRoute.value.params.id,
-        (value) => {
-            selectNote(value as string);
-            loadElementEditor(true, selectedNote.value as Note);
-        }
-    );
 });
 </script>
 
@@ -119,6 +104,7 @@ onMounted(() => {
             display: flex;
             flex-direction: row;
             height: fit-content;
+            margin-left: -5px;
         }
     }
 

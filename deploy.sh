@@ -1,16 +1,16 @@
 #!/bin/sh
 
 # Build project
-cd ~/Programs/WebApps/folio
+cd /home/huon/Programs/WebApps/folio
 echo "deployment=true" > .env
 npm run build
 mkdir -p server_files
 rm -r server_files/*
 # Transfer files
 rsync -a dist server_files
-rsync -a ~/Programs/WebApps/folio/package.json ~/Programs/WebApps/folio/server_files
-rsync -a ~/Programs/WebApps/folio/*config* ~/Programs/WebApps/folio/server_files
-echo Web server files built in directory ~/Programs/WebApps/folio/server_files
+rsync -a /home/huon/Programs/WebApps/folio/package.json /home/huon/Programs/WebApps/folio/server_files
+rsync -a /home/huon/Programs/WebApps/folio/*config* /home/huon/Programs/WebApps/folio/server_files
+echo Web server files built in directory /home/huon/Programs/WebApps/folio/server_files
 
 case "$1" in
     prod|production)

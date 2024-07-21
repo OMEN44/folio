@@ -4,13 +4,12 @@ import { NoteFolder } from "../../shared/NoteFolder";
 import { remult } from "remult";
 import { setPermissionLevel } from "../login";
 import router from "../../plugins/router";
+import { closeOverlay, OverlayType, setOverlayContent } from "../overlay";
+import { saveNote } from "./toolbar";
 
 const menuContent = ref<Array<{ isNote: boolean; element: Note | NoteFolder }>>([]);
 export const selectedNote = ref<Note | null>(null);
 export const editorContent = ref<string>();
-
-// for styling
-export const menuIndex = ref<number>(0);
 
 export const MenuContent = readonly(menuContent);
 
@@ -32,18 +31,74 @@ export const loadNotes = async (updateSelected?: boolean) => {
 
     menuContent.value = elements;
 
-    if (updateSelected) selectNote(router.currentRoute.value.params.id as string);
+    if (updateSelected) updateSelectedNote();
 };
 
-export const selectNote = (id: string) => {
-    if (id === undefined) return;
-    remult
+const updateSelectedNote = async (id?: string) => {
+    const note = await remult
         .repo(Note)
-        .findId(id, { include: { author: true, parent: true } })
-        .then((note) => {
-            if (note !== undefined) {
-                selectedNote.value = note;
-                editorContent.value = note.content;
-            }
+        .findId(id ? id : (router.currentRoute.value.params.id as string), {
+            include: { author: true, parent: true },
         });
+
+    if (note !== undefined) {
+        selectedNote.value = note;
+        editorContent.value = note.content;
+    } else {
+        selectedNote.value = null;
+        editorContent.value = undefined;
+    }
 };
+
+router.beforeEach(async (to, _from) => {
+    if (
+        editorContent.value !== selectedNote.value?.content &&
+        to.name === "notes" &&
+        selectedNote.value !== null
+    ) {
+        setOverlayContent(getSaveChangesOverlay(to.params.id as string));
+        return false;
+    } else {
+        if (to.params.id !== undefined && to.params.id !== "") {
+            updateSelectedNote(to.params.id as string);
+        } else {
+            selectedNote.value = null;
+            editorContent.value = undefined;
+        }
+        return true;
+    }
+});
+
+const getSaveChangesOverlay = (nextId: string): OverlayType => ({
+    title: "Unsaved changes",
+    content: "You have unsaved changes in your note. Do you want to save them?",
+    buttons: [
+        {
+            name: "Save",
+            primary: true,
+            action: async () => {
+                // I cannot fathom why the route needs to be updated before saving the note but it works
+                const noteToSave = selectedNote.value!;
+                const contentToSave = editorContent.value;
+                editorContent.value = selectedNote.value!.content;
+                await router.push({ name: "notes", params: { id: nextId } });
+                await saveNote(noteToSave, contentToSave);
+                closeOverlay();
+            },
+        },
+        {
+            name: "Discard",
+            primary: false,
+            action: () => {
+                editorContent.value = selectedNote.value!.content;
+                closeOverlay();
+                router.push({ name: "notes", params: { id: nextId } });
+            },
+        },
+        {
+            name: "Cancel",
+            primary: false,
+            action: () => closeOverlay(),
+        },
+    ],
+});

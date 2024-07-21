@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { errorMessage, formIndex, login, loginDetails, logout, register } from "../scripts/login";
+import {
+    errorMessage,
+    formIndex,
+    login,
+    loginDetails,
+    logout,
+    register,
+} from "../../scripts/login";
 import { remult } from "remult";
 
 onMounted(async () => {

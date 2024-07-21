@@ -10,7 +10,7 @@ import {
 </script>
 
 <template>
-    <form class="div-search-container" @submit.prevent="addSearchTag">
+    <form class="div-search-container" @submit.prevent="addSearchTag()">
         <input type="text" placeholder="Enter a seach term" v-model="searchInput" autofocus />
         <div class="div-search-tags">
             <p class="search-hint" v-if="searchForm.searchTags.length === 0">

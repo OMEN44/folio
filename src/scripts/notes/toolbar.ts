@@ -52,6 +52,7 @@ export const create = () => {
                     title: createForm.value.title,
                     public: createForm.value.isPublic,
                     parent: folders.value[createForm.value.parentId],
+                    content: "<p></p>",
                     author: author,
                 }).then(() => {
                     addNotification(
@@ -68,9 +69,17 @@ export const create = () => {
     }
 };
 
-export const saveNote = async () => {
+export const saveNote = async (note: Note | null, content: string | undefined) => {
+    if (note) {
+        await remult.repo(Note).update(note.id, { content: content });
+        addNotification(`Changes saved`);
+        loadNotes(true);
+    }
+};
+
+export const saveCurrentNote = async () => {
     if (selectedNote.value) {
-        await remult.repo(Note).update(selectedNote.value?.id, { content: editorContent.value });
+        await remult.repo(Note).update(selectedNote.value.id, { content: editorContent.value });
         addNotification(`Changes saved`);
         loadNotes(true);
     }
@@ -92,6 +101,7 @@ export const deleteNote = () => {
                             .then(() => {
                                 addNotification(`Deleted note: ${selectedNote.value?.title}`);
                                 selectedNote.value = null;
+                                editorContent.value = undefined;
                                 loadNotes();
                                 closeOverlay();
                                 router.push({ name: "notes", params: { id: "" } });

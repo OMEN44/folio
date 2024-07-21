@@ -9,7 +9,7 @@ import {
     faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { deleteNote, saveNote, togglePublicity } from "../../scripts/notes/toolbar";
+import { deleteNote, saveCurrentNote, togglePublicity } from "../../scripts/notes/toolbar";
 import { addNotification } from "../../scripts/notification";
 import {
     changeAuthor,
@@ -58,7 +58,7 @@ watch(selectedNote, () => {
                     class="option-icon"
                     v-if="hasAccess()"
                     :icon="faSave"
-                    @click="saveNote" />
+                    @click="saveCurrentNote" />
                 <font-awesome-icon
                     class="option-icon"
                     v-if="hasAccess()"
@@ -169,8 +169,8 @@ watch(selectedNote, () => {
     form {
         display: flex;
         flex-direction: column;
-        margin: 5px 0;
-        width: 100%;
+        margin: 5px;
+        width: calc(100% - 10px);
 
         label {
             font-size: 18px;

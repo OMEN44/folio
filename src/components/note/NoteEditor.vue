@@ -6,16 +6,16 @@ import Image from "@tiptap/extension-image";
 import CharacterCount from "@tiptap/extension-character-count";
 import { watch } from "vue";
 import { remult } from "remult";
-import { AccessLevel } from "../../scripts/login";
+import { AccessLevel, setPermissionLevel } from "../../scripts/login";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faAdd, faFileEdit, faFolder } from "@fortawesome/free-solid-svg-icons";
-import { closeOverlay, setOverlayContent } from "../../scripts/overlay";
+import { setOverlayContent } from "../../scripts/overlay";
 import { wordCount } from "../../scripts/notes/folderEditor";
-import { saveNote } from "../../scripts/notes/toolbar";
-import router from "../../plugins/router";
+import { saveCurrentNote } from "../../scripts/notes/toolbar";
 
 const props = defineProps<{ content?: string }>();
 const emits = defineEmits(["update:content"]);
+setPermissionLevel();
 
 let editor = new Editor({
     extensions: [StarterKit, Image, CharacterCount],
@@ -24,6 +24,10 @@ let editor = new Editor({
     onUpdate: () => {
         emits("update:content", editor!.getHTML());
         wordCount.value = editor.storage.characterCount.words();
+    },
+    onCreate: () => {
+        editor!.setEditable(selectedNote.value?.author?.id === remult.user?.id);
+        if (!selectedNote.value?.public && AccessLevel.value >= 3) selectedNote.value = null;
     },
 });
 
@@ -42,41 +46,6 @@ watch(
         editor!.setEditable(selectedNote.value?.author?.id === remult.user?.id);
     }
 );
-
-router.beforeEach((_to, _from, next) => {
-    if (selectedNote.value !== null && selectedNote.value?.content !== editor.getHTML()) {
-        setOverlayContent({
-            title: "Unsaved changes",
-            content: "You have unsaved changes in your note. Do you want to save them?",
-            buttons: [
-                {
-                    name: "Save",
-                    primary: true,
-                    action: async () => {
-                        await saveNote();
-                        closeOverlay();
-                        selectedNote.value = null;
-                        next();
-                    },
-                },
-                {
-                    name: "Discard",
-                    primary: false,
-                    action: () => {
-                        closeOverlay();
-                        selectedNote.value = null;
-                        next();
-                    },
-                },
-                {
-                    name: "Cancel",
-                    primary: false,
-                    action: () => closeOverlay(),
-                },
-            ],
-        });
-    } else next();
-});
 </script>
 
 <template>
@@ -85,7 +54,7 @@ router.beforeEach((_to, _from, next) => {
         class="div-note-editor"
         @keydown.ctrl.prevent="
             (e) => {
-                if (e.key === 's') saveNote();
+                if (e.key === 's') saveCurrentNote();
             }
         ">
         <template v-if="selectedNote !== null">

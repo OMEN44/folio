@@ -8,7 +8,7 @@ import {
     ShowOverlay,
 } from "../scripts/overlay";
 import { clearInput, editing, setEditing } from "../scripts/timeline/creator";
-import OverlayAccount from "./Login.vue";
+import OverlayAccount from "./overlays/Login.vue";
 import NoteCreateForm from "./note/NoteCreateForm.vue";
 import NoteFolderForm from "./note/NoteFolderForm.vue";
 import NoteMenu from "./note/NoteMenu.vue";
@@ -16,6 +16,7 @@ import NoteToolbar from "./note/NoteToolbar.vue";
 import TimelineForm from "./timeline/TimelineForm.vue";
 import TimelineSearch from "./timeline/TimelineSearch.vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import Contact from "./overlays/contact.vue";
 
 loadCloseEvents([
     {
@@ -39,6 +40,7 @@ loadCloseEvents([
                 </div>
                 <div v-if="OverlayContent === ''"></div>
                 <overlay-account v-else-if="OverlayContent === 'login'" />
+                <Contact v-else-if="OverlayContent === 'contact'" />
                 <TimelineSearch v-else-if="OverlayContent === 'timeline-search'" />
                 <TimelineForm v-else-if="OverlayContent === 'timeline-form'" />
                 <NoteCreateForm v-else-if="OverlayContent === 'note-form-create'" />
