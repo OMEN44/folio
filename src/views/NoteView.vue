@@ -8,7 +8,7 @@ import { editorContent, loadNotes, selectedNote } from "../scripts/notes/notes";
 import NoteToolbar from "../components/note/NoteToolbar.vue";
 import { setOverlayContent } from "../scripts/overlay";
 import { AccessLevel } from "../scripts/login";
-import { saveNote } from "../scripts/notes/toolbar";
+import { saveCurrentNote } from "../scripts/notes/toolbar";
 
 onMounted(() => {
     nextTick(async () => {
@@ -41,7 +41,7 @@ onMounted(() => {
                     class="option-icon"
                     v-if="AccessLevel < 3 && selectedNote !== null"
                     :icon="faSave"
-                    @click="saveNote" />
+                    @click="saveCurrentNote" />
             </div>
         </div>
         <div class="div-note">

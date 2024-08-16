@@ -52,9 +52,12 @@ watch(
     <span class="left-decoration"></span>
     <div
         class="div-note-editor"
-        @keydown.ctrl.prevent="
+        @keydown.ctrl="
             (e) => {
-                if (e.key === 's') saveCurrentNote();
+                if (e.key === 's') {
+                    e.preventDefault();
+                    saveCurrentNote();
+                }
             }
         ">
         <template v-if="selectedNote !== null">
