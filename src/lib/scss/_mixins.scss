@@ -1,10 +1,14 @@
 @use "$lib/scss/var";
 
-@mixin box() {
+@mixin box($use-padding: true) {
     box-shadow: 0px 0px var.$gap var.$primary-a;
     border-radius: var.$b-radius;
     border: var.$b-thickness solid var.$primary;
-    padding: var.$gap;
+    @if $use-padding {
+        padding: var.$gap;
+    } @else {
+        padding: 0;
+    }
     margin: var.$gap;
     background-color: var.$background;
 }

@@ -1,23 +1,34 @@
 <script lang="ts">
     import Nav from "$lib/components/nav.svelte";
+    import { onMount } from "svelte";
 
     let { children } = $props();
+
+    let viewHeight = $state(0);
+
+    onMount(() => {
+        viewHeight = window.innerHeight;
+    });
 </script>
 
 <Nav />
 
-<div>
-    {@render children()}
+<div class="container" style:height={`${viewHeight}px`}>
+    <div>
+        {@render children()}
+    </div>
 </div>
 
 <style lang="scss">
     @use "$lib/scss/var.scss";
     @use "$lib/scss/mixins";
 
-    div {
-        @include mixins.box;
-        margin-top: calc(var.$gap * 6);
-        min-height: calc(100vh - (var.$gap * 2) - var.$gap * 5);
+    .container {
+        div {
+            @include mixins.box;
+            margin-top: calc(var.$gap * 6);
+            min-height: calc(100% - (var.$gap * 2) - var.$gap * 5);
+        }
     }
 
     :global(body) {
