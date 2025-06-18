@@ -5,3 +5,10 @@ $text: #d0d0d0;
 $b-radius: 8px;
 $b-thickness: 2px;
 $gap: 10px;
+
+$mobile-width: 600px;
+$mobile: false;
+
+@media (max-width: $mobile-width) {
+    $mobile: true;
+}

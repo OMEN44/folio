@@ -17,7 +17,7 @@
     div {
         @include mixins.box;
         margin-top: calc(var.$gap * 6);
-        min-height: calc(100vh - (var.$gap * 2) - var.$gap * 6);
+        min-height: calc(100vh - (var.$gap * 2) - var.$gap * 5);
     }
 
     :global(body) {
