@@ -1,9 +1,13 @@
-import adapter from '@sveltejs/adapter-node';
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import adapter from "@sveltejs/adapter-node";
+import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 
 const config = {
-	preprocess: vitePreprocess(),
-	kit: { adapter: adapter() }
+    preprocess: vitePreprocess({
+        scss: {
+            prependData: `@import '$lib/scss/_global.scss';`,
+        },
+    }),
+    kit: { adapter: adapter() },
 };
 
 export default config;

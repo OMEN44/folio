@@ -51,7 +51,6 @@ declare module '$env/static/private' {
 	export const HOME: string;
 	export const CHROME_DESKTOP: string;
 	export const LOCPATH_VSCODE_SNAP_ORIG: string;
-	export const OLDPWD: string;
 	export const TERM_PROGRAM_VERSION: string;
 	export const DESKTOP_SESSION: string;
 	export const GTK_PATH: string;
@@ -60,6 +59,8 @@ declare module '$env/static/private' {
 	export const XDG_DATA_HOME_VSCODE_SNAP_ORIG: string;
 	export const GTK_IM_MODULE_FILE: string;
 	export const GIO_LAUNCHED_DESKTOP_FILE: string;
+	export const npm_package_devDependencies_svelte_preprocess: string;
+	export const npm_package_devDependencies_scss: string;
 	export const npm_config_init_license: string;
 	export const ROS_PYTHON_VERSION: string;
 	export const GNOME_SHELL_SESSION_MODE: string;
@@ -79,11 +80,13 @@ declare module '$env/static/private' {
 	export const COLORTERM: string;
 	export const GIO_LAUNCHED_DESKTOP_FILE_PID: string;
 	export const npm_package_description: string;
+	export const npm_package_dependencies__fortawesome_free_solid_svg_icons: string;
 	export const npm_package_devDependencies_typescript: string;
 	export const NVM_DIR: string;
 	export const DEBUGINFOD_URLS: string;
 	export const npm_package_readmeFilename: string;
 	export const ROS_DISTRO: string;
+	export const npm_package_devDependencies_sass_embedded: string;
 	export const npm_package_devDependencies_prettier: string;
 	export const npm_package_scripts_dev: string;
 	export const LOGNAME: string;
@@ -139,6 +142,7 @@ declare module '$env/static/private' {
 	export const npm_lifecycle_event: string;
 	export const npm_package_version: string;
 	export const QT_ACCESSIBILITY: string;
+	export const NO_AT_BRIDGE: string;
 	export const GDMSESSION: string;
 	export const npm_config_argv: string;
 	export const npm_package_devDependencies_svelte: string;
@@ -146,6 +150,7 @@ declare module '$env/static/private' {
 	export const LESSCLOSE: string;
 	export const GTK_PATH_VSCODE_SNAP_ORIG: string;
 	export const FONTCONFIG_FILE: string;
+	export const npm_package_dependencies__fortawesome_free_brands_svg_icons: string;
 	export const NIX_SSL_CERT_FILE: string;
 	export const GTK_IM_MODULE_FILE_VSCODE_SNAP_ORIG: string;
 	export const npm_config_version_git_tag: string;
@@ -163,6 +168,7 @@ declare module '$env/static/private' {
 	export const NVM_CD_FLAGS: string;
 	export const XDG_DATA_DIRS: string;
 	export const PYTHONPATH: string;
+	export const npm_package_dependencies_svelte_fa: string;
 	export const npm_config_save_prefix: string;
 	export const npm_config_ignore_optional: string;
 	export const npm_package_devDependencies_prettier_plugin_svelte: string;
@@ -227,7 +233,6 @@ declare module '$env/dynamic/private' {
 		HOME: string;
 		CHROME_DESKTOP: string;
 		LOCPATH_VSCODE_SNAP_ORIG: string;
-		OLDPWD: string;
 		TERM_PROGRAM_VERSION: string;
 		DESKTOP_SESSION: string;
 		GTK_PATH: string;
@@ -236,6 +241,8 @@ declare module '$env/dynamic/private' {
 		XDG_DATA_HOME_VSCODE_SNAP_ORIG: string;
 		GTK_IM_MODULE_FILE: string;
 		GIO_LAUNCHED_DESKTOP_FILE: string;
+		npm_package_devDependencies_svelte_preprocess: string;
+		npm_package_devDependencies_scss: string;
 		npm_config_init_license: string;
 		ROS_PYTHON_VERSION: string;
 		GNOME_SHELL_SESSION_MODE: string;
@@ -255,11 +262,13 @@ declare module '$env/dynamic/private' {
 		COLORTERM: string;
 		GIO_LAUNCHED_DESKTOP_FILE_PID: string;
 		npm_package_description: string;
+		npm_package_dependencies__fortawesome_free_solid_svg_icons: string;
 		npm_package_devDependencies_typescript: string;
 		NVM_DIR: string;
 		DEBUGINFOD_URLS: string;
 		npm_package_readmeFilename: string;
 		ROS_DISTRO: string;
+		npm_package_devDependencies_sass_embedded: string;
 		npm_package_devDependencies_prettier: string;
 		npm_package_scripts_dev: string;
 		LOGNAME: string;
@@ -315,6 +324,7 @@ declare module '$env/dynamic/private' {
 		npm_lifecycle_event: string;
 		npm_package_version: string;
 		QT_ACCESSIBILITY: string;
+		NO_AT_BRIDGE: string;
 		GDMSESSION: string;
 		npm_config_argv: string;
 		npm_package_devDependencies_svelte: string;
@@ -322,6 +332,7 @@ declare module '$env/dynamic/private' {
 		LESSCLOSE: string;
 		GTK_PATH_VSCODE_SNAP_ORIG: string;
 		FONTCONFIG_FILE: string;
+		npm_package_dependencies__fortawesome_free_brands_svg_icons: string;
 		NIX_SSL_CERT_FILE: string;
 		GTK_IM_MODULE_FILE_VSCODE_SNAP_ORIG: string;
 		npm_config_version_git_tag: string;
@@ -339,6 +350,7 @@ declare module '$env/dynamic/private' {
 		NVM_CD_FLAGS: string;
 		XDG_DATA_DIRS: string;
 		PYTHONPATH: string;
+		npm_package_dependencies_svelte_fa: string;
 		npm_config_save_prefix: string;
 		npm_config_ignore_optional: string;
 		npm_package_devDependencies_prettier_plugin_svelte: string;

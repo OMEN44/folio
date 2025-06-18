@@ -1,0 +1,10 @@
+@use "$lib/scss/var";
+
+@mixin box() {
+    box-shadow: 0px 0px calc(var.$gap / 2) var.$primary;
+    border-radius: var.$b-radius;
+    border: var.$b-thickness solid var.$primary;
+    padding: var.$gap;
+    margin: var.$gap;
+    background-color: var.$background;
+}
