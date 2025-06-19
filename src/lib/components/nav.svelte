@@ -74,6 +74,11 @@
         display: flex;
         flex-direction: column;
 
+        @media (max-width: var.$mobile-width) {
+            width: calc(100vw - var.$gap * 2);
+            left: 0;
+        }
+
         transition: all 0.3s ease-out !important;
 
         // Mobile nav links
