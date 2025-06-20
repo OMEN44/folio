@@ -7,7 +7,7 @@ export const ping: CommandType = {
     execute: async () => {
         return {
             prefix: getActivePrefix(false) as PrefixType,
-            output: "Pong! The server is responsive.",
+            output: "Pong from the server!",
         };
     },
 };
@@ -18,7 +18,7 @@ export const pong: CommandType = {
     execute: async () => {
         return {
             prefix: getActivePrefix(false) as PrefixType,
-            output: "Pong! The output",
+            output: "Ping from the server!",
         };
     },
 };

@@ -19,7 +19,7 @@ export interface CommandType {
 
 export let availableCommands: CommandType[] = [];
 
-export let commandHistory = $state<string[]>([]);
+export let commandHistory = $state<CommandOutputType[]>([]);
 
 let activePrefix = $derived<PrefixType>({
     user: "guest",
@@ -33,6 +33,12 @@ export const commandHandler = async (e: KeyboardEvent) => {
         const inputElement = e.target as HTMLInputElement;
         const input = inputElement.value.trim().split(" ");
 
+        // add command to history
+        commandHistory.push({
+            prefix: getActivePrefix(false) as PrefixType,
+            output: inputElement.value,
+        });
+
         // Search for command
         const command = availableCommands.find(
             (cmd) => cmd.label === input[0] || (cmd.aliases && cmd.aliases.includes(input[0]))
@@ -43,13 +49,15 @@ export const commandHandler = async (e: KeyboardEvent) => {
             let output: CommandOutputType | Promise<CommandOutputType> = await command.execute(
                 input.slice(1)
             );
-            commandHistory.push(output.output);
+            commandHistory.push({ output: output.output });
         } else if (command && command.adminOnly && !activePrefix.admin) {
             // Command is admin only
-            commandHistory.push("Permission denied: This command is for administrators only.");
+            commandHistory.push({
+                output: "Permission denied: This command is for administrators only.",
+            });
         } else {
             // Command not found
-            commandHistory.push(`${input[0]}: command not found`);
+            commandHistory.push({ output: `${input[0]}: command not found` });
         }
 
         inputElement.value = ""; // Clear input after execution
@@ -61,6 +69,10 @@ export const getActivePrefix = (asHTML: boolean) => {
         return `<span class="primary">${activePrefix.user}@huon.dev</span>:<span class="secondary">
     ${activePrefix.directory}</span>${activePrefix.admin ? "#" : "$"}`;
     return activePrefix;
+};
+
+export const prefixToHTML = (prefix: PrefixType): string => {
+    return `<span class="primary">${prefix.user}@huon.dev</span>:<span class="secondary">${prefix.directory}</span>${prefix.admin ? "#" : "$"}`;
 };
 
 export const loadCommands = (commands: CommandType[]) => {
@@ -83,4 +95,8 @@ export const loadCommands = (commands: CommandType[]) => {
             }
         }
     }
+};
+
+export const parseCommandOutput = (command: CommandOutputType): string => {
+    return `${command.prefix ? prefixToHTML(command.prefix) + " " : ""}${command.output}`;
 };

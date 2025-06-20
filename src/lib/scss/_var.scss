@@ -1,11 +1,22 @@
-$background: #1a1a1b;
-$primary: #7dfdfe;
-$primary-a: #7dfefe52;
-$primary-b: #2a383a;
-$text: #d0d0d0;
-$b-radius: 8px;
-$b-thickness: 2px;
-$gap: 10px;
+:root {
+    --background: #1a1a1b;
+    --primary: #7dfdfe;
+    --primary-a: #7dfefe52;
+    --primary-b: #2a383a;
+    --text: #d0d0d0;
+    --b-radius: 8px;
+    --b-thickness: 2px;
+    --gap: 10px;
+}
+
+$background: var(--background);
+$primary: var(--primary);
+$primary-a: var(--primary-a);
+$primary-b: var(--primary-b);
+$text: var(--text);
+$b-radius: var(--b-radius);
+$b-thickness: var(--b-thickness);
+$gap: var(--gap);
 
 $mobile-width: 600px;
 $mobile: false;
