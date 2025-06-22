@@ -99,7 +99,7 @@
             margin: var.$gap;
             padding: 4px var.$gap 0 var.$gap;
             border-radius: 8px;
-            background-color: var.$primary-b;
+            background-color: var.$primary-a;
 
             height: fit-content;
             font-family: monospace;
@@ -120,6 +120,10 @@
                 flex: none;
                 height: 0px;
                 overflow-y: auto;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
 
                 &.focused {
                     flex: 1;

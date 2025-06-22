@@ -60,6 +60,13 @@ export const commandHandler = async (e: KeyboardEvent) => {
             commandHistory.push({ output: `${input[0]}: command not found` });
         }
 
+        // Scroll to the bottom of the command history
+        setTimeout(() => {
+            const commandOutputElement = document.querySelector(".command-output");
+            if (commandOutputElement) {
+                commandOutputElement.scrollTop = commandOutputElement.scrollHeight;
+            }
+        }, 1);
         inputElement.value = ""; // Clear input after execution
     }
 };

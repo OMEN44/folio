@@ -14,11 +14,14 @@
         "lint": "prettier --check ."
     },
     "devDependencies": {
+        "@auth/core": "^0.39.1",
+        "@auth/sveltekit": "^1.9.2",
         "@sveltejs/adapter-node": "^5.2.12",
         "@sveltejs/kit": "^2.16.0",
         "@sveltejs/vite-plugin-svelte": "^5.0.0",
         "prettier": "^3.4.2",
         "prettier-plugin-svelte": "^3.3.3",
+        "remult": "^3.0.5",
         "sass-embedded": "^1.89.2",
         "scss": "^0.2.4",
         "svelte": "^5.0.0",
@@ -30,6 +33,13 @@
     "dependencies": {
         "@fortawesome/free-brands-svg-icons": "^6.7.2",
         "@fortawesome/free-solid-svg-icons": "^6.7.2",
-        "svelte-fa": "^4.0.4"
+        "@theatre/core": "^0.7.2",
+        "@theatre/studio": "^0.7.2",
+        "@threlte/core": "^8.0.5",
+        "@threlte/extras": "^9.4.0",
+        "@threlte/theatre": "^3.0.4",
+        "@types/three": "^0.177.0",
+        "svelte-fa": "^4.0.4",
+        "three": "^0.177.0"
     }
 }

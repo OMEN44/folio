@@ -1,0 +1,72 @@
+@use "./var";
+@use "./mixins";
+
+form {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+
+    h1 {
+        font-size: 30px;
+        font-weight: 500;
+        margin: 0 0 var.$gap 0;
+        text-align: center;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        border: none;
+        padding: 5px 10px;
+        margin: 5px;
+        border-radius: calc(var.$b-radius / 2);
+        outline: none;
+        background-color: var.$primary-a;
+        color: var.$text;
+        border-bottom: var.$b-thickness solid var.$primary-a;
+        transition: border-color 0.3s ease;
+
+        &:focus {
+            border-color: var.$primary;
+        }
+    }
+
+    div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    button {
+        color: var.$text;
+        background-color: var.$background;
+        border: var.$b-thickness solid var.$primary-a;
+        border-radius: calc(var.$b-radius / 2);
+        padding: 5px 10px;
+        cursor: pointer;
+        margin: 10px 0 5px 5px;
+        transition: all 0.3s ease;
+        width: fit-content;
+
+        &:hover {
+            border-color: var.$primary;
+            transform: scale(1.02);
+        }
+    }
+
+    p {
+        margin: 5px;
+        text-align: center;
+
+        a {
+            color: var.$primary;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+                color: var.$primary-a;
+            }
+        }
+    }
+}

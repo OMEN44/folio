@@ -21,8 +21,9 @@
 <nav bind:this={nav} class:open>
     <ul class="mobile-only">
         <li><a onclick={() => (open = false)} href="/">Home</a></li>
-        <li><a onclick={() => (open = false)} href="/timeline">Timeline</a></li>
-        <li><a onclick={() => (open = false)} href="/notes">Notes</a></li>
+        <li><a onclick={() => (open = false)} href="/timeline">Projects</a></li>
+        <li><a onclick={() => (open = false)} href="/notes">Blog</a></li>
+        <li><a onclick={() => (open = false)} href="/notes">Resume</a></li>
         <li>
             <a onclick={() => (open = false)} href="/account">
                 <div class="icon">
@@ -38,17 +39,20 @@
         <Logo />
         <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/timeline">Timeline</a></li>
-            <li><a href="/notes">Notes</a></li>
+            <li><a href="/timeline">Projects</a></li>
+            <li><a href="/notes">Blog</a></li>
+            <li><a href="/notes">Resume</a></li>
         </ul>
         <button aria-label="open menu" onclick={() => (open = !open)}>
             <div class="icon">
                 <Fa icon={faBars} size="lg" fw />
             </div>
         </button>
-        <div class="icon dektop-only">
-            <Fa icon={faUserAlt} size="lg" fw />
-        </div>
+        <a onclick={() => (open = false)} href="/account">
+            <div class="icon dektop-only">
+                <Fa icon={faUserAlt} size="lg" fw />
+            </div>
+        </a>
     </div>
 </nav>
 
@@ -73,13 +77,12 @@
         left: calc(var.$gap * 2);
         display: flex;
         flex-direction: column;
+        transition: all 0.3s ease-out !important;
 
         @media (max-width: var.$mobile-width) {
             width: calc(100vw - var.$gap * 2);
             left: 0;
         }
-
-        transition: all 0.3s ease-out !important;
 
         // Mobile nav links
         .mobile-only {
