@@ -1,8 +1,12 @@
+<script>
+    import { signOut } from "@auth/sveltekit/client";
+</script>
+
 <form>
     <h1>Account Settings</h1>
 
     <div>
-        <button>Log out</button>
+        <button onclick={async () => signOut()}>Log out</button>
     </div>
 </form>
 

@@ -1,5 +1,6 @@
 <script lang="ts">
     import Nav from "$lib/components/nav.svelte";
+    import { remult } from "remult";
     import { onMount } from "svelte";
 
     let { children } = $props();

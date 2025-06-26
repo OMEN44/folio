@@ -1,11 +1,10 @@
-import { authClient } from "$lib/auth-client";
 import { remult } from "remult";
 import type { LayoutServerLoad } from "./$types";
 import { redirect } from "@sveltejs/kit";
 
-export const load: LayoutServerLoad = async () => {
-    if (!remult.authenticated()) {
-        throw redirect(303, "/account/login");
+export const load: LayoutServerLoad = async (event) => {
+    if (!remult.authenticated() && event.url.pathname === "/account") {
+        throw redirect(303, "/auth/signin");
     }
 
     return {

@@ -1,11 +1,37 @@
-import { auth } from "$lib/auth";
-import type { Handle } from "@sveltejs/kit";
+import Credentials from "@auth/core/providers/credentials";
+import { SvelteKitAuth } from "@auth/sveltekit";
+import { type UserInfo } from "remult";
 import { sequence } from "@sveltejs/kit/hooks";
-import { svelteKitHandler } from "better-auth/svelte-kit";
 import { api as handleRemult } from "./server/api";
 
-const betterAuth: Handle = ({ event, resolve }) => {
-    return svelteKitHandler({ event, resolve, auth });
-};
+const validUsers: UserInfo[] = [
+    { id: "1", name: "Jane", roles: ["admin"] },
+    { id: "2", name: "Steve" },
+];
 
-export const handle = sequence(betterAuth, handleRemult);
+export const { handle: handleAuth } = SvelteKitAuth({
+    trustHost: true,
+    providers: [
+        Credentials({
+            credentials: {
+                name: {
+                    placeholder: "Name",
+                },
+                password: {
+                    placeholder: "Password",
+                    type: "password",
+                },
+            },
+            authorize: async (credentials) =>
+                validUsers.find((user) => user.name === credentials?.name) || null,
+        }),
+    ],
+    callbacks: {
+        session: ({ session, token }) => ({
+            ...session,
+            user: validUsers.find((user) => user.id === token?.sub),
+        }),
+    },
+});
+
+export const handle = sequence(handleAuth, handleRemult);
