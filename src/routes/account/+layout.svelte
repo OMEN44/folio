@@ -1,9 +1,10 @@
 <script lang="ts">
     import AccountScene from "$lib/components/scenes/accountScene.svelte";
     import { Canvas } from "@threlte/core";
+    import { remult } from "remult";
     import { onMount } from "svelte";
 
-    let { children } = $props();
+    let { children, data } = $props();
 
     let eyePos = $state({ x: 0, y: 0 });
 
@@ -11,6 +12,10 @@
         const bounds = document.getElementsByClassName("left")[0].getBoundingClientRect();
         eyePos.x = bounds.width / 2 + bounds.x;
         eyePos.y = bounds.height / 2 + bounds.y;
+    });
+
+    $effect(() => {
+        remult.user = data.user;
     });
 </script>
 

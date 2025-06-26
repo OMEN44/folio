@@ -1,3 +1,16 @@
+<script lang="ts">
+</script>
+
+<!-- {#each providerMap as provider}
+    <SignIn provider={provider.id} signInPage="/account/login">
+        <div slot="submitButton">
+            <span>
+                Signin with {provider.name}
+            </span>
+        </div>
+    </SignIn>
+{/each} -->
+
 <form>
     <h1>Login</h1>
     <input type="text" placeholder="Username" required />
