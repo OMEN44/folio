@@ -33,14 +33,12 @@
     "dependencies": {
         "@fortawesome/free-brands-svg-icons": "^6.7.2",
         "@fortawesome/free-solid-svg-icons": "^6.7.2",
-        "@nerdfolio/remult-better-auth": "^0.2.18",
         "@theatre/core": "^0.7.2",
         "@theatre/studio": "^0.7.2",
         "@threlte/core": "^8.0.5",
         "@threlte/extras": "^9.4.0",
         "@threlte/theatre": "^3.0.4",
         "@types/three": "^0.177.0",
-        "better-auth": "^1.2.10",
         "svelte-fa": "^4.0.4",
         "three": "^0.177.0"
     }

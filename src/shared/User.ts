@@ -1,7 +1,7 @@
 import { Allow, Entity, Fields } from "remult";
 
 @Entity("users", {
-    allowApiCrud: Allow.authenticated,
+    allowApiCrud: true,
 })
 export class User {
     @Fields.cuid()

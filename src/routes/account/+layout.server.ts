@@ -4,7 +4,7 @@ import { redirect } from "@sveltejs/kit";
 
 export const load: LayoutServerLoad = async (event) => {
     if (!remult.authenticated() && event.url.pathname === "/account") {
-        throw redirect(303, "/auth/signin");
+        throw redirect(303, "/account/login");
     }
 
     return {
